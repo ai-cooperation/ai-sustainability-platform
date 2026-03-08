@@ -65,6 +65,8 @@ const translations: Record<string, Record<Lang, string>> = {
   "kpi.carbonIntensity": { en: "UK Carbon Intensity", zh: "英國碳排強度" },
   "kpi.apiHealth": { en: "API Health", zh: "API 健康度" },
   "kpi.forecastAccuracy": { en: "Forecast Accuracy", zh: "預測準確率" },
+  "kpi.last12m": { en: "12 months", zh: "近 12 個月" },
+  "kpi.last30d": { en: "30 days", zh: "近 30 天" },
 
   // Energy page
   "energy.title": { en: "Energy Dashboard", zh: "能源儀表板" },

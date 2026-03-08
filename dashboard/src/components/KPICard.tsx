@@ -1,5 +1,7 @@
 "use client";
 
+import Sparkline from "@/components/Sparkline";
+
 interface KPICardProps {
   title: string;
   value: string | number;
@@ -7,23 +9,54 @@ interface KPICardProps {
   trend?: "up" | "down" | "neutral";
   trendValue?: string;
   color?: string;
+  sparkData?: number[];
+  sparkColor?: string;
+  sparkLabel?: string;
 }
 
-export default function KPICard({ title, value, unit, trend, trendValue, color = "emerald" }: KPICardProps) {
-  const trendIcon = trend === "up" ? "+" : trend === "down" ? "-" : "";
-  const trendColor = trend === "up" ? "text-green-500" : trend === "down" ? "text-red-500" : "text-gray-500";
+export default function KPICard({
+  title,
+  value,
+  unit,
+  trend,
+  trendValue,
+  color = "emerald",
+  sparkData,
+  sparkColor,
+  sparkLabel,
+}: KPICardProps) {
+  const trendColor =
+    trend === "up"
+      ? "text-green-600 dark:text-green-400"
+      : trend === "down"
+        ? "text-red-500 dark:text-red-400"
+        : "text-gray-500 dark:text-gray-400";
+
+  const defaultSparkColor =
+    trend === "down" ? "#ef4444" : trend === "up" ? "#10b981" : "#6b7280";
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+    <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-800">
       <p className="text-sm font-medium text-gray-500 dark:text-gray-400">{title}</p>
       <div className="mt-2 flex items-baseline gap-2">
         <p className={`text-3xl font-bold text-${color}-600 dark:text-${color}-400`}>{value}</p>
         {unit && <span className="text-sm text-gray-500">{unit}</span>}
       </div>
       {trendValue && (
-        <p className={`mt-1 text-sm ${trendColor}`}>
-          {trendIcon}{trendValue}
-        </p>
+        <p className={`mt-1 text-sm ${trendColor}`}>{trendValue}</p>
+      )}
+      {sparkData && sparkData.length > 1 && (
+        <div className="mt-3 flex items-end justify-between">
+          <Sparkline
+            data={sparkData}
+            color={sparkColor ?? defaultSparkColor}
+            width={140}
+            height={36}
+          />
+          {sparkLabel && (
+            <span className="ml-2 text-[10px] text-gray-400">{sparkLabel}</span>
+          )}
+        </div>
       )}
     </div>
   );

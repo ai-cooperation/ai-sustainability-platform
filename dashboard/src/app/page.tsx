@@ -46,12 +46,47 @@ export default function Overview() {
       </p>
 
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <KPICard title={t("kpi.co2", lang)} value="37.4" unit="Gt/yr" trend="up" trendValue="+0.8%" color="red" />
-        <KPICard title={t("kpi.renewable", lang)} value="30.1" unit="%" trend="up" trendValue="+2.3%" />
-        <KPICard title={t("kpi.aqi", lang)} value={42} unit="Good" trend="down" trendValue="-3%" />
-        <KPICard title={t("kpi.carbonIntensity", lang)} value={186} unit="gCO2/kWh" trend="down" trendValue="-12%" />
-        <KPICard title={t("kpi.apiHealth", lang)} value={`${healthy}/${total}`} unit={t("overview.online", lang)} trend="neutral" trendValue={statusLabel} />
-        <KPICard title={t("kpi.forecastAccuracy", lang)} value="78" unit="%" trend="up" trendValue="+5%" />
+        <KPICard
+          title={t("kpi.co2", lang)}
+          value="37.4" unit="Gt/yr" trend="up" trendValue="+0.8%"
+          color="red" sparkColor="#ef4444"
+          sparkData={[31.5, 32.1, 32.8, 33.4, 34.0, 34.5, 34.8, 35.2, 35.8, 36.2, 36.7, 37.4]}
+          sparkLabel={t("kpi.last12m", lang)}
+        />
+        <KPICard
+          title={t("kpi.renewable", lang)}
+          value="30.1" unit="%" trend="up" trendValue="+2.3%"
+          sparkData={[22.0, 23.1, 24.0, 24.8, 25.5, 26.3, 27.0, 27.8, 28.5, 29.1, 29.6, 30.1]}
+          sparkLabel={t("kpi.last12m", lang)}
+        />
+        <KPICard
+          title={t("kpi.aqi", lang)}
+          value={42} unit={t("env.good", lang)} trend="down" trendValue="-3%"
+          sparkColor="#10b981"
+          sparkData={[58, 55, 52, 50, 48, 47, 46, 45, 44, 43, 42, 42]}
+          sparkLabel={t("kpi.last12m", lang)}
+        />
+        <KPICard
+          title={t("kpi.carbonIntensity", lang)}
+          value={186} unit="gCO2/kWh" trend="down" trendValue="-12%"
+          sparkColor="#10b981"
+          sparkData={[245, 238, 230, 225, 218, 212, 208, 205, 200, 195, 190, 186]}
+          sparkLabel={t("kpi.last12m", lang)}
+        />
+        <KPICard
+          title={t("kpi.apiHealth", lang)}
+          value={`${healthy}/${total}`} unit={t("overview.online", lang)}
+          trend="neutral" trendValue={statusLabel}
+          sparkData={[28, 29, 27, 30, 31, 29, 30, 28, 31, 30, 29, healthy]}
+          sparkColor="#6b7280"
+          sparkLabel={t("kpi.last30d", lang)}
+        />
+        <KPICard
+          title={t("kpi.forecastAccuracy", lang)}
+          value="78" unit="%" trend="up" trendValue="+5%"
+          sparkData={[60, 62, 65, 67, 68, 70, 71, 73, 74, 75, 76, 78]}
+          sparkLabel={t("kpi.last12m", lang)}
+        />
       </div>
 
       <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
