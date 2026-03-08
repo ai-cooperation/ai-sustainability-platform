@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import StatusBadge from "@/components/StatusBadge";
+import ApiDetailModal from "@/components/ApiDetailModal";
 import {
   fetchStatus,
   fetchHistory,
@@ -21,6 +22,7 @@ export default function StatusPage() {
   const [report, setReport] = useState<StatusReport | null>(null);
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedApi, setSelectedApi] = useState<string | null>(null);
 
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
@@ -115,7 +117,7 @@ export default function StatusPage() {
                 {allApiIds.map((apiId) => (
                   <tr key={apiId}>
                     <td className="sticky left-0 bg-white px-2 py-1 font-medium text-gray-700 dark:bg-gray-800 dark:text-gray-300">
-                      {apiId}
+                      {t(`api.${apiId}.name`, lang)}
                     </td>
                     {(matrixData[apiId] ?? []).map((status, i) => (
                       <td key={i} className="px-2 py-1 text-center">
@@ -148,17 +150,24 @@ export default function StatusPage() {
             <tr>
               <th className="px-4 py-3">{t("status.api", lang)}</th>
               <th className="px-4 py-3">{t("status.domain", lang)}</th>
-              <th className="px-4 py-3">{t("status.healthy", lang)}</th>
+              <th className="px-4 py-3">{t("status.statusCol", lang)}</th>
               <th className="px-4 py-3">{t("status.latency", lang)}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
             {apis.map((api: ApiStatus) => (
               <tr key={api.id} className="text-gray-700 dark:text-gray-300">
-                <td className="px-4 py-2.5 font-medium">{api.id}</td>
+                <td className="px-4 py-2.5">
+                  <button
+                    onClick={() => setSelectedApi(api.id)}
+                    className="text-left font-medium text-emerald-600 underline decoration-dotted hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300"
+                  >
+                    {t(`api.${api.id}.name`, lang)}
+                  </button>
+                </td>
                 <td className="px-4 py-2.5">{formatDomain(api.domain, lang)}</td>
                 <td className="px-4 py-2.5">
-                  <StatusBadge status={api.status} />
+                  <StatusBadge status={api.status} lang={lang} />
                 </td>
                 <td className="px-4 py-2.5">
                   {api.latency_ms > 0 ? `${api.latency_ms}ms` : "—"}
@@ -168,6 +177,14 @@ export default function StatusPage() {
           </tbody>
         </table>
       </div>
+
+      {selectedApi && (
+        <ApiDetailModal
+          apiId={selectedApi}
+          lang={lang}
+          onClose={() => setSelectedApi(null)}
+        />
+      )}
     </div>
   );
 }
