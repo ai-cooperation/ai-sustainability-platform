@@ -26,6 +26,7 @@ jobs:
       GBIF_USERNAME: ${{ secrets.GBIF_USERNAME }}
       GBIF_PASSWORD: ${{ secrets.GBIF_PASSWORD }}
       CLIMATIQ_API_KEY: ${{ secrets.CLIMATIQ_API_KEY }}
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
       TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
       TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
 
@@ -65,11 +66,80 @@ jobs:
         continue-on-error: true
         run: uv run python -m src.pipelines.cross_domain
 
-      - name: Commit processed data
+      - name: Run AI Forecast
+        continue-on-error: true
+        run: |
+          uv run python -c "
+          import json
+          from src.decision.orchestrator import ForecastOrchestrator
+
+          orchestrator = ForecastOrchestrator()
+          questions = [
+              'Will UK grid carbon intensity exceed 200g CO2/kWh in the next 7 days?',
+              'Will global renewable energy share exceed 32% by end of Q2 2026?',
+              'Will PM2.5 levels in major Asian cities improve in the next month?',
+          ]
+
+          results = []
+          for q in questions:
+              try:
+                  r = orchestrator.run_forecast(q)
+                  results.append({
+                      'question': r.question,
+                      'probability': r.probability,
+                      'confidence': r.confidence,
+                      'reasoning': r.reasoning,
+                      'positions': [
+                          {'agent': p.agent_name, 'probability': p.probability, 'reasoning': p.reasoning}
+                          for p in r.positions
+                      ],
+                      'created_at': str(r.created_at),
+                  })
+                  print(f'OK: {q[:50]}... -> {r.probability:.0%}')
+              except Exception as e:
+                  print(f'FAIL: {q[:50]}... -> {e}')
+
+          with open('data/forecasts/latest.json', 'w') as f:
+              json.dump(results, f, indent=2)
+          "
+
+      - name: Send daily summary via Telegram
+        continue-on-error: true
+        run: |
+          uv run python -c "
+          from src.utils.telegram import send_telegram
+          from pathlib import Path
+          import json
+
+          # Pipeline results
+          processed = list(Path('data/processed').glob('*.parquet')) if Path('data/processed').exists() else []
+
+          # Forecast results
+          forecast_text = 'No forecasts'
+          fp = Path('data/forecasts/latest.json')
+          if fp.exists():
+              forecasts = json.loads(fp.read_text())
+              lines = []
+              for f in forecasts:
+                  p = f['probability']
+                  lines.append(f\"  {p:.0%} - {f['question'][:60]}\")
+              forecast_text = chr(10).join(lines)
+
+          msg = (
+              '<b>Daily Pipeline Summary</b>\n\n'
+              f'<b>Pipelines:</b> {len(processed)} output files\n\n'
+              f'<b>AI Forecasts:</b>\n{forecast_text}'
+          )
+          send_telegram(msg, parse_mode='HTML')
+          print('Telegram notification sent')
+          "
+
+      - name: Commit results
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/processed/ data/status/ || true
+          mkdir -p data/forecasts
+          git add data/processed/ data/status/ data/forecasts/ || true
           git diff --cached --quiet || git commit -m "chore: daily pipeline update $(date -u +%Y-%m-%d)"
           git push || true
 

@@ -44,6 +44,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/status/status.json
-          git diff --cached --quiet || git commit -m "chore: update API health status"
-          git push
+          git add data/status/ || true
+          git diff --cached --quiet || git commit -m "chore: update API health status $(date -u +%H:%MZ)"
+          git push || true

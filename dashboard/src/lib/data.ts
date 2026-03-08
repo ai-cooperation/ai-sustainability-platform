@@ -2,9 +2,11 @@ const RAW_BASE =
   "https://raw.githubusercontent.com/ai-cooperation/ai-sustainability-platform/main/data";
 
 export interface ApiStatus {
-  name: string;
+  id: string;
+  domain: string;
   status: "healthy" | "degraded" | "down";
   latency_ms: number;
+  message: string;
   checked_at: string;
 }
 
@@ -14,21 +16,16 @@ export interface StatusReport {
   healthy: number;
   degraded: number;
   down: number;
-  results: ApiStatus[];
+  apis: ApiStatus[];
 }
 
-export interface RealtimeWeather {
-  timestamp: string;
-  temperature_2m: number;
-  relative_humidity_2m: number;
-  wind_speed_10m: number;
-}
-
-export interface RealtimeCarbonIntensity {
-  from: string;
-  to: string;
-  intensity_forecast: number;
-  intensity_index: string;
+export interface HistoryEntry {
+  checked_at: string;
+  total: number;
+  healthy: number;
+  degraded: number;
+  down: number;
+  apis: ApiStatus[];
 }
 
 export interface ForecastResult {
@@ -56,16 +53,10 @@ export async function fetchStatus(): Promise<StatusReport | null> {
   return fetchJson<StatusReport>("status/status.json");
 }
 
-export async function fetchWeather(): Promise<RealtimeWeather[] | null> {
-  return fetchJson<RealtimeWeather[]>("realtime/weather.json");
-}
-
-export async function fetchCarbonIntensity(): Promise<
-  RealtimeCarbonIntensity[] | null
-> {
-  return fetchJson<RealtimeCarbonIntensity[]>(
-    "realtime/carbon_intensity_uk.json"
-  );
+export async function fetchHistory(
+  date: string
+): Promise<HistoryEntry[] | null> {
+  return fetchJson<HistoryEntry[]>(`status/history/${date}.json`);
 }
 
 export async function fetchForecasts(): Promise<ForecastResult[] | null> {

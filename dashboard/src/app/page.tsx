@@ -8,8 +8,11 @@ import {
   type StatusReport,
   type ForecastResult,
 } from "@/lib/data";
+import { useApp } from "@/lib/context";
+import { t } from "@/lib/i18n";
 
 export default function Overview() {
+  const { lang } = useApp();
   const [status, setStatus] = useState<StatusReport | null>(null);
   const [forecasts, setForecasts] = useState<ForecastResult[] | null>(null);
 
@@ -21,92 +24,57 @@ export default function Overview() {
   const healthy = status?.healthy ?? 29;
   const total = status?.total ?? 31;
   const statusLabel = status
-    ? `${status.degraded} degraded, ${status.down} down`
-    : "Loading...";
+    ? `${status.degraded} ${t("status.degraded", lang)}, ${status.down} ${t("status.down", lang)}`
+    : t("overview.loading", lang);
+
+  const domains = [
+    { key: "energy", sources: 7 },
+    { key: "climate", sources: 6 },
+    { key: "environment", sources: 7 },
+    { key: "agriculture", sources: 4 },
+    { key: "carbon", sources: 5 },
+    { key: "transport", sources: 2 },
+  ];
 
   return (
     <div>
       <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-        AI Sustainability Intelligence Platform
+        {t("app.title", lang)}
       </h1>
       <p className="mt-1 text-gray-500">
-        Real-time monitoring across {total} global data sources
+        {t("app.subtitle", lang, { count: total })}
       </p>
 
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <KPICard
-          title="Global CO2 Emissions"
-          value="37.4"
-          unit="Gt/yr"
-          trend="up"
-          trendValue="+0.8%"
-          color="red"
-        />
-        <KPICard
-          title="Renewable Share"
-          value="30.1"
-          unit="%"
-          trend="up"
-          trendValue="+2.3%"
-        />
-        <KPICard
-          title="Global Avg AQI"
-          value={42}
-          unit="Good"
-          trend="down"
-          trendValue="-3%"
-        />
-        <KPICard
-          title="UK Carbon Intensity"
-          value={186}
-          unit="gCO2/kWh"
-          trend="down"
-          trendValue="-12%"
-        />
-        <KPICard
-          title="API Health"
-          value={`${healthy}/${total}`}
-          unit="Online"
-          trend="neutral"
-          trendValue={statusLabel}
-        />
-        <KPICard
-          title="Forecast Accuracy"
-          value="78"
-          unit="%"
-          trend="up"
-          trendValue="+5%"
-        />
+        <KPICard title={t("kpi.co2", lang)} value="37.4" unit="Gt/yr" trend="up" trendValue="+0.8%" color="red" />
+        <KPICard title={t("kpi.renewable", lang)} value="30.1" unit="%" trend="up" trendValue="+2.3%" />
+        <KPICard title={t("kpi.aqi", lang)} value={42} unit="Good" trend="down" trendValue="-3%" />
+        <KPICard title={t("kpi.carbonIntensity", lang)} value={186} unit="gCO2/kWh" trend="down" trendValue="-12%" />
+        <KPICard title={t("kpi.apiHealth", lang)} value={`${healthy}/${total}`} unit={t("overview.online", lang)} trend="neutral" trendValue={statusLabel} />
+        <KPICard title={t("kpi.forecastAccuracy", lang)} value="78" unit="%" trend="up" trendValue="+5%" />
       </div>
 
       <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
         <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-            Platform Status
+            {t("overview.platformStatus", lang)}
           </h2>
           <div className="mt-4 space-y-3">
-            {[
-              { domain: "Energy", sources: 7 },
-              { domain: "Climate", sources: 6 },
-              { domain: "Environment", sources: 7 },
-              { domain: "Agriculture", sources: 4 },
-              { domain: "Carbon", sources: 5 },
-              { domain: "Transport", sources: 2 },
-            ].map((d) => (
+            {domains.map((d) => (
               <div
-                key={d.domain}
+                key={d.key}
                 className="flex items-center justify-between rounded-lg bg-gray-50 px-4 py-3 dark:bg-gray-700"
               >
                 <div>
                   <span className="font-medium text-gray-900 dark:text-white">
-                    {d.domain}
+                    {t(`domain.${d.key}`, lang)}
                   </span>
                   <span className="ml-2 text-sm text-gray-500">
-                    {d.sources} sources
+                    {d.sources} {t("overview.sources", lang)}
                   </span>
                 </div>
                 <span className="text-sm font-medium text-green-600">
-                  {status ? "Live" : "Loading..."}
+                  {status ? t("overview.live", lang) : t("overview.loading", lang)}
                 </span>
               </div>
             ))}
@@ -115,7 +83,7 @@ export default function Overview() {
 
         <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-            Latest AI Forecast
+            {t("overview.latestForecast", lang)}
           </h2>
           {forecasts && forecasts.length > 0 ? (
             forecasts.slice(0, 2).map((f, i) => (
@@ -143,10 +111,10 @@ export default function Overview() {
                       : "text-blue-700 dark:text-blue-400"
                   }`}
                 >
-                  {Math.round(f.probability * 100)}% probability
+                  {Math.round(f.probability * 100)}% {t("overview.probability", lang)}
                 </p>
                 <p className="mt-1 text-sm text-gray-500">
-                  Confidence: {f.confidence} | {f.positions.length} agents
+                  {t("overview.confidence", lang)}: {f.confidence} | {f.positions.length} {t("overview.agents", lang)}
                 </p>
               </div>
             ))
@@ -156,10 +124,10 @@ export default function Overview() {
                 Will UK grid carbon intensity exceed 200g CO2/kWh in the next 7 days?
               </p>
               <p className="mt-2 text-3xl font-bold text-emerald-700 dark:text-emerald-400">
-                Awaiting first forecast run
+                {t("overview.awaitingForecast", lang)}
               </p>
               <p className="mt-1 text-sm text-gray-500">
-                Weekly forecast runs every Monday via GitHub Actions
+                {t("overview.weeklyForecast", lang)}
               </p>
             </div>
           )}
