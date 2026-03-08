@@ -119,15 +119,20 @@ export default function Overview() {
               </div>
             ))
           ) : (
-            <div className="mt-4 rounded-lg bg-emerald-50 p-4 dark:bg-emerald-900/20">
-              <p className="text-sm font-medium text-emerald-800 dark:text-emerald-300">
-                Will UK grid carbon intensity exceed 200g CO2/kWh in the next 7 days?
-              </p>
-              <p className="mt-2 text-3xl font-bold text-emerald-700 dark:text-emerald-400">
-                {t("overview.awaitingForecast", lang)}
-              </p>
-              <p className="mt-1 text-sm text-gray-500">
-                {t("overview.weeklyForecast", lang)}
+            <div className="mt-4 space-y-4">
+              <div className="rounded-lg bg-emerald-50 p-4 dark:bg-emerald-900/20">
+                <p className="text-sm font-medium text-emerald-800 dark:text-emerald-300">
+                  {t("forecast.question1", lang)}
+                </p>
+                <p className="mt-2 text-3xl font-bold text-emerald-700 dark:text-emerald-400">
+                  45% {t("forecast.probability", lang)}
+                </p>
+                <p className="mt-1 text-sm text-gray-500">
+                  {t("forecast.confidence", lang)}: {t("forecast.medium", lang)} | {t("forecast.agentSources", lang)}
+                </p>
+              </div>
+              <p className="text-xs text-gray-400">
+                {t("overview.forecastSchedule", lang)}
               </p>
             </div>
           )}

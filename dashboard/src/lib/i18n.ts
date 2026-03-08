@@ -54,6 +54,9 @@ const translations: Record<string, Record<Lang, string>> = {
   "overview.probability": { en: "probability", zh: "機率" },
   "overview.confidence": { en: "Confidence", zh: "信心度" },
   "overview.agents": { en: "agents", zh: "個代理" },
+  "overview.online": { en: "Online", zh: "上線" },
+  "overview.sources": { en: "sources", zh: "個來源" },
+  "overview.live": { en: "Live", zh: "即時" },
 
   // KPI titles
   "kpi.co2": { en: "Global CO2 Emissions", zh: "全球 CO2 排放量" },
