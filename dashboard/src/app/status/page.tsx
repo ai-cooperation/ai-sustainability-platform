@@ -1,48 +1,63 @@
-import StatusBadge from "@/components/StatusBadge";
+"use client";
 
-const apis = [
-  { id: "open_meteo_solar", name: "Open-Meteo Solar", domain: "Energy", status: "healthy", latency: 142 },
-  { id: "nasa_power", name: "NASA POWER", domain: "Energy", status: "healthy", latency: 320 },
-  { id: "carbon_intensity_uk", name: "UK Carbon Intensity", domain: "Energy", status: "healthy", latency: 89 },
-  { id: "open_power_system", name: "Open Power System", domain: "Energy", status: "healthy", latency: 450 },
-  { id: "eia", name: "EIA", domain: "Energy", status: "healthy", latency: 210 },
-  { id: "electricity_maps", name: "Electricity Maps", domain: "Energy", status: "healthy", latency: 156 },
-  { id: "nrel", name: "NREL", domain: "Energy", status: "healthy", latency: 198 },
-  { id: "open_meteo_weather", name: "Open-Meteo Weather", domain: "Climate", status: "healthy", latency: 134 },
-  { id: "open_meteo_climate", name: "Open-Meteo Climate", domain: "Climate", status: "healthy", latency: 178 },
-  { id: "noaa_ghg", name: "NOAA GHG", domain: "Climate", status: "healthy", latency: 567 },
-  { id: "world_bank_climate", name: "World Bank Climate", domain: "Climate", status: "degraded", latency: 1200 },
-  { id: "noaa_cdo", name: "NOAA CDO", domain: "Climate", status: "healthy", latency: 345 },
-  { id: "copernicus_cds", name: "Copernicus CDS", domain: "Climate", status: "healthy", latency: 890 },
-  { id: "open_meteo_aq", name: "Open-Meteo Air Quality", domain: "Environment", status: "healthy", latency: 145 },
-  { id: "epa_envirofacts", name: "EPA Envirofacts", domain: "Environment", status: "healthy", latency: 430 },
-  { id: "epa_water", name: "EPA Water Quality", domain: "Environment", status: "healthy", latency: 380 },
-  { id: "emissions_api", name: "Emissions API", domain: "Environment", status: "healthy", latency: 267 },
-  { id: "openaq", name: "OpenAQ", domain: "Environment", status: "healthy", latency: 198 },
-  { id: "aqicn", name: "AQICN", domain: "Environment", status: "healthy", latency: 156 },
-  { id: "gfw", name: "Global Forest Watch", domain: "Environment", status: "down", latency: 0 },
-  { id: "faostat", name: "FAOSTAT", domain: "Agriculture", status: "healthy", latency: 780 },
-  { id: "eu_agri", name: "EU Agri-Food", domain: "Agriculture", status: "healthy", latency: 345 },
-  { id: "usda_nass", name: "USDA NASS", domain: "Agriculture", status: "healthy", latency: 290 },
-  { id: "gbif", name: "GBIF", domain: "Agriculture", status: "healthy", latency: 410 },
-  { id: "owid", name: "OWID CO2", domain: "Carbon", status: "healthy", latency: 120 },
-  { id: "climate_watch", name: "Climate Watch", domain: "Carbon", status: "healthy", latency: 340 },
-  { id: "open_climate", name: "Open Climate Data", domain: "Carbon", status: "healthy", latency: 180 },
-  { id: "climate_trace", name: "Climate TRACE", domain: "Carbon", status: "healthy", latency: 560 },
-  { id: "climatiq", name: "Climatiq", domain: "Carbon", status: "healthy", latency: 210 },
-  { id: "ocm", name: "Open Charge Map", domain: "Transport", status: "healthy", latency: 320 },
-  { id: "nrel_alt", name: "NREL Alt Fuel", domain: "Transport", status: "healthy", latency: 245 },
-];
+import { useEffect, useState } from "react";
+import StatusBadge from "@/components/StatusBadge";
+import { fetchStatus, type StatusReport, type ApiStatus } from "@/lib/data";
+
+function guessDomain(name: string): string {
+  const l = name.toLowerCase();
+  if (l.includes("solar") || l.includes("power") || l.includes("eia") || l.includes("nrel") || l.includes("electricity") || l.includes("carbon intensity")) return "Energy";
+  if (l.includes("weather") || l.includes("climate") || l.includes("ghg") || l.includes("noaa") || l.includes("copernicus") || l.includes("world bank")) return "Climate";
+  if (l.includes("air") || l.includes("water") || l.includes("forest") || l.includes("emission") || l.includes("epa") || l.includes("openaq") || l.includes("aqicn")) return "Environment";
+  if (l.includes("fao") || l.includes("agri") || l.includes("usda") || l.includes("gbif")) return "Agriculture";
+  if (l.includes("co2") || l.includes("carbon") || l.includes("climatiq") || l.includes("owid") || l.includes("trace")) return "Carbon";
+  if (l.includes("charge") || l.includes("fuel") || l.includes("transport")) return "Transport";
+  return "Other";
+}
 
 export default function StatusPage() {
-  const healthy = apis.filter(a => a.status === "healthy").length;
-  const degraded = apis.filter(a => a.status === "degraded").length;
-  const down = apis.filter(a => a.status === "down").length;
+  const [report, setReport] = useState<StatusReport | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchStatus().then((data) => {
+      setReport(data);
+      setLoading(false);
+    });
+  }, []);
+
+  if (loading) {
+    return (
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">API Status</h1>
+        <p className="mt-4 text-gray-500">Loading live status data...</p>
+      </div>
+    );
+  }
+
+  const apis = report
+    ? report.results.map((r: ApiStatus) => ({
+        name: r.name,
+        domain: guessDomain(r.name),
+        status: r.status,
+        latency: r.latency_ms,
+      }))
+    : [];
+
+  const healthy = apis.filter((a) => a.status === "healthy").length;
+  const degraded = apis.filter((a) => a.status === "degraded").length;
+  const down = apis.filter((a) => a.status === "down").length;
+  const total = apis.length;
+  const checkedAt = report?.checked_at
+    ? new Date(report.checked_at).toLocaleString()
+    : "N/A";
 
   return (
     <div>
       <h1 className="text-2xl font-bold text-gray-900 dark:text-white">API Status</h1>
-      <p className="mt-1 text-gray-500">Health monitoring for all 31 data sources</p>
+      <p className="mt-1 text-gray-500">
+        Live health monitoring for {total} data sources — Last checked: {checkedAt}
+      </p>
 
       <div className="mt-6 flex gap-4">
         <div className="rounded-lg bg-green-50 px-4 py-2 dark:bg-green-900/20">
@@ -71,7 +86,7 @@ export default function StatusPage() {
           </thead>
           <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
             {apis.map((api) => (
-              <tr key={api.id} className="text-gray-700 dark:text-gray-300">
+              <tr key={api.name} className="text-gray-700 dark:text-gray-300">
                 <td className="px-4 py-2.5 font-medium">{api.name}</td>
                 <td className="px-4 py-2.5">{api.domain}</td>
                 <td className="px-4 py-2.5"><StatusBadge status={api.status} /></td>
