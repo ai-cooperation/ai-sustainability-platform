@@ -157,8 +157,16 @@ class TestFAOSTATNormalize:
     def test_normalize_skips_records_without_year(self, connector):
         raw = {
             "data": [
-                {"Year": 2020, "Area": "World", "Item": "Wheat", "Element": "Production", "Value": 100, "Unit": "t"},
-                {"Area": "World", "Item": "Rice", "Element": "Production", "Value": 200, "Unit": "t"},
+                {
+                    "Year": 2020, "Area": "World",
+                    "Item": "Wheat", "Element": "Production",
+                    "Value": 100, "Unit": "t",
+                },
+                {
+                    "Area": "World", "Item": "Rice",
+                    "Element": "Production",
+                    "Value": 200, "Unit": "t",
+                },
             ]
         }
         df = connector.normalize(raw)

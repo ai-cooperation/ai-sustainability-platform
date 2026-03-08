@@ -11,7 +11,6 @@ import requests
 from src.connectors.base import ConnectorError
 from src.connectors.transport.open_charge_map import OpenChargeMapConnector
 
-
 SAMPLE_RESPONSE = [
     {
         "ID": 12345,

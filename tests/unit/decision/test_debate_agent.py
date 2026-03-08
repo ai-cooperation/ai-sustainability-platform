@@ -3,19 +3,16 @@
 from __future__ import annotations
 
 import json
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 import pytest
 
 from src.decision.debate_agent import (
+    OPTIMIST_PROMPT,
     DebateAgent,
     _parse_position,
     create_debate_agents,
-    OPTIMIST_PROMPT,
-    PESSIMIST_PROMPT,
-    STATISTICIAN_PROMPT,
 )
-from src.decision.models import ForecastPosition
 
 
 @pytest.fixture
@@ -38,7 +35,10 @@ class TestParsePosition:
         assert pos.reasoning == "Strong trend data supports this."
 
     def test_json_in_text(self):
-        raw = 'Here is my analysis: {"probability": 0.3, "confidence": "low", "reasoning": "Weak signals."}'
+        raw = (
+            'Here is my analysis: {"probability": 0.3, '
+            '"confidence": "low", "reasoning": "Weak signals."}'
+        )
         pos = _parse_position("Pessimist", raw)
 
         assert pos.probability == 0.3

@@ -11,7 +11,6 @@ import requests as requests_lib
 from src.connectors.base import ConnectorError
 from src.connectors.carbon.open_climate_data import OpenClimateDataConnector
 
-
 SAMPLE_CSV = (
     "Year,Country,Emissions,Category\n"
     "2018,USA,5100.5,Fossil\n"

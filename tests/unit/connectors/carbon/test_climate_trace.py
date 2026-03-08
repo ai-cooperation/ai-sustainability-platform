@@ -11,7 +11,6 @@ import requests as requests_lib
 from src.connectors.base import ConnectorError
 from src.connectors.carbon.climate_trace import ClimateTRACEConnector
 
-
 SAMPLE_RESPONSE_LIST = [
     {
         "year": 2020,

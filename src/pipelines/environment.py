@@ -11,8 +11,8 @@ from src.connectors.environment import (
     EPAEnvirofactsConnector,
     EPAWaterQualityConnector,
     GlobalForestWatchConnector,
-    OpenMeteoAirQualityConnector,
     OpenAQConnector,
+    OpenMeteoAirQualityConnector,
 )
 from src.pipelines.base import BasePipeline
 

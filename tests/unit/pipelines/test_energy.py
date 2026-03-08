@@ -90,8 +90,16 @@ class TestEnergyPipelineTransform:
         """Identical rows across connectors should be deduped."""
         df1 = pd.DataFrame({"timestamp": pd.to_datetime(["2026-01-01"]), "v": [1.0]})
         results = [
-            ConnectorResult(data=df1, source="src_a", fetched_at=datetime(2026, 1, 1), record_count=1),
-            ConnectorResult(data=df1, source="src_a", fetched_at=datetime(2026, 1, 1), record_count=1),
+            ConnectorResult(
+                data=df1, source="src_a",
+                fetched_at=datetime(2026, 1, 1),
+                record_count=1,
+            ),
+            ConnectorResult(
+                data=df1, source="src_a",
+                fetched_at=datetime(2026, 1, 1),
+                record_count=1,
+            ),
         ]
         df = pipeline.transform(results)
         assert len(df) == 1

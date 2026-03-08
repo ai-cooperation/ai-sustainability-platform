@@ -4,13 +4,13 @@ from __future__ import annotations
 
 import pandas as pd
 
-from src.connectors.base import ConnectorResult
 from src.connectors.agriculture import (
     EUAgriFoodConnector,
     FAOSTATConnector,
     GBIFConnector,
     USDANASSConnector,
 )
+from src.connectors.base import ConnectorResult
 from src.pipelines.base import BasePipeline
 
 

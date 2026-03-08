@@ -7,7 +7,7 @@ from unittest.mock import MagicMock, patch
 import httpx
 import pytest
 
-from src.decision.groq_client import GroqClient, GROQ_API_URL
+from src.decision.groq_client import GROQ_API_URL, GroqClient
 
 
 @pytest.fixture

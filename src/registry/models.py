@@ -19,7 +19,10 @@ class DatasetEntry(BaseModel):
 
     id: str = Field(description="Unique identifier (snake_case)")
     name: str = Field(description="Human-readable name")
-    domain: str = Field(description="Domain: energy|climate|environment|agriculture|transport|carbon")
+    domain: str = Field(
+        description="Domain: energy|climate|environment"
+        "|agriculture|transport|carbon"
+    )
     provider: str = Field(description="Data provider name")
     access: AccessInfo
     update_frequency: str = Field(description="e.g., hourly, daily, weekly, monthly, annual")

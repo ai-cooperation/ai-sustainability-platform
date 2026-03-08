@@ -11,7 +11,6 @@ import requests as requests_lib
 from src.connectors.base import ConnectorError
 from src.connectors.carbon.climate_watch import ClimateWatchConnector
 
-
 SAMPLE_RESPONSE = {
     "data": [
         {

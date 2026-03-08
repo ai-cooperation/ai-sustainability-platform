@@ -20,7 +20,11 @@ def connector():
 
 @pytest.fixture
 def sample_csv_text():
-    header = "utc_timestamp,DE_load_actual_entsoe_transparency,DE_solar_generation_actual,DE_wind_onshore_generation_actual"
+    header = (
+        "utc_timestamp,DE_load_actual_entsoe_transparency,"
+        "DE_solar_generation_actual,"
+        "DE_wind_onshore_generation_actual"
+    )
     row1 = "2024-01-01T00:00:00Z,45000,0,12000"
     row2 = "2024-01-01T01:00:00Z,44000,0,11500"
     row3 = "2024-01-01T02:00:00Z,43500,0,11800"

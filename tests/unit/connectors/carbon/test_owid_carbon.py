@@ -11,7 +11,6 @@ import requests as requests_lib
 from src.connectors.base import ConnectorError
 from src.connectors.carbon.owid_carbon import OWIDCarbonConnector
 
-
 SAMPLE_CSV = (
     "country,year,co2,co2_per_capita,population,gdp,energy_per_capita\n"
     "World,2020,34.81,4.47,7794798739,84.71,74.46\n"

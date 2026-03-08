@@ -11,7 +11,6 @@ import requests
 from src.connectors.base import ConnectorError
 from src.connectors.transport.nrel_alt_fuel import NRELAltFuelConnector
 
-
 SAMPLE_RESPONSE = {
     "alt_fuel_stations": [
         {

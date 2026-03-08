@@ -13,7 +13,6 @@ from src.monitor.reporter import (
     load_previous_status,
     save_history,
     save_status,
-    send_health_report,
 )
 from src.utils.logging import get_logger
 from src.utils.telegram import send_telegram

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 from src.connectors.base import BaseConnector
@@ -119,7 +119,7 @@ def check_connector_health(connector: BaseConnector) -> dict[str, Any]:
     Returns:
         Health status dict with keys: id, domain, status, latency_ms, message, checked_at.
     """
-    checked_at = datetime.now(tz=timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    checked_at = datetime.now(tz=UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
     try:
         result = connector.health_check()
         return {
@@ -165,7 +165,7 @@ def check_all(connectors: list[BaseConnector]) -> dict[str, Any]:
     down = sum(1 for a in apis if a["status"] == "down")
 
     return {
-        "checked_at": datetime.now(tz=timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "checked_at": datetime.now(tz=UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "total": len(apis),
         "healthy": healthy,
         "degraded": degraded,

@@ -4,8 +4,6 @@ from __future__ import annotations
 
 from unittest.mock import MagicMock, PropertyMock
 
-import pytest
-
 from src.monitor.health_checker import (
     check_all,
     check_connector_health,

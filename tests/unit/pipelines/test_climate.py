@@ -31,7 +31,10 @@ def sample_results():
         "co2_ppm": [421.5],
     })
     return [
-        ConnectorResult(data=df1, source="weather", fetched_at=datetime(2026, 1, 1), record_count=1),
+        ConnectorResult(
+            data=df1, source="weather",
+            fetched_at=datetime(2026, 1, 1), record_count=1,
+        ),
         ConnectorResult(data=df2, source="ghg", fetched_at=datetime(2026, 1, 1), record_count=1),
     ]
 

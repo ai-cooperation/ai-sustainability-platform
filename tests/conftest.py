@@ -19,8 +19,10 @@ def settings():
 @pytest.fixture
 def sample_connector_result():
     """Sample ConnectorResult for testing."""
-    import pandas as pd
     from datetime import datetime
+
+    import pandas as pd
+
     from src.connectors.base import ConnectorResult
 
     df = pd.DataFrame({

@@ -135,7 +135,10 @@ class WorldBankClimateConnector(BaseConnector):
             raise ConnectorError(f"{self.name}: empty data in response")
 
         if not isinstance(data, list):
-            raise ConnectorError(f"{self.name}: expected list for 'data', got {type(data).__name__}")
+            raise ConnectorError(
+                f"{self.name}: expected list for 'data', "
+                f"got {type(data).__name__}"
+            )
 
         indicator = raw_data.get("indicator", "unknown")
 

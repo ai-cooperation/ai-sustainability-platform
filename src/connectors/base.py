@@ -12,7 +12,6 @@ from pathlib import Path
 from typing import Any
 
 import pandas as pd
-import requests
 
 from src.utils.config import get_settings
 from src.utils.logging import get_logger

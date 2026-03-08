@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -51,7 +51,7 @@ def save_history(report: dict[str, Any], base_dir: Path | None = None) -> Path:
         base_dir = settings.data_dir / "status" / "history"
     base_dir.mkdir(parents=True, exist_ok=True)
 
-    today = datetime.now(tz=timezone.utc).strftime("%Y-%m-%d")
+    today = datetime.now(tz=UTC).strftime("%Y-%m-%d")
     path = base_dir / f"{today}.json"
 
     entries: list[dict[str, Any]] = []

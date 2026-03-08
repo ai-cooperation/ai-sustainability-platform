@@ -9,39 +9,37 @@ from __future__ import annotations
 import signal
 import sys
 import time
-import traceback
 from dataclasses import dataclass
-from typing import Any
 
 # Ensure project root is on sys.path so `src.*` imports work.
 from pathlib import Path
+from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 # Energy connectors
-from src.connectors.energy.open_meteo_solar import OpenMeteoSolarConnector
-from src.connectors.energy.nasa_power import NASAPowerConnector
-from src.connectors.energy.carbon_intensity_uk import CarbonIntensityUKConnector
-from src.connectors.energy.open_power_system import OpenPowerSystemConnector
-
-# Climate connectors
-from src.connectors.climate.open_meteo_weather import OpenMeteoWeatherConnector
-from src.connectors.climate.open_meteo_climate import OpenMeteoClimateConnector
-from src.connectors.climate.world_bank_climate import WorldBankClimateConnector
-
-# Environment connectors
-from src.connectors.environment.open_meteo_air_quality import OpenMeteoAirQualityConnector
-from src.connectors.environment.emissions_api import EmissionsAPIConnector
+from src.connectors.agriculture.eu_agri_food import EUAgriFoodConnector
 
 # Agriculture connectors
 from src.connectors.agriculture.faostat import FAOSTATConnector
-from src.connectors.agriculture.eu_agri_food import EUAgriFoodConnector
 from src.connectors.agriculture.gbif import GBIFConnector
+from src.connectors.carbon.open_climate_data import OpenClimateDataConnector
 
 # Carbon connectors
 from src.connectors.carbon.owid_carbon import OWIDCarbonConnector
-from src.connectors.carbon.open_climate_data import OpenClimateDataConnector
+from src.connectors.climate.open_meteo_climate import OpenMeteoClimateConnector
 
+# Climate connectors
+from src.connectors.climate.open_meteo_weather import OpenMeteoWeatherConnector
+from src.connectors.climate.world_bank_climate import WorldBankClimateConnector
+from src.connectors.energy.carbon_intensity_uk import CarbonIntensityUKConnector
+from src.connectors.energy.nasa_power import NASAPowerConnector
+from src.connectors.energy.open_meteo_solar import OpenMeteoSolarConnector
+from src.connectors.energy.open_power_system import OpenPowerSystemConnector
+from src.connectors.environment.emissions_api import EmissionsAPIConnector
+
+# Environment connectors
+from src.connectors.environment.open_meteo_air_quality import OpenMeteoAirQualityConnector
 
 TIMEOUT_SECONDS = 10
 

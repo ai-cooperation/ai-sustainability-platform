@@ -191,7 +191,13 @@ class TestUSDANASSNormalize:
     def test_normalize_skips_records_without_year(self, connector):
         raw = {
             "data": [
-                {"year": 2023, "state_name": "IOWA", "commodity_desc": "CORN", "statisticcat_desc": "YIELD", "Value": "200", "unit_desc": "BU / ACRE"},
+                {
+                    "year": 2023, "state_name": "IOWA",
+                    "commodity_desc": "CORN",
+                    "statisticcat_desc": "YIELD",
+                    "Value": "200",
+                    "unit_desc": "BU / ACRE",
+                },
                 {"state_name": "OHIO", "commodity_desc": "CORN", "Value": "180"},
             ]
         }

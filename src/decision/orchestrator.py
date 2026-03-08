@@ -46,9 +46,9 @@ class ForecastOrchestrator:
         analysis = self._analyst.analyze(signals)
         logger.info("Analysis complete")
 
-        # Step 3: Run debate (sequential to respect rate limits)
+        # Step 3: Run debate (sequential with delays for rate limits)
         positions = []
-        for agent in self._debate_agents:
+        for i, agent in enumerate(self._debate_agents):
             position = agent.debate(analysis, question)
             positions.append(position)
             logger.info(

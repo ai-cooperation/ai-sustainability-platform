@@ -10,7 +10,6 @@ import requests
 
 from src.connectors.base import BaseConnector, ConnectorError
 
-
 _DATASET_URLS: dict[str, str] = {
     "global-carbon-budget": (
         "https://raw.githubusercontent.com/openclimatedata/"

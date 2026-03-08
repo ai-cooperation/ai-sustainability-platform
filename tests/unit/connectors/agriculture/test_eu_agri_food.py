@@ -45,9 +45,21 @@ def sample_converted_eurostat():
     """Eurostat response after _convert_eurostat_response."""
     return {
         "data": [
-            {"year": 2020, "product": "C0000", "country": "EU27_2020", "value": 280000.0, "unit": "1000 t"},
-            {"year": 2021, "product": "C0000", "country": "EU27_2020", "value": 275000.0, "unit": "1000 t"},
-            {"year": 2022, "product": "C0000", "country": "EU27_2020", "value": 290000.0, "unit": "1000 t"},
+            {
+                "year": 2020, "product": "C0000",
+                "country": "EU27_2020",
+                "value": 280000.0, "unit": "1000 t",
+            },
+            {
+                "year": 2021, "product": "C0000",
+                "country": "EU27_2020",
+                "value": 275000.0, "unit": "1000 t",
+            },
+            {
+                "year": 2022, "product": "C0000",
+                "country": "EU27_2020",
+                "value": 290000.0, "unit": "1000 t",
+            },
         ],
         "source": "eurostat",
     }
@@ -199,7 +211,13 @@ class TestEUAgriFoodNormalize:
         raw = {
             "data": [
                 {"product": "Wheat", "memberState": "FR", "price": 200.0},
-                {"date": "2024-01-01", "product": "Barley", "memberState": "DE", "price": 190.0, "unit": "EUR/t"},
+                {
+                    "date": "2024-01-01",
+                    "product": "Barley",
+                    "memberState": "DE",
+                    "price": 190.0,
+                    "unit": "EUR/t",
+                },
             ]
         }
         df = connector.normalize(raw)

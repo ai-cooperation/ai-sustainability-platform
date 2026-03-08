@@ -81,7 +81,8 @@ class USDANASSConnector(BaseConnector):
         data = response.json()
         if not isinstance(data, dict):
             raise ConnectorError(
-                f"USDA NASS API returned unexpected format: expected dict, got {type(data).__name__}"
+                "USDA NASS API returned unexpected format: "
+                f"expected dict, got {type(data).__name__}"
             )
 
         if "error" in data:

@@ -11,7 +11,6 @@ import requests as requests_lib
 from src.connectors.base import ConnectorError
 from src.connectors.carbon.climatiq import ClimatiqConnector
 
-
 SAMPLE_RESPONSE = {
     "co2e": 0.42,
     "co2e_unit": "kg",

@@ -3,9 +3,8 @@
 from __future__ import annotations
 
 import json
+from datetime import UTC
 from pathlib import Path
-
-import pytest
 
 from src.monitor.reporter import (
     detect_changes,
@@ -97,8 +96,8 @@ class TestSaveHistory:
 
     def test_handles_corrupted_history(self, tmp_path: Path) -> None:
         # Write corrupted JSON
-        from datetime import datetime, timezone
-        today = datetime.now(tz=timezone.utc).strftime("%Y-%m-%d")
+        from datetime import datetime
+        today = datetime.now(tz=UTC).strftime("%Y-%m-%d")
         corrupted = tmp_path / f"{today}.json"
         corrupted.write_text("not valid json{{{")
 

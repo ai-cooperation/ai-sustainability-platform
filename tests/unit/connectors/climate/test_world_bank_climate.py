@@ -26,19 +26,31 @@ def sample_api_response():
         {"page": 1, "pages": 1, "per_page": 500, "total": 3},
         [
             {
-                "indicator": {"id": "EG.USE.PCAP.KG.OE", "value": "Energy use (kg of oil equivalent per capita)"},
+                "indicator": {
+                    "id": "EG.USE.PCAP.KG.OE",
+                    "value": "Energy use (kg of oil "
+                    "equivalent per capita)",
+                },
                 "country": {"id": "WLD", "value": "World"},
                 "date": "2022",
                 "value": 4.35,
             },
             {
-                "indicator": {"id": "EG.USE.PCAP.KG.OE", "value": "Energy use (kg of oil equivalent per capita)"},
+                "indicator": {
+                    "id": "EG.USE.PCAP.KG.OE",
+                    "value": "Energy use (kg of oil "
+                    "equivalent per capita)",
+                },
                 "country": {"id": "WLD", "value": "World"},
                 "date": "2021",
                 "value": 4.28,
             },
             {
-                "indicator": {"id": "EG.USE.PCAP.KG.OE", "value": "Energy use (kg of oil equivalent per capita)"},
+                "indicator": {
+                    "id": "EG.USE.PCAP.KG.OE",
+                    "value": "Energy use (kg of oil "
+                    "equivalent per capita)",
+                },
                 "country": {"id": "WLD", "value": "World"},
                 "date": "2020",
                 "value": 3.98,

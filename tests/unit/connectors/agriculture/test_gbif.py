@@ -174,7 +174,13 @@ class TestGBIFNormalize:
         raw = {
             "results": [
                 {"species": "Oryza sativa", "country": "TW"},
-                {"year": 2024, "species": "Zea mays", "country": "US", "decimalLatitude": 40.0, "decimalLongitude": -90.0, "datasetName": "Test"},
+                {
+                    "year": 2024, "species": "Zea mays",
+                    "country": "US",
+                    "decimalLatitude": 40.0,
+                    "decimalLongitude": -90.0,
+                    "datasetName": "Test",
+                },
             ]
         }
         df = connector.normalize(raw)
