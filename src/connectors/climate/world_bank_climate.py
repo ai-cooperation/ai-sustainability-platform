@@ -1,7 +1,8 @@
-"""World Bank Climate Data API connector."""
+"""World Bank Climate Data connector (via World Bank Indicators API)."""
 
 from __future__ import annotations
 
+from datetime import datetime
 from typing import Any
 
 import pandas as pd
@@ -11,13 +12,23 @@ from src.connectors.base import BaseConnector, ConnectorError
 
 
 class WorldBankClimateConnector(BaseConnector):
-    """Fetch climate data from World Bank Climate Data API.
+    """Fetch climate indicator data from the World Bank Indicators API.
 
-    Endpoint: http://climatedataapi.worldbank.org/climateweb/rest/v1/country/
+    Endpoint: https://api.worldbank.org/v2/country/{country}/indicator/{indicator}
     Auth: None (public API)
     """
 
-    BASE_URL = "http://climatedataapi.worldbank.org/climateweb/rest/v1/country"
+    BASE_URL = "https://api.worldbank.org/v2/country"
+
+    # Common climate-related indicators
+    INDICATORS = {
+        "co2_per_capita": "EN.ATM.CO2E.PC",
+        "energy_use_per_capita": "EG.USE.PCAP.KG.OE",
+        "population": "SP.POP.TOTL",
+        "renewable_energy_pct": "EG.FEC.RNEW.ZS",
+    }
+
+    DEFAULT_INDICATOR = "EG.USE.PCAP.KG.OE"
 
     @property
     def name(self) -> str:
@@ -28,14 +39,15 @@ class WorldBankClimateConnector(BaseConnector):
         return "climate"
 
     def fetch(self, **params: Any) -> dict:
-        """Fetch climate data for a country.
+        """Fetch climate indicator data from the World Bank API.
 
         Args:
-            var: Climate variable - 'tas' (temperature) or 'pr' (precipitation).
-                Default: 'tas'.
-            aggregation: Time aggregation - 'mavg' (monthly avg), 'annualavg',
-                'manom' (monthly anomaly). Default: 'annualavg'.
-            country_iso: ISO 3166-1 alpha-3 country code. Default: 'TWN'.
+            country: Country code (ISO alpha-3 or 'WLD' for world).
+                Default: 'WLD'.
+            indicator: Indicator code or alias from INDICATORS dict.
+                Default: 'EN.ATM.CO2E.PC' (CO2 emissions per capita).
+            start_year: Start year for date range. Default: 10 years ago.
+            end_year: End year for date range. Default: current year.
 
         Returns:
             Dict with 'data' (list of records) and request metadata.
@@ -43,36 +55,74 @@ class WorldBankClimateConnector(BaseConnector):
         Raises:
             ConnectorError: If the API request fails.
         """
-        var = params.get("var", "tas")
-        aggregation = params.get("aggregation", "annualavg")
-        country_iso = params.get("country_iso", "TWN")
+        country = params.get("country", "WLD")
+        indicator_input = params.get("indicator", self.DEFAULT_INDICATOR)
+        indicator = self.INDICATORS.get(indicator_input, indicator_input)
 
-        url = f"{self.BASE_URL}/{aggregation}/{var}/1980/2099/{country_iso}.json"
+        current_year = datetime.now().year
+        start_year = params.get("start_year", current_year - 10)
+        end_year = params.get("end_year", current_year)
+
+        url = (
+            f"{self.BASE_URL}/{country}/indicator/{indicator}"
+        )
+        query_params = {
+            "format": "json",
+            "date": f"{start_year}:{end_year}",
+            "per_page": 500,
+        }
 
         try:
-            response = requests.get(url, timeout=30)
+            response = requests.get(url, params=query_params, timeout=30)
             response.raise_for_status()
-            data = response.json()
-            return {
-                "data": data,
-                "var": var,
-                "aggregation": aggregation,
-                "country_iso": country_iso,
-            }
+            payload = response.json()
         except requests.exceptions.JSONDecodeError as e:
             raise ConnectorError(f"{self.name}: invalid JSON response - {e}") from e
         except requests.exceptions.RequestException as e:
             raise ConnectorError(f"{self.name}: API request failed - {e}") from e
 
+        # World Bank API returns [metadata, data_records] on success,
+        # or [{message: [...]}] on error (e.g., archived indicator).
+        if not isinstance(payload, list):
+            raise ConnectorError(
+                f"{self.name}: unexpected response structure "
+                f"(expected list, got {type(payload).__name__})"
+            )
+
+        if len(payload) == 1 and isinstance(payload[0], dict) and "message" in payload[0]:
+            messages = payload[0]["message"]
+            msg_text = messages[0].get("value", "unknown error") if messages else "unknown error"
+            raise ConnectorError(f"{self.name}: API error - {msg_text}")
+
+        if len(payload) < 2:
+            raise ConnectorError(
+                f"{self.name}: unexpected response structure "
+                f"(expected list with 2 elements, got {len(payload)} elements)"
+            )
+
+        metadata = payload[0]
+        records = payload[1]
+
+        if records is None:
+            records = []
+
+        return {
+            "data": records,
+            "country": country,
+            "indicator": indicator,
+            "start_year": start_year,
+            "end_year": end_year,
+            "api_metadata": metadata,
+        }
+
     def normalize(self, raw_data: dict | list) -> pd.DataFrame:
-        """Convert World Bank climate response to standardized DataFrame.
+        """Convert World Bank API response to standardized DataFrame.
 
         Args:
-            raw_data: Dict with 'data' list and metadata.
+            raw_data: Dict with 'data' list and metadata from fetch().
 
         Returns:
-            DataFrame with columns: timestamp, country, scenario,
-            variable, value.
+            DataFrame with columns: timestamp, country, variable, value.
 
         Raises:
             ConnectorError: If response structure is unexpected.
@@ -87,50 +137,30 @@ class WorldBankClimateConnector(BaseConnector):
         if not isinstance(data, list):
             raise ConnectorError(f"{self.name}: expected list for 'data', got {type(data).__name__}")
 
-        country = raw_data.get("country_iso", "UNKNOWN")
-        var = raw_data.get("var", "unknown")
+        indicator = raw_data.get("indicator", "unknown")
 
         records = []
         for entry in data:
-            scenario = entry.get("scenario", "historical")
-            from_year = entry.get("fromYear")
-            to_year = entry.get("toYear")
-            annual_data = entry.get("annualData", entry.get("monthVals", []))
+            value = entry.get("value")
+            if value is None:
+                continue
 
-            if isinstance(annual_data, list) and annual_data:
-                # Monthly data (12 values)
-                if len(annual_data) == 12:
-                    base_year = from_year if from_year else 2000
-                    for month_idx, val in enumerate(annual_data, start=1):
-                        if val is not None:
-                            records.append({
-                                "timestamp": pd.Timestamp(year=int(base_year), month=month_idx, day=1),
-                                "country": country,
-                                "scenario": scenario,
-                                "variable": var,
-                                "value": float(val),
-                            })
-            elif isinstance(annual_data, (int, float)):
-                year = from_year if from_year else 2000
-                records.append({
-                    "timestamp": pd.Timestamp(year=int(year), month=1, day=1),
-                    "country": country,
-                    "scenario": scenario,
-                    "variable": var,
-                    "value": float(annual_data),
-                })
+            year_str = entry.get("date")
+            if not year_str:
+                continue
 
-            # Handle direct annual average responses (single value per model/scenario)
-            if not records or (isinstance(annual_data, list) and len(annual_data) != 12):
-                annual_val = entry.get("annualVal")
-                if annual_val is not None and from_year:
-                    records.append({
-                        "timestamp": pd.Timestamp(year=int(from_year), month=1, day=1),
-                        "country": country,
-                        "scenario": scenario,
-                        "variable": var,
-                        "value": float(annual_val),
-                    })
+            country_info = entry.get("country", {})
+            country_code = country_info.get("id", raw_data.get("country", "UNKNOWN"))
+
+            indicator_info = entry.get("indicator", {})
+            indicator_name = indicator_info.get("id", indicator)
+
+            records.append({
+                "timestamp": pd.Timestamp(year=int(year_str), month=1, day=1),
+                "country": country_code,
+                "variable": indicator_name,
+                "value": float(value),
+            })
 
         if not records:
             raise ConnectorError(f"{self.name}: could not extract any records from response")
@@ -141,4 +171,4 @@ class WorldBankClimateConnector(BaseConnector):
 
     def _health_check_params(self) -> dict:
         """Minimal params for health check."""
-        return {"var": "tas", "aggregation": "annualavg", "country_iso": "USA"}
+        return {"country": "WLD", "indicator": self.DEFAULT_INDICATOR}

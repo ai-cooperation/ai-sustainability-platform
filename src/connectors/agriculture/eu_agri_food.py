@@ -1,4 +1,4 @@
-"""EU Agri-Food data connector for dairy prices, cereal prices, and trade."""
+"""EU Agri-Food data connector (via Eurostat API, with USDA FAS fallback)."""
 
 from __future__ import annotations
 
@@ -11,14 +11,17 @@ from src.connectors.base import BaseConnector, ConnectorError
 
 
 class EUAgriFoodConnector(BaseConnector):
-    """Fetch agricultural market data from the EU Agri-Food Data Portal.
+    """Fetch agricultural data from Eurostat API (crop production).
 
-    Endpoint: https://agridata.ec.europa.eu/api/v1/
-    Data: dairy prices, cereal prices, trade statistics.
-    Auth: None required.
+    Primary: https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/
+    Fallback: https://apps.fas.usda.gov/OpenData/api/esr/exports/
+    Auth: None required for either endpoint.
     """
 
-    BASE_URL = "https://agridata.ec.europa.eu/api/v1"
+    EUROSTAT_BASE = (
+        "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data"
+    )
+    USDA_FAS_BASE = "https://apps.fas.usda.gov/OpenData/api/esr/exports"
 
     @property
     def name(self) -> str:
@@ -29,47 +32,116 @@ class EUAgriFoodConnector(BaseConnector):
         return "agriculture"
 
     def fetch(self, **params: Any) -> dict:
-        """Fetch data from the EU Agri-Food Data Portal.
+        """Fetch crop production data from Eurostat, falling back to USDA FAS.
 
         Args:
-            dataset: Dataset identifier (default "cereals-prices").
-            member_state: EU member state code (e.g., "FR", "DE").
-            product: Product filter (e.g., "Common wheat").
-            year: Year filter.
+            dataset: Eurostat dataset code. Default: 'apro_cpsh1'.
+            geo: Geographic area. Default: 'EU27_2020'.
+            crops: Crop code. Default: 'C0000' (total cereals).
+            strucpro: Structure of production. Default: 'PR_HU_EU'.
+            commodity_code: USDA commodity code for fallback. Default: '0100000'.
 
         Returns:
-            Raw JSON response dict.
+            Dict with normalized structure containing data records.
+
+        Raises:
+            ConnectorError: If both APIs fail.
         """
-        dataset = params.get("dataset", "cereals-prices")
-        url = f"{self.BASE_URL}/{dataset}"
+        try:
+            return self._fetch_eurostat(**params)
+        except ConnectorError:
+            self.logger.warning(
+                "Eurostat API failed, falling back to USDA FAS API"
+            )
+            return self._fetch_usda_fas(**params)
 
-        query_params: dict[str, Any] = {}
+    def _fetch_eurostat(self, **params: Any) -> dict:
+        """Fetch from Eurostat API."""
+        dataset = params.get("dataset", "apro_cpsh1")
+        geo = params.get("geo", "EU27_2020")
+        crops = params.get("crops", "C0000")
+        strucpro = params.get("strucpro", "PR_HU_EU")
 
-        member_state = params.get("member_state")
-        if member_state:
-            query_params["memberState"] = member_state
-
-        product = params.get("product")
-        if product:
-            query_params["product"] = product
-
-        year = params.get("year")
-        if year:
-            query_params["year"] = year
+        url = f"{self.EUROSTAT_BASE}/{dataset}"
+        query_params = {
+            "format": "JSON",
+            "lang": "en",
+            "geo": geo,
+            "crops": crops,
+            "strucpro": strucpro,
+        }
 
         try:
             response = requests.get(url, params=query_params, timeout=30)
             response.raise_for_status()
         except requests.RequestException as exc:
             raise ConnectorError(
-                f"EU Agri-Food API request failed for dataset '{dataset}': {exc}"
+                f"Eurostat API request failed for dataset '{dataset}': {exc}"
             ) from exc
 
-        data = response.json()
-        return data
+        raw = response.json()
+        return self._convert_eurostat_response(raw, geo, crops)
+
+    def _convert_eurostat_response(
+        self, raw: dict, geo: str, crops: str
+    ) -> dict:
+        """Convert Eurostat JSON-stat format to a flat record list."""
+        values = raw.get("value", {})
+        dimensions = raw.get("dimension", {})
+
+        time_dim = dimensions.get("time", {}).get("category", {}).get("index", {})
+        # time_dim is {year_label: positional_index}
+        index_to_year = {v: k for k, v in time_dim.items()}
+
+        records = []
+        for idx_str, val in values.items():
+            year_label = index_to_year.get(int(idx_str))
+            if year_label is None:
+                continue
+            records.append({
+                "year": int(year_label),
+                "product": crops,
+                "country": geo,
+                "value": float(val),
+                "unit": raw.get("extension", {}).get("annotation", [{}])[0].get("title", ""),
+            })
+
+        return {"data": records, "source": "eurostat"}
+
+    def _fetch_usda_fas(self, **params: Any) -> dict:
+        """Fetch from USDA FAS API as fallback."""
+        commodity_code = params.get("commodity_code", "0100000")
+        url = f"{self.USDA_FAS_BASE}/commodityCode/{commodity_code}"
+
+        try:
+            response = requests.get(url, timeout=30)
+            response.raise_for_status()
+        except requests.RequestException as exc:
+            raise ConnectorError(
+                f"USDA FAS API request failed for commodity '{commodity_code}': {exc}"
+            ) from exc
+
+        raw = response.json()
+        if not isinstance(raw, list):
+            raw = [raw]
+
+        records = []
+        for entry in raw:
+            year = entry.get("dataYear") or entry.get("year")
+            if year is None:
+                continue
+            records.append({
+                "year": int(year),
+                "product": entry.get("commodityDescription", entry.get("commodity", "")),
+                "country": entry.get("countryDescription", entry.get("country", "")),
+                "value": float(entry.get("quantity", entry.get("value", 0))),
+                "unit": entry.get("unitDescription", entry.get("unit", "")),
+            })
+
+        return {"data": records, "source": "usda_fas"}
 
     def normalize(self, raw_data: dict | list) -> pd.DataFrame:
-        """Convert raw EU Agri-Food response to a standardized DataFrame.
+        """Convert raw response to a standardized DataFrame.
 
         Returns:
             DataFrame with columns: timestamp, product, country, price, unit.
@@ -117,4 +189,4 @@ class EUAgriFoodConnector(BaseConnector):
 
     def _health_check_params(self) -> dict:
         """Minimal params for health check."""
-        return {"dataset": "cereals-prices"}
+        return {"dataset": "apro_cpsh1"}

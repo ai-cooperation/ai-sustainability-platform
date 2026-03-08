@@ -2,13 +2,32 @@ name: Daily Pipeline Update
 
 on:
   schedule:
-    - cron: "0 6 * * *"  # Daily at UTC 06:00
-  workflow_dispatch:  # Allow manual trigger
+    - cron: "0 6 * * *"  # Daily at UTC 06:00 (Taiwan 14:00)
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   run-pipelines:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+
+    env:
+      EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
+      ELECTRICITY_MAPS_API_KEY: ${{ secrets.ELECTRICITY_MAPS_API_KEY }}
+      NREL_API_KEY: ${{ secrets.NREL_API_KEY }}
+      NOAA_CDO_TOKEN: ${{ secrets.NOAA_CDO_TOKEN }}
+      COPERNICUS_CDS_KEY: ${{ secrets.COPERNICUS_CDS_KEY }}
+      OPENAQ_API_KEY: ${{ secrets.OPENAQ_API_KEY }}
+      AQICN_API_TOKEN: ${{ secrets.AQICN_API_TOKEN }}
+      GLOBAL_FOREST_WATCH_API_KEY: ${{ secrets.GLOBAL_FOREST_WATCH_API_KEY }}
+      USDA_NASS_API_KEY: ${{ secrets.USDA_NASS_API_KEY }}
+      GBIF_USERNAME: ${{ secrets.GBIF_USERNAME }}
+      GBIF_PASSWORD: ${{ secrets.GBIF_PASSWORD }}
+      CLIMATIQ_API_KEY: ${{ secrets.CLIMATIQ_API_KEY }}
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
 
     steps:
       - uses: actions/checkout@v4
@@ -23,39 +42,36 @@ jobs:
         run: uv sync
 
       - name: Run Energy Pipeline
+        continue-on-error: true
         run: uv run python -m src.pipelines.energy
-        env:
-          EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
-          ELECTRICITY_MAPS_API_KEY: ${{ secrets.ELECTRICITY_MAPS_API_KEY }}
-          NREL_API_KEY: ${{ secrets.NREL_API_KEY }}
 
       - name: Run Climate Pipeline
+        continue-on-error: true
         run: uv run python -m src.pipelines.climate
-        env:
-          NOAA_CDO_TOKEN: ${{ secrets.NOAA_CDO_TOKEN }}
-          COPERNICUS_CDS_KEY: ${{ secrets.COPERNICUS_CDS_KEY }}
 
       - name: Run Environment Pipeline
+        continue-on-error: true
         run: uv run python -m src.pipelines.environment
-        env:
-          OPENAQ_API_KEY: ${{ secrets.OPENAQ_API_KEY }}
-          AQICN_API_TOKEN: ${{ secrets.AQICN_API_TOKEN }}
-          GLOBAL_FOREST_WATCH_API_KEY: ${{ secrets.GLOBAL_FOREST_WATCH_API_KEY }}
 
       - name: Run Agriculture Pipeline
+        continue-on-error: true
         run: uv run python -m src.pipelines.agriculture
-        env:
-          USDA_NASS_API_KEY: ${{ secrets.USDA_NASS_API_KEY }}
-          GBIF_USERNAME: ${{ secrets.GBIF_USERNAME }}
-          GBIF_PASSWORD: ${{ secrets.GBIF_PASSWORD }}
 
       - name: Run Carbon Pipeline
+        continue-on-error: true
         run: uv run python -m src.pipelines.carbon
-        env:
-          CLIMATIQ_API_KEY: ${{ secrets.CLIMATIQ_API_KEY }}
 
       - name: Run Cross-Domain Pipeline
+        continue-on-error: true
         run: uv run python -m src.pipelines.cross_domain
+
+      - name: Commit processed data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/processed/ data/status/ || true
+          git diff --cached --quiet || git commit -m "chore: daily pipeline update $(date -u +%Y-%m-%d)"
+          git push || true
 
       - name: Upload processed data
         uses: actions/upload-artifact@v4
