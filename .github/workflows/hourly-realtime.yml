@@ -1,0 +1,41 @@
+name: Hourly Real-Time Update
+
+on:
+  schedule:
+    - cron: "0 * * * *"  # Every hour
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  run-realtime:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Run Carbon Intensity UK (real-time)
+        run: |
+          uv run python -c "
+          from src.connectors.energy.carbon_intensity_uk import CarbonIntensityUKConnector
+          connector = CarbonIntensityUKConnector()
+          result = connector.run()
+          print(f'Carbon Intensity UK: {result.record_count} records')
+          "
+
+      - name: Run Air Quality (real-time)
+        run: |
+          uv run python -c "
+          from src.connectors.environment.open_meteo_air_quality import OpenMeteoAirQualityConnector
+          connector = OpenMeteoAirQualityConnector()
+          result = connector.run()
+          print(f'Air Quality: {result.record_count} records')
+          "

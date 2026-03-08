@@ -1,0 +1,545 @@
+datasets:
+  # ============================================================
+  # ENERGY DOMAIN (7)
+  # ============================================================
+  - id: open_meteo_solar
+    name: Open-Meteo Solar Radiation
+    domain: energy
+    provider: Open-Meteo
+    access:
+      type: api
+      endpoint: https://api.open-meteo.com/v1/forecast
+      auth: none
+      rate_limit: "10000/day"
+    update_frequency: hourly
+    data_format: json
+    connector_class: OpenMeteoSolarConnector
+    connector_module: src.connectors.energy.open_meteo_solar
+    fields: [timestamp, latitude, longitude, shortwave_radiation, direct_radiation, diffuse_radiation]
+    status: active
+    description: Global solar radiation forecasts and historical data
+
+  - id: nasa_power
+    name: NASA POWER
+    domain: energy
+    provider: NASA
+    access:
+      type: api
+      endpoint: https://power.larc.nasa.gov/api/temporal/daily/point
+      auth: none
+      rate_limit: ""
+    update_frequency: daily
+    data_format: json
+    connector_class: NASAPowerConnector
+    connector_module: src.connectors.energy.nasa_power
+    fields: [timestamp, latitude, longitude, solar_radiation, temperature]
+    status: active
+    description: NASA solar irradiance and meteorological data for renewable energy
+
+  - id: carbon_intensity_uk
+    name: UK Carbon Intensity
+    domain: energy
+    provider: National Grid ESO
+    access:
+      type: api
+      endpoint: https://api.carbonintensity.org.uk
+      auth: none
+      rate_limit: ""
+    update_frequency: 30min
+    data_format: json
+    connector_class: CarbonIntensityUKConnector
+    connector_module: src.connectors.energy.carbon_intensity_uk
+    fields: [timestamp, intensity_forecast, intensity_actual, index, region]
+    status: active
+    description: UK electricity grid carbon intensity with regional breakdowns
+
+  - id: open_power_system
+    name: Open Power System Data
+    domain: energy
+    provider: Open Power System Data
+    access:
+      type: download
+      endpoint: https://data.open-power-system-data.org/time_series/
+      auth: none
+      rate_limit: ""
+    update_frequency: archived
+    data_format: csv
+    connector_class: OpenPowerSystemConnector
+    connector_module: src.connectors.energy.open_power_system
+    fields: [timestamp, country, load, wind_onshore, wind_offshore, solar]
+    status: active
+    description: European electricity generation and consumption time series
+
+  - id: eia
+    name: US Energy Information Administration
+    domain: energy
+    provider: EIA
+    access:
+      type: api
+      endpoint: https://api.eia.gov/v2/
+      auth: api_key
+      rate_limit: "5000 rows/response"
+    update_frequency: varies
+    data_format: json
+    connector_class: EIAConnector
+    connector_module: src.connectors.energy.eia
+    fields: [timestamp, series_id, value, unit]
+    status: active
+    description: Comprehensive US energy statistics
+
+  - id: electricity_maps
+    name: Electricity Maps
+    domain: energy
+    provider: Electricity Maps
+    access:
+      type: api
+      endpoint: https://api.electricitymaps.com/v3/carbon-intensity/latest
+      auth: api_key
+      rate_limit: ""
+    update_frequency: hourly
+    data_format: json
+    connector_class: ElectricityMapsConnector
+    connector_module: src.connectors.energy.electricity_maps
+    fields: [timestamp, zone, carbon_intensity, fossil_fuel_percentage]
+    status: active
+    description: Global real-time carbon intensity of electricity
+
+  - id: nrel
+    name: NREL Solar and Wind
+    domain: energy
+    provider: NREL
+    access:
+      type: api
+      endpoint: https://developer.nrel.gov/api/solar/solar_resource/v1.json
+      auth: api_key
+      rate_limit: "1000/hour"
+    update_frequency: on_demand
+    data_format: json
+    connector_class: NRELConnector
+    connector_module: src.connectors.energy.nrel
+    fields: [latitude, longitude, ghi, dni, wind_speed]
+    status: active
+    description: US solar and wind resource data from NREL
+
+  # ============================================================
+  # CLIMATE DOMAIN (6)
+  # ============================================================
+  - id: open_meteo_weather
+    name: Open-Meteo Weather
+    domain: climate
+    provider: Open-Meteo
+    access:
+      type: api
+      endpoint: https://api.open-meteo.com/v1/forecast
+      auth: none
+      rate_limit: "10000/day"
+    update_frequency: hourly
+    data_format: json
+    connector_class: OpenMeteoWeatherConnector
+    connector_module: src.connectors.climate.open_meteo_weather
+    fields: [timestamp, latitude, longitude, temperature, humidity, precipitation, wind_speed]
+    status: active
+    description: Global weather forecast and historical data
+
+  - id: open_meteo_climate
+    name: Open-Meteo Climate Projections
+    domain: climate
+    provider: Open-Meteo
+    access:
+      type: api
+      endpoint: https://climate-api.open-meteo.com/v1/climate
+      auth: none
+      rate_limit: "10000/day"
+    update_frequency: on_demand
+    data_format: json
+    connector_class: OpenMeteoClimateConnector
+    connector_module: src.connectors.climate.open_meteo_climate
+    fields: [timestamp, latitude, longitude, temperature_max, temperature_min, precipitation]
+    status: active
+    description: IPCC climate model projections
+
+  - id: noaa_ghg
+    name: NOAA Greenhouse Gas Concentrations
+    domain: climate
+    provider: NOAA GML
+    access:
+      type: download
+      endpoint: https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_mm_mlo.csv
+      auth: none
+      rate_limit: ""
+    update_frequency: weekly
+    data_format: csv
+    connector_class: NOAAGHGConnector
+    connector_module: src.connectors.climate.noaa_ghg
+    fields: [timestamp, co2_ppm, trend, location]
+    status: active
+    description: Atmospheric CO2 and CH4 concentrations from Mauna Loa
+
+  - id: world_bank_climate
+    name: World Bank Climate Data
+    domain: climate
+    provider: World Bank
+    access:
+      type: api
+      endpoint: https://climatedataapi.worldbank.org/climateweb/rest/v1/country
+      auth: none
+      rate_limit: ""
+    update_frequency: periodic
+    data_format: json
+    connector_class: WorldBankClimateConnector
+    connector_module: src.connectors.climate.world_bank_climate
+    fields: [country, year, temperature, precipitation, scenario]
+    status: active
+    description: Country-level climate data and projections
+
+  - id: noaa_cdo
+    name: NOAA Climate Data Online
+    domain: climate
+    provider: NOAA NCEI
+    access:
+      type: api
+      endpoint: https://www.ncei.noaa.gov/cdo-web/api/v2/data
+      auth: token
+      rate_limit: "5/sec, 10000/day"
+    update_frequency: daily
+    data_format: json
+    connector_class: NOAACDOConnector
+    connector_module: src.connectors.climate.noaa_cdo
+    fields: [timestamp, station, datatype, value]
+    status: active
+    description: Global historical weather and climate observations
+
+  - id: copernicus_cds
+    name: Copernicus Climate Data Store
+    domain: climate
+    provider: Copernicus
+    access:
+      type: api
+      endpoint: https://cds.climate.copernicus.eu/api
+      auth: token
+      rate_limit: queue-based
+    update_frequency: monthly
+    data_format: netcdf
+    connector_class: CopernicusCDSConnector
+    connector_module: src.connectors.climate.copernicus_cds
+    fields: [timestamp, latitude, longitude, temperature, precipitation]
+    status: active
+    description: ERA5 reanalysis and climate datasets from EU Copernicus
+
+  # ============================================================
+  # ENVIRONMENT DOMAIN (7)
+  # ============================================================
+  - id: open_meteo_air_quality
+    name: Open-Meteo Air Quality
+    domain: environment
+    provider: Open-Meteo
+    access:
+      type: api
+      endpoint: https://air-quality-api.open-meteo.com/v1/air-quality
+      auth: none
+      rate_limit: "10000/day"
+    update_frequency: hourly
+    data_format: json
+    connector_class: OpenMeteoAirQualityConnector
+    connector_module: src.connectors.environment.open_meteo_air_quality
+    fields: [timestamp, latitude, longitude, pm2_5, pm10, co, no2, o3, aqi]
+    status: active
+    description: Global air quality forecasts and data
+
+  - id: epa_envirofacts
+    name: EPA Envirofacts
+    domain: environment
+    provider: US EPA
+    access:
+      type: api
+      endpoint: https://data.epa.gov/efservice/
+      auth: none
+      rate_limit: ""
+    update_frequency: varies
+    data_format: json
+    connector_class: EPAEnvirofactsConnector
+    connector_module: src.connectors.environment.epa_envirofacts
+    fields: [facility, sector, emissions, year]
+    status: active
+    description: US EPA greenhouse gas emissions and toxic release data
+
+  - id: epa_water_quality
+    name: EPA Water Quality Portal
+    domain: environment
+    provider: US EPA / USGS
+    access:
+      type: api
+      endpoint: https://www.waterqualitydata.us/data/Result/search
+      auth: none
+      rate_limit: ""
+    update_frequency: continuous
+    data_format: csv
+    connector_class: EPAWaterQualityConnector
+    connector_module: src.connectors.environment.epa_water_quality
+    fields: [timestamp, station, parameter, value, unit]
+    status: active
+    description: US water quality data from EPA and USGS
+
+  - id: emissions_api
+    name: Emissions API (Sentinel-5P)
+    domain: environment
+    provider: Emissions API
+    access:
+      type: api
+      endpoint: https://api.v2.emissions-api.org/api/v2/
+      auth: none
+      rate_limit: fair_use
+    update_frequency: daily
+    data_format: json
+    connector_class: EmissionsAPIConnector
+    connector_module: src.connectors.environment.emissions_api
+    fields: [timestamp, latitude, longitude, product, value]
+    status: active
+    description: Satellite-based atmospheric emissions from Sentinel-5P
+
+  - id: openaq
+    name: OpenAQ
+    domain: environment
+    provider: OpenAQ
+    access:
+      type: api
+      endpoint: https://api.openaq.org/v3/
+      auth: api_key
+      rate_limit: ""
+    update_frequency: realtime
+    data_format: json
+    connector_class: OpenAQConnector
+    connector_module: src.connectors.environment.openaq
+    fields: [timestamp, location, parameter, value, unit, country]
+    status: active
+    description: Global air quality data from 100+ countries
+
+  - id: aqicn
+    name: World Air Quality Index
+    domain: environment
+    provider: AQICN
+    access:
+      type: api
+      endpoint: https://api.waqi.info/feed/
+      auth: api_key
+      rate_limit: "1000/sec"
+    update_frequency: hourly
+    data_format: json
+    connector_class: AQICNConnector
+    connector_module: src.connectors.environment.aqicn
+    fields: [timestamp, city, aqi, pm25, pm10, o3, no2, so2, co]
+    status: active
+    description: Real-time AQI from 12000+ monitoring stations
+
+  - id: global_forest_watch
+    name: Global Forest Watch
+    domain: environment
+    provider: World Resources Institute
+    access:
+      type: api
+      endpoint: https://data-api.globalforestwatch.org/
+      auth: api_key
+      rate_limit: ""
+    update_frequency: annual
+    data_format: json
+    connector_class: GlobalForestWatchConnector
+    connector_module: src.connectors.environment.global_forest_watch
+    fields: [year, country, tree_cover_loss_ha, co2_emissions]
+    status: active
+    description: Satellite-based deforestation and forest fire monitoring
+
+  # ============================================================
+  # AGRICULTURE DOMAIN (4)
+  # ============================================================
+  - id: faostat
+    name: FAOSTAT
+    domain: agriculture
+    provider: UN FAO
+    access:
+      type: api
+      endpoint: https://fenixservices.fao.org/faostat/api/v1/en/data/
+      auth: none
+      rate_limit: ""
+    update_frequency: annual
+    data_format: json
+    connector_class: FAOSTATConnector
+    connector_module: src.connectors.agriculture.faostat
+    fields: [year, country, item, element, value, unit]
+    status: active
+    description: Global agricultural statistics from 245+ countries
+
+  - id: eu_agri_food
+    name: EU Agri-Food Data Portal
+    domain: agriculture
+    provider: European Commission
+    access:
+      type: api
+      endpoint: https://agridata.ec.europa.eu/api/v1/
+      auth: none
+      rate_limit: ""
+    update_frequency: weekly
+    data_format: json
+    connector_class: EUAgriFoodConnector
+    connector_module: src.connectors.agriculture.eu_agri_food
+    fields: [date, product, country, price, unit]
+    status: active
+    description: European agricultural commodity prices and trade data
+
+  - id: usda_nass
+    name: USDA NASS Quick Stats
+    domain: agriculture
+    provider: USDA
+    access:
+      type: api
+      endpoint: https://quickstats.nass.usda.gov/api/api_GET/
+      auth: api_key
+      rate_limit: "50000 records/query"
+    update_frequency: varies
+    data_format: json
+    connector_class: USDANASSConnector
+    connector_module: src.connectors.agriculture.usda_nass
+    fields: [year, state, commodity, statistic, value, unit]
+    status: active
+    description: Detailed US agricultural statistics
+
+  - id: gbif
+    name: GBIF Biodiversity
+    domain: agriculture
+    provider: GBIF
+    access:
+      type: api
+      endpoint: https://api.gbif.org/v1/occurrence/search
+      auth: none
+      rate_limit: ""
+    update_frequency: continuous
+    data_format: json
+    connector_class: GBIFConnector
+    connector_module: src.connectors.agriculture.gbif
+    fields: [timestamp, species, country, latitude, longitude, dataset]
+    status: active
+    description: Global biodiversity occurrence records
+
+  # ============================================================
+  # CARBON / ESG DOMAIN (5)
+  # ============================================================
+  - id: owid_carbon
+    name: Our World in Data CO2
+    domain: carbon
+    provider: Our World in Data
+    access:
+      type: download
+      endpoint: https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv
+      auth: none
+      rate_limit: ""
+    update_frequency: periodic
+    data_format: csv
+    connector_class: OWIDCarbonConnector
+    connector_module: src.connectors.carbon.owid_carbon
+    fields: [year, country, co2, co2_per_capita, population, gdp]
+    status: active
+    description: Country-level CO2 emissions from Global Carbon Project
+
+  - id: climate_watch
+    name: Climate Watch Data
+    domain: carbon
+    provider: World Resources Institute
+    access:
+      type: api
+      endpoint: https://www.climatewatchdata.org/api/v1/data/historical_emissions
+      auth: none
+      rate_limit: ""
+    update_frequency: annual
+    data_format: json
+    connector_class: ClimateWatchConnector
+    connector_module: src.connectors.carbon.climate_watch
+    fields: [year, country, sector, gas, value]
+    status: active
+    description: Historical GHG emissions and NDC tracking
+
+  - id: open_climate_data
+    name: Open Climate Data
+    domain: carbon
+    provider: Open Climate Data
+    access:
+      type: download
+      endpoint: https://github.com/openclimatedata/
+      auth: none
+      rate_limit: ""
+    update_frequency: periodic
+    data_format: csv
+    connector_class: OpenClimateDataConnector
+    connector_module: src.connectors.carbon.open_climate_data
+    fields: [year, country, emissions, category]
+    status: active
+    description: Curated UNFCCC and carbon budget datasets
+
+  - id: climate_trace
+    name: Climate TRACE
+    domain: carbon
+    provider: Climate TRACE
+    access:
+      type: api
+      endpoint: https://api.climatetrace.org/v6/country/emissions
+      auth: none
+      rate_limit: beta
+    update_frequency: annual
+    data_format: json
+    connector_class: ClimateTRACEConnector
+    connector_module: src.connectors.carbon.climate_trace
+    fields: [year, country, sector, subsector, co2, ch4, n2o, co2e]
+    status: active
+    description: Global asset-level emissions inventory
+
+  - id: climatiq
+    name: Climatiq Emission Factors
+    domain: carbon
+    provider: Climatiq
+    access:
+      type: api
+      endpoint: https://api.climatiq.io/estimate
+      auth: api_key
+      rate_limit: ""
+    update_frequency: regular
+    data_format: json
+    connector_class: ClimatiqConnector
+    connector_module: src.connectors.carbon.climatiq
+    fields: [activity, emission_factor, co2e, unit, source]
+    status: active
+    description: Carbon emission factors and calculation engine
+
+  # ============================================================
+  # TRANSPORT / URBAN DOMAIN (2)
+  # ============================================================
+  - id: open_charge_map
+    name: Open Charge Map
+    domain: transport
+    provider: Open Charge Map
+    access:
+      type: api
+      endpoint: https://api.openchargemap.io/v3/poi/
+      auth: api_key
+      rate_limit: ""
+    update_frequency: continuous
+    data_format: json
+    connector_class: OpenChargeMapConnector
+    connector_module: src.connectors.transport.open_charge_map
+    fields: [id, title, latitude, longitude, country, power_kw, connector_type, operator]
+    status: active
+    description: Global EV charging station locations
+
+  - id: nrel_alt_fuel
+    name: NREL Alternative Fuel Stations
+    domain: transport
+    provider: NREL / US DOE
+    access:
+      type: api
+      endpoint: https://developer.nrel.gov/api/alt-fuel-stations/v1.json
+      auth: api_key
+      rate_limit: "1000/hour"
+    update_frequency: continuous
+    data_format: json
+    connector_class: NRELAltFuelConnector
+    connector_module: src.connectors.transport.nrel_alt_fuel
+    fields: [id, station_name, latitude, longitude, fuel_type, city, state, access_code]
+    status: active
+    description: US alternative fuel and EV charging stations

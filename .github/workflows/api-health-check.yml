@@ -1,0 +1,49 @@
+name: API Health Check
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Run health check
+        env:
+          EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
+          ELECTRICITY_MAPS_API_KEY: ${{ secrets.ELECTRICITY_MAPS_API_KEY }}
+          NREL_API_KEY: ${{ secrets.NREL_API_KEY }}
+          NOAA_CDO_TOKEN: ${{ secrets.NOAA_CDO_TOKEN }}
+          COPERNICUS_CDS_KEY: ${{ secrets.COPERNICUS_CDS_KEY }}
+          OPENAQ_API_KEY: ${{ secrets.OPENAQ_API_KEY }}
+          AQICN_API_TOKEN: ${{ secrets.AQICN_API_TOKEN }}
+          GLOBAL_FOREST_WATCH_API_KEY: ${{ secrets.GLOBAL_FOREST_WATCH_API_KEY }}
+          USDA_NASS_API_KEY: ${{ secrets.USDA_NASS_API_KEY }}
+          CLIMATIQ_API_KEY: ${{ secrets.CLIMATIQ_API_KEY }}
+          OPEN_CHARGE_MAP_API_KEY: ${{ secrets.OPEN_CHARGE_MAP_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: uv run python -m src.monitor.scheduler
+
+      - name: Commit updated status
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/status/status.json
+          git diff --cached --quiet || git commit -m "chore: update API health status"
+          git push

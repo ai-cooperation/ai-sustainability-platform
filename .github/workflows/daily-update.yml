@@ -1,0 +1,65 @@
+name: Daily Pipeline Update
+
+on:
+  schedule:
+    - cron: "0 6 * * *"  # Daily at UTC 06:00
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  run-pipelines:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Run Energy Pipeline
+        run: uv run python -m src.pipelines.energy
+        env:
+          EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
+          ELECTRICITY_MAPS_API_KEY: ${{ secrets.ELECTRICITY_MAPS_API_KEY }}
+          NREL_API_KEY: ${{ secrets.NREL_API_KEY }}
+
+      - name: Run Climate Pipeline
+        run: uv run python -m src.pipelines.climate
+        env:
+          NOAA_CDO_TOKEN: ${{ secrets.NOAA_CDO_TOKEN }}
+          COPERNICUS_CDS_KEY: ${{ secrets.COPERNICUS_CDS_KEY }}
+
+      - name: Run Environment Pipeline
+        run: uv run python -m src.pipelines.environment
+        env:
+          OPENAQ_API_KEY: ${{ secrets.OPENAQ_API_KEY }}
+          AQICN_API_TOKEN: ${{ secrets.AQICN_API_TOKEN }}
+          GLOBAL_FOREST_WATCH_API_KEY: ${{ secrets.GLOBAL_FOREST_WATCH_API_KEY }}
+
+      - name: Run Agriculture Pipeline
+        run: uv run python -m src.pipelines.agriculture
+        env:
+          USDA_NASS_API_KEY: ${{ secrets.USDA_NASS_API_KEY }}
+          GBIF_USERNAME: ${{ secrets.GBIF_USERNAME }}
+          GBIF_PASSWORD: ${{ secrets.GBIF_PASSWORD }}
+
+      - name: Run Carbon Pipeline
+        run: uv run python -m src.pipelines.carbon
+        env:
+          CLIMATIQ_API_KEY: ${{ secrets.CLIMATIQ_API_KEY }}
+
+      - name: Run Cross-Domain Pipeline
+        run: uv run python -m src.pipelines.cross_domain
+
+      - name: Upload processed data
+        uses: actions/upload-artifact@v4
+        with:
+          name: processed-data-${{ github.run_number }}
+          path: data/processed/
+          retention-days: 30
