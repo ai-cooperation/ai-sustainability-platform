@@ -15,7 +15,10 @@ class ElectricityMapsConnector(BaseConnector):
 
     Free tier endpoint: https://api.electricitymaps.com/free-tier/carbon-intensity/latest
     Commercial endpoint: https://api.electricitymaps.com/v3/carbon-intensity/latest
-    Auth: API key via ``auth-token`` header (ELECTRICITY_MAPS_API_KEY).
+
+    Auth headers differ by tier:
+    - Free tier: API key via ``X-BLOBR-KEY`` header.
+    - Commercial (v3): API key via ``auth-token`` header.
 
     Set ELECTRICITY_MAPS_API_TIER=v3 to use the commercial endpoint.
     """
@@ -32,15 +35,28 @@ class ElectricityMapsConnector(BaseConnector):
         return "energy"
 
     @property
+    def _api_tier(self) -> str:
+        """Return the configured API tier ('free-tier' or 'v3')."""
+        return getattr(self._settings, "electricity_maps_api_tier", "free-tier")
+
+    @property
     def _base_url(self) -> str:
         """Return base URL based on configured API tier.
 
         Defaults to free-tier. Set ELECTRICITY_MAPS_API_TIER=v3 for commercial.
         """
-        tier = getattr(self._settings, "electricity_maps_api_tier", "free-tier")
-        if tier == "v3":
+        if self._api_tier == "v3":
             return self.COMMERCIAL_URL
         return self.FREE_TIER_URL
+
+    def _build_auth_headers(self, api_key: str) -> dict[str, str]:
+        """Build authentication headers based on API tier.
+
+        Free tier uses ``X-BLOBR-KEY``, commercial uses ``auth-token``.
+        """
+        if self._api_tier == "v3":
+            return {"auth-token": api_key}
+        return {"X-BLOBR-KEY": api_key}
 
     def fetch(self, **params: Any) -> dict:
         """Fetch carbon intensity data for a zone.
@@ -62,7 +78,7 @@ class ElectricityMapsConnector(BaseConnector):
         endpoint = params.get("endpoint", "latest")
 
         url = f"{self._base_url}/carbon-intensity/{endpoint}"
-        headers = {"auth-token": api_key}
+        headers = self._build_auth_headers(api_key)
         request_params = {"zone": zone}
 
         try:

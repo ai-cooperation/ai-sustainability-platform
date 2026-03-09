@@ -82,7 +82,7 @@ class TestElectricityMapsConnector:
         assert result == sample_response
         mock_get.assert_called_once()
         call_kwargs = mock_get.call_args
-        assert call_kwargs[1]["headers"]["auth-token"] == "test-api-key"
+        assert call_kwargs[1]["headers"]["X-BLOBR-KEY"] == "test-api-key"
 
     @patch("src.connectors.energy.electricity_maps.requests.get")
     def test_fetch_http_error(self, mock_get, connector):

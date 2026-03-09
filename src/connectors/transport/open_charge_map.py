@@ -47,10 +47,13 @@ class OpenChargeMapConnector(BaseConnector):
             "maxresults": maxresults,
         }
 
-        headers: dict[str, str] = {}
         api_key = self._settings.open_charge_map_api_key
         if api_key:
-            headers["X-API-Key"] = api_key
+            request_params["key"] = api_key
+
+        headers: dict[str, str] = {
+            "User-Agent": "ai-sustainability-platform/1.0",
+        }
 
         try:
             response = requests.get(
