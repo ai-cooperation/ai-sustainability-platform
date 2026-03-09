@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useApp } from "@/lib/context";
 import { t } from "@/lib/i18n";
 import { fetchForecasts, type ForecastResult } from "@/lib/data";
+import LoadingSkeleton from "@/components/LoadingSkeleton";
 
 const FORECAST_COLORS = [
   { bg: "bg-emerald-50 dark:bg-emerald-900/20", text: "text-emerald-800 dark:text-emerald-300", num: "text-emerald-700 dark:text-emerald-400" },
@@ -27,10 +28,31 @@ export default function ForecastsPage() {
   const { lang } = useApp();
   const [forecasts, setForecasts] = useState<ForecastResult[] | null>(null);
   const [expanded, setExpanded] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchForecasts().then(setForecasts);
+    setLoading(true);
+    fetchForecasts()
+      .then((d) => { setForecasts(d); setError(null); })
+      .catch(() => setError("Failed to load forecasts"))
+      .finally(() => setLoading(false));
   }, []);
+
+  if (loading) return (
+    <div>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t("forecast.title", lang)}</h1>
+      <p className="mt-1 text-gray-500">{t("forecast.subtitle", lang)}</p>
+      <div className="mt-6"><LoadingSkeleton rows={3} /></div>
+    </div>
+  );
+
+  if (error) return (
+    <div>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t("forecast.title", lang)}</h1>
+      <p className="mt-4 text-red-500">{error}</p>
+    </div>
+  );
 
   return (
     <div>

@@ -31,10 +31,10 @@ class NASAPowerConnector(BaseConnector):
         """Fetch daily solar radiation and temperature data.
 
         Args:
-            latitude: Location latitude (default 52.52).
-            longitude: Location longitude (default 13.41).
+            latitude: Location latitude (default 25.03, Taipei).
+            longitude: Location longitude (default 121.57, Taipei).
             start: Start date as YYYYMMDD (default '20240101').
-            end: End date as YYYYMMDD (default '20240107').
+            end: End date as YYYYMMDD (default '20241231').
             parameters: Comma-separated parameter names.
 
         Returns:
@@ -43,10 +43,10 @@ class NASAPowerConnector(BaseConnector):
         request_params = {
             "parameters": params.get("parameters", "ALLSKY_SFC_SW_DWN,T2M"),
             "community": params.get("community", "RE"),
-            "longitude": params.get("longitude", 13.41),
-            "latitude": params.get("latitude", 52.52),
+            "longitude": params.get("longitude", 121.57),
+            "latitude": params.get("latitude", 25.03),
             "start": params.get("start", "20240101"),
-            "end": params.get("end", "20240107"),
+            "end": params.get("end", "20241231"),
             "format": "JSON",
         }
 

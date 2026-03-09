@@ -47,13 +47,12 @@ class OpenMeteoAirQualityConnector(BaseConnector):
             ConnectorError: If the API call fails.
         """
         query = {
-            "latitude": params.get("latitude", 48.85),
-            "longitude": params.get("longitude", 2.35),
+            "latitude": params.get("latitude", 25.03),
+            "longitude": params.get("longitude", 121.57),
             "hourly": params.get("hourly", self.DEFAULT_HOURLY),
         }
 
-        if "forecast_days" in params:
-            query["forecast_days"] = params["forecast_days"]
+        query["forecast_days"] = params.get("forecast_days", 7)
 
         try:
             response = requests.get(self.BASE_URL, params=query, timeout=30)

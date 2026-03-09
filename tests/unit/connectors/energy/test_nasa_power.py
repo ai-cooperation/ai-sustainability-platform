@@ -21,7 +21,7 @@ def connector():
 @pytest.fixture
 def sample_response():
     return {
-        "geometry": {"type": "Point", "coordinates": [13.41, 52.52]},
+        "geometry": {"type": "Point", "coordinates": [121.57, 25.03]},
         "properties": {
             "parameter": {
                 "ALLSKY_SFC_SW_DWN": {
@@ -54,7 +54,7 @@ class TestNASAPowerConnector:
         mock_get.return_value = mock_resp
 
         result = connector.fetch(
-            latitude=52.52, longitude=13.41, start="20240101", end="20240103"
+            latitude=25.03, longitude=121.57, start="20240101", end="20240103"
         )
 
         assert result == sample_response
@@ -99,7 +99,7 @@ class TestNASAPowerConnector:
         mock_get.return_value = mock_resp
 
         result = connector.run(
-            latitude=52.52, longitude=13.41, start="20240101", end="20240103"
+            latitude=25.03, longitude=121.57, start="20240101", end="20240103"
         )
 
         assert result.source == "nasa_power"
@@ -118,7 +118,7 @@ class TestNASAPowerIntegration:
             mock_s.return_value = MagicMock()
             conn = NASAPowerConnector()
             raw = conn.fetch(
-                latitude=52.52, longitude=13.41, start="20240101", end="20240103"
+                latitude=25.03, longitude=121.57, start="20240101", end="20240103"
             )
             df = conn.normalize(raw)
             assert not df.empty

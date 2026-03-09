@@ -21,8 +21,8 @@ def connector():
 @pytest.fixture
 def sample_response():
     return {
-        "latitude": 52.52,
-        "longitude": 13.41,
+        "latitude": 25.03,
+        "longitude": 121.57,
         "hourly": {
             "time": [
                 "2024-01-01T00:00",
@@ -50,12 +50,12 @@ class TestOpenMeteoSolarConnector:
         mock_resp.raise_for_status.return_value = None
         mock_get.return_value = mock_resp
 
-        result = connector.fetch(latitude=52.52, longitude=13.41)
+        result = connector.fetch(latitude=25.03, longitude=121.57)
 
         assert result == sample_response
         mock_get.assert_called_once()
         call_kwargs = mock_get.call_args
-        assert call_kwargs[1]["params"]["latitude"] == 52.52
+        assert call_kwargs[1]["params"]["latitude"] == 25.03
 
     @patch("src.connectors.energy.open_meteo_solar.requests.get")
     def test_fetch_http_error(self, mock_get, connector):
@@ -94,7 +94,7 @@ class TestOpenMeteoSolarConnector:
         mock_resp.raise_for_status.return_value = None
         mock_get.return_value = mock_resp
 
-        result = connector.run(latitude=52.52, longitude=13.41)
+        result = connector.run(latitude=25.03, longitude=121.57)
 
         assert result.source == "open_meteo_solar"
         assert result.record_count == 3
@@ -111,7 +111,7 @@ class TestOpenMeteoSolarIntegration:
         with patch("src.utils.config.get_settings") as mock_s:
             mock_s.return_value = MagicMock()
             conn = OpenMeteoSolarConnector()
-            raw = conn.fetch(latitude=52.52, longitude=13.41)
+            raw = conn.fetch(latitude=25.03, longitude=121.57)
             df = conn.normalize(raw)
             assert not df.empty
             assert "timestamp" in df.columns

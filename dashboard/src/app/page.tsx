@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import KPICard from "@/components/KPICard";
+import LoadingSkeleton from "@/components/LoadingSkeleton";
 import {
   fetchStatus,
   fetchForecasts,
@@ -21,21 +22,28 @@ export default function Overview() {
   const [forecasts, setForecasts] = useState<ForecastResult[] | null>(null);
   const [overview, setOverview] = useState<OverviewData | null>(null);
   const [domains, setDomains] = useState<Record<string, DomainData>>({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchStatus().then(setStatus);
-    fetchForecasts().then(setForecasts);
-    fetchOverview().then(setOverview);
-
-    // Load all domain data for sparklines
+    setLoading(true);
     const names = ["energy", "climate", "environment", "agriculture", "carbon"];
-    Promise.all(names.map((n) => fetchDomainData(n))).then((results) => {
-      const map: Record<string, DomainData> = {};
-      results.forEach((r, i) => {
-        if (r) map[names[i]] = r;
-      });
-      setDomains(map);
-    });
+
+    Promise.all([
+      fetchStatus().then(setStatus),
+      fetchForecasts().then(setForecasts),
+      fetchOverview().then(setOverview),
+      Promise.all(names.map((n) => fetchDomainData(n))).then((results) => {
+        const map: Record<string, DomainData> = {};
+        results.forEach((r, i) => {
+          if (r) map[names[i]] = r;
+        });
+        setDomains(map);
+      }),
+    ])
+      .then(() => setError(null))
+      .catch(() => setError("Failed to load overview data"))
+      .finally(() => setLoading(false));
   }, []);
 
   const healthy = status?.healthy ?? 0;
@@ -75,6 +83,21 @@ export default function Overview() {
     ? new Date(overview.updated_at).toLocaleString()
     : null;
 
+  if (loading) return (
+    <div>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t("app.title", lang)}</h1>
+      <p className="mt-1 text-gray-500">{t("app.subtitle", lang, { count: total })}</p>
+      <div className="mt-6"><LoadingSkeleton rows={4} /></div>
+    </div>
+  );
+
+  if (error) return (
+    <div>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t("app.title", lang)}</h1>
+      <p className="mt-4 text-red-500">{error}</p>
+    </div>
+  );
+
   return (
     <div>
       <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
@@ -98,7 +121,7 @@ export default function Overview() {
           trendValue={energyKpis.intensity_forecast ? `avg ${energyKpis.intensity_forecast.mean.toFixed(0)}` : ""}
           sparkData={energyTs.open_meteo_solar?.data?.shortwave_radiation}
           sparkColor="#10b981"
-          sparkLabel={lang === "zh" ? "太陽輻射" : "Solar rad."}
+          sparkLabel={t("spark.solarRad", lang)}
         />
         <KPICard
           title={t("kpi.renewable", lang)}
@@ -108,7 +131,7 @@ export default function Overview() {
           trendValue={energyKpis.shortwave_radiation ? `max ${energyKpis.shortwave_radiation.max.toFixed(0)} W/m²` : ""}
           sparkData={energyTs.open_meteo_solar?.data?.direct_radiation}
           sparkColor="#f59e0b"
-          sparkLabel={lang === "zh" ? "直射輻射" : "Direct rad."}
+          sparkLabel={t("spark.directRad", lang)}
         />
         <KPICard
           title={t("kpi.aqi", lang)}
@@ -121,14 +144,14 @@ export default function Overview() {
           sparkLabel="PM2.5"
         />
         <KPICard
-          title="CO₂ (ppm)"
+          title={t("common.co2ppm", lang)}
           value={climateKpis.co2_ppm?.latest?.toFixed(1) ?? "—"}
           unit="ppm"
           trend="up"
           trendValue={climateKpis.co2_ppm ? `avg ${climateKpis.co2_ppm.mean.toFixed(1)} ppm` : ""}
           sparkData={climateTs.open_meteo_weather?.data?.temperature}
           sparkColor="#ef4444"
-          sparkLabel={lang === "zh" ? "溫度" : "Temp."}
+          sparkLabel={t("spark.temp", lang)}
           color="red"
         />
         <KPICard
@@ -139,7 +162,7 @@ export default function Overview() {
           trendValue={carbonKpis.co2 ? `avg ${carbonKpis.co2.mean.toFixed(0)} Mt` : ""}
           sparkData={carbonTs.owid_carbon?.data?.co2}
           sparkColor="#ef4444"
-          sparkLabel={lang === "zh" ? "排放趨勢" : "Emissions"}
+          sparkLabel={t("spark.emissions", lang)}
           color="red"
         />
         <KPICard
@@ -174,7 +197,7 @@ export default function Overview() {
                 <div className="text-right">
                   {d.records > 0 ? (
                     <span className="text-sm font-medium text-green-600">
-                      {d.records.toLocaleString()} records
+                      {d.records.toLocaleString()} {t("common.records", lang)}
                     </span>
                   ) : (
                     <span className="text-sm text-gray-400">

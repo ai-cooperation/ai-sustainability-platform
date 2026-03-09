@@ -50,8 +50,7 @@ class OpenMeteoWeatherConnector(BaseConnector):
             ),
         }
 
-        if "forecast_days" in params:
-            request_params["forecast_days"] = params["forecast_days"]
+        request_params["forecast_days"] = params.get("forecast_days", 7)
 
         try:
             response = requests.get(self.BASE_URL, params=request_params, timeout=30)

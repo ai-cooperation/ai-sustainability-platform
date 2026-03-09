@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import KPICard from "@/components/KPICard";
 import Sparkline from "@/components/Sparkline";
+import LoadingSkeleton from "@/components/LoadingSkeleton";
 import { fetchDomainData, type DomainData } from "@/lib/data";
 import { useApp } from "@/lib/context";
 import { t } from "@/lib/i18n";
@@ -10,9 +11,15 @@ import { t } from "@/lib/i18n";
 export default function CarbonPage() {
   const { lang } = useApp();
   const [data, setData] = useState<DomainData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchDomainData("carbon").then(setData);
+    setLoading(true);
+    fetchDomainData("carbon")
+      .then((d) => { setData(d); setError(d ? null : "Failed to load data"); })
+      .catch(() => setError("Failed to load data"))
+      .finally(() => setLoading(false));
   }, []);
 
   const kpis = data?.kpis ?? {};
@@ -23,6 +30,21 @@ export default function CarbonPage() {
   // OWID carbon has the most interesting data
   const owidTs = ts.owid_carbon?.data;
   const owidTimestamps = ts.owid_carbon?.timestamps ?? [];
+
+  if (loading) return (
+    <div>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t("carbon.title", lang)}</h1>
+      <p className="mt-1 text-gray-500">{t("carbon.subtitle", lang)}</p>
+      <div className="mt-6"><LoadingSkeleton rows={4} /></div>
+    </div>
+  );
+
+  if (error) return (
+    <div>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t("carbon.title", lang)}</h1>
+      <p className="mt-4 text-red-500">{error}</p>
+    </div>
+  );
 
   return (
     <div>
@@ -53,7 +75,7 @@ export default function CarbonPage() {
           sparkColor="#f59e0b"
         />
         <KPICard
-          title={lang === "zh" ? "化石燃料+工業排放" : "Fossil + Industry"}
+          title={t("carbon.fossilIndustry", lang)}
           value={kpis["Fossil-Fuel-And-Industry"]?.latest?.toFixed(1) ?? "—"}
           unit="GtC/yr"
           trend="up"
@@ -67,7 +89,7 @@ export default function CarbonPage() {
       {owidTs?.co2 && (
         <div className="mt-8 rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-            CO₂ {lang === "zh" ? "排放趨勢 (OWID)" : "Emissions Trend (OWID)"}
+            {t("carbon.emissionsTrend", lang)}
           </h2>
           <div className="mt-4">
             <Sparkline data={owidTs.co2} color="#ef4444" width={600} height={120} />

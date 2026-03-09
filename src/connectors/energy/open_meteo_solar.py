@@ -32,15 +32,15 @@ class OpenMeteoSolarConnector(BaseConnector):
         """Fetch solar radiation data for a given location.
 
         Args:
-            latitude: Location latitude (default 52.52).
-            longitude: Location longitude (default 13.41).
+            latitude: Location latitude (default 25.03, Taipei).
+            longitude: Location longitude (default 121.57, Taipei).
             hourly: Comma-separated hourly variables.
 
         Returns:
             Raw JSON response dict.
         """
-        latitude = params.get("latitude", 52.52)
-        longitude = params.get("longitude", 13.41)
+        latitude = params.get("latitude", 25.03)
+        longitude = params.get("longitude", 121.57)
         hourly = params.get(
             "hourly",
             "shortwave_radiation,direct_radiation,diffuse_radiation",
@@ -52,8 +52,7 @@ class OpenMeteoSolarConnector(BaseConnector):
             "hourly": hourly,
         }
 
-        if "forecast_days" in params:
-            request_params["forecast_days"] = params["forecast_days"]
+        request_params["forecast_days"] = params.get("forecast_days", 7)
 
         try:
             response = requests.get(self.BASE_URL, params=request_params, timeout=30)

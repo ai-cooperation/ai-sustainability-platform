@@ -23,8 +23,8 @@ def connector():
 @pytest.fixture
 def sample_response():
     return {
-        "latitude": 48.85,
-        "longitude": 2.35,
+        "latitude": 25.03,
+        "longitude": 121.57,
         "hourly": {
             "time": [
                 "2026-03-01T00:00",
@@ -55,7 +55,7 @@ class TestOpenMeteoAirQualityConnector:
         mock_resp.raise_for_status = MagicMock()
         mock_get.return_value = mock_resp
 
-        result = connector.fetch(latitude=48.85, longitude=2.35)
+        result = connector.fetch(latitude=25.03, longitude=121.57)
 
         assert "hourly" in result
         mock_get.assert_called_once()
@@ -65,12 +65,12 @@ class TestOpenMeteoAirQualityConnector:
         mock_get.side_effect = requests.RequestException("Connection error")
 
         with pytest.raises(ConnectorError, match="API request failed"):
-            connector.fetch(latitude=48.85, longitude=2.35)
+            connector.fetch(latitude=25.03, longitude=121.57)
 
     @patch("src.connectors.environment.open_meteo_air_quality.requests.get")
     def test_fetch_missing_hourly_key(self, mock_get, connector):
         mock_resp = MagicMock()
-        mock_resp.json.return_value = {"latitude": 48.85}
+        mock_resp.json.return_value = {"latitude": 25.03}
         mock_resp.raise_for_status = MagicMock()
         mock_get.return_value = mock_resp
 
@@ -101,5 +101,5 @@ class TestOpenMeteoAirQualityConnector:
         df = connector.normalize(sample_response)
 
         assert df["pm2_5"].iloc[0] == 12.5
-        assert df["latitude"].iloc[0] == 48.85
-        assert df["longitude"].iloc[0] == 2.35
+        assert df["latitude"].iloc[0] == 25.03
+        assert df["longitude"].iloc[0] == 121.57

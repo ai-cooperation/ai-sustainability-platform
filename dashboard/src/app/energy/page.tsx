@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import KPICard from "@/components/KPICard";
 import Sparkline from "@/components/Sparkline";
+import LoadingSkeleton from "@/components/LoadingSkeleton";
 import { fetchDomainData, type DomainData } from "@/lib/data";
 import { useApp } from "@/lib/context";
 import { t } from "@/lib/i18n";
@@ -10,15 +11,36 @@ import { t } from "@/lib/i18n";
 export default function EnergyPage() {
   const { lang } = useApp();
   const [data, setData] = useState<DomainData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchDomainData("energy").then(setData);
+    setLoading(true);
+    fetchDomainData("energy")
+      .then((d) => { setData(d); setError(d ? null : "Failed to load data"); })
+      .catch(() => setError("Failed to load data"))
+      .finally(() => setLoading(false));
   }, []);
 
   const kpis = data?.kpis ?? {};
   const sources = data?.sources ?? [];
   const ts = data?.time_series ?? {};
   const updatedAt = data?.updated_at ? new Date(data.updated_at).toLocaleString() : null;
+
+  if (loading) return (
+    <div>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t("energy.title", lang)}</h1>
+      <p className="mt-1 text-gray-500">{t("energy.subtitle", lang)}</p>
+      <div className="mt-6"><LoadingSkeleton rows={4} /></div>
+    </div>
+  );
+
+  if (error) return (
+    <div>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t("energy.title", lang)}</h1>
+      <p className="mt-4 text-red-500">{error}</p>
+    </div>
+  );
 
   return (
     <div>
@@ -46,7 +68,7 @@ export default function EnergyPage() {
           sparkColor="#f59e0b"
         />
         <KPICard
-          title="Direct Radiation"
+          title={t("energy.directRad", lang)}
           value={kpis.direct_radiation?.mean?.toFixed(0) ?? "—"}
           unit="W/m²"
           trend="up"
@@ -55,7 +77,7 @@ export default function EnergyPage() {
           sparkColor="#ef4444"
         />
         <KPICard
-          title="NASA Solar"
+          title={t("energy.nasaSolar", lang)}
           value={kpis.solar_radiation?.latest?.toFixed(2) ?? "—"}
           unit="kWh/m²/day"
           trend="neutral"

@@ -44,7 +44,7 @@ class OpenPowerSystemConnector(BaseConnector):
             Dict with 'csv_text' and 'nrows' keys.
         """
         url = params.get("url", self.BASE_URL)
-        nrows = params.get("nrows", 1000)
+        nrows = params.get("nrows", 5000)
 
         try:
             response = requests.get(url, timeout=120, stream=True)

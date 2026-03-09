@@ -22,6 +22,10 @@ const translations: Record<string, Record<Lang, string>> = {
   "domain.agriculture": { en: "Agriculture", zh: "農業" },
   "domain.carbon": { en: "Carbon", zh: "碳排放" },
   "domain.transport": { en: "Transport", zh: "交通運輸" },
+  "domain.all": { en: "All", zh: "全部" },
+
+  // Status filters
+  "status.filterAll": { en: "All", zh: "全部" },
 
   // Common
   "common.loading": { en: "Loading...", zh: "載入中..." },
@@ -58,6 +62,7 @@ const translations: Record<string, Record<Lang, string>> = {
   "overview.online": { en: "Online", zh: "上線" },
   "overview.sources": { en: "sources", zh: "個來源" },
   "overview.live": { en: "Live", zh: "即時" },
+  "overview.loading": { en: "Loading...", zh: "載入中..." },
 
   // KPI titles
   "kpi.co2": { en: "Global CO2 Emissions", zh: "全球 CO2 排放量" },
@@ -166,8 +171,40 @@ const translations: Record<string, Record<Lang, string>> = {
     zh: "英國電網碳排強度在未來 7 天內是否會超過 200g CO2/kWh？",
   },
 
-  // Loading
-  "overview.loading": { en: "Loading...", zh: "載入中..." },
+  // Spark labels
+  "spark.solarRad": { en: "Solar rad.", zh: "太陽輻射" },
+  "spark.directRad": { en: "Direct rad.", zh: "直射輻射" },
+  "spark.temp": { en: "Temp.", zh: "溫度" },
+  "spark.emissions": { en: "Emissions", zh: "排放趨勢" },
+
+  // Agriculture extras
+  "agri.priceIndex": { en: "Price Index", zh: "農產品價格指數" },
+  "agri.biodiversity": { en: "Biodiversity Observations", zh: "生物多樣性觀測" },
+  "agri.records": { en: "records", zh: "筆記錄" },
+  "agri.gbifData": { en: "data", zh: "資料" },
+  "agri.totalRecords": { en: "Total Records", zh: "總記錄數" },
+
+  // Environment extras
+  "env.trend": { en: "Trend", zh: "趨勢" },
+
+  // Climate extras
+  "climate.humidity": { en: "Humidity", zh: "濕度" },
+  "climate.tempTrend": { en: "Temperature Trend", zh: "溫度趨勢" },
+
+  // Carbon extras
+  "carbon.fossilIndustry": { en: "Fossil + Industry", zh: "化石燃料+工業排放" },
+  "carbon.emissionsTrend": { en: "Emissions Trend (OWID)", zh: "CO₂ 排放趨勢 (OWID)" },
+
+  // Energy extras
+  "energy.directRad": { en: "Direct Radiation", zh: "直射輻射" },
+  "energy.nasaSolar": { en: "NASA Solar", zh: "NASA 太陽能" },
+
+  // Sidebar
+  "sidebar.title": { en: "AI Sustainability", zh: "AI 永續平台" },
+
+  // Common extras
+  "common.co2ppm": { en: "CO₂ (ppm)", zh: "CO₂ (ppm)" },
+  "common.records": { en: "records", zh: "筆記錄" },
 
   // API Detail - column headers
   "apiDetail.title": { en: "API Details", zh: "API 詳細資訊" },

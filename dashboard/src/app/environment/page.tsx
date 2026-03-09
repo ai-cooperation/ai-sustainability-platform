@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import KPICard from "@/components/KPICard";
 import Sparkline from "@/components/Sparkline";
+import LoadingSkeleton from "@/components/LoadingSkeleton";
 import { fetchDomainData, type DomainData } from "@/lib/data";
 import { useApp } from "@/lib/context";
 import { t } from "@/lib/i18n";
@@ -10,15 +11,36 @@ import { t } from "@/lib/i18n";
 export default function EnvironmentPage() {
   const { lang } = useApp();
   const [data, setData] = useState<DomainData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchDomainData("environment").then(setData);
+    setLoading(true);
+    fetchDomainData("environment")
+      .then((d) => { setData(d); setError(d ? null : "Failed to load data"); })
+      .catch(() => setError("Failed to load data"))
+      .finally(() => setLoading(false));
   }, []);
 
   const kpis = data?.kpis ?? {};
   const sources = data?.sources ?? [];
   const ts = data?.time_series ?? {};
   const updatedAt = data?.updated_at ? new Date(data.updated_at).toLocaleString() : null;
+
+  if (loading) return (
+    <div>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t("env.title", lang)}</h1>
+      <p className="mt-1 text-gray-500">{t("env.subtitle", lang)}</p>
+      <div className="mt-6"><LoadingSkeleton rows={4} /></div>
+    </div>
+  );
+
+  if (error) return (
+    <div>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t("env.title", lang)}</h1>
+      <p className="mt-4 text-red-500">{error}</p>
+    </div>
+  );
 
   return (
     <div>
@@ -68,7 +90,7 @@ export default function EnvironmentPage() {
       {ts.open_meteo_air_quality?.data?.pm2_5 && (
         <div className="mt-8 rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-            PM2.5 — {lang === "zh" ? "趨勢" : "Trend"}
+            PM2.5 — {t("env.trend", lang)}
           </h2>
           <div className="mt-4">
             <Sparkline data={ts.open_meteo_air_quality.data.pm2_5} color="#10b981" width={600} height={120} />
