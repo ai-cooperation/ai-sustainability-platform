@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import time
 from typing import Any
 
 import pandas as pd
+import requests
 
 from src.connectors.base import BaseConnector, ConnectorError
 
@@ -156,8 +158,37 @@ class CopernicusCDSConnector(BaseConnector):
         df["timestamp"] = pd.to_datetime(df["timestamp"])
         return df
 
+    def health_check(self) -> dict:
+        """Check CDS API availability via HTTP without requiring cdsapi package.
+
+        Uses a lightweight HTTP HEAD/GET request to the CDS API endpoint
+        instead of going through the full cdsapi client flow.
+
+        Returns:
+            Dict with keys: status (healthy|degraded|down), latency_ms, message.
+        """
+        cds_api_url = "https://cds.climate.copernicus.eu/api"
+        start = time.time()
+        try:
+            resp = requests.get(cds_api_url, timeout=15)
+            latency = (time.time() - start) * 1000
+            if resp.status_code < 500:
+                return {
+                    "status": "healthy",
+                    "latency_ms": round(latency),
+                    "message": f"CDS API reachable (HTTP {resp.status_code})",
+                }
+            return {
+                "status": "degraded",
+                "latency_ms": round(latency),
+                "message": f"CDS API returned HTTP {resp.status_code}",
+            }
+        except requests.RequestException as e:
+            latency = (time.time() - start) * 1000
+            return {"status": "down", "latency_ms": round(latency), "message": str(e)}
+
     def _health_check_params(self) -> dict:
-        """Minimal params for health check."""
+        """Minimal params for health check (used if base health_check is called)."""
         return {
             "dataset": "reanalysis-era5-single-levels-monthly-means",
             "year": ["2023"],

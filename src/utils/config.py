@@ -19,6 +19,7 @@ class Settings(BaseSettings):
     # Energy APIs
     eia_api_key: str = ""
     electricity_maps_api_key: str = ""
+    electricity_maps_api_tier: str = "free-tier"  # "free-tier" or "v3" (commercial)
     nrel_api_key: str = ""
 
     # Climate APIs

@@ -52,6 +52,9 @@ class OpenMeteoAirQualityConnector(BaseConnector):
             "hourly": params.get("hourly", self.DEFAULT_HOURLY),
         }
 
+        if "forecast_days" in params:
+            query["forecast_days"] = params["forecast_days"]
+
         try:
             response = requests.get(self.BASE_URL, params=query, timeout=30)
             response.raise_for_status()
@@ -99,4 +102,14 @@ class OpenMeteoAirQualityConnector(BaseConnector):
         return df
 
     def _health_check_params(self) -> dict:
-        return {"latitude": 48.85, "longitude": 2.35}
+        """Minimal params for health check.
+
+        Request only 1 day of a single variable to minimize response size
+        and avoid timeouts on the free Open-Meteo API.
+        """
+        return {
+            "latitude": 48.85,
+            "longitude": 2.35,
+            "hourly": "pm2_5",
+            "forecast_days": 1,
+        }

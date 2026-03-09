@@ -88,8 +88,10 @@ class TestOpenChargeMapConnector:
         conn._settings.open_charge_map_api_key = "test-key-123"
         conn.fetch()
 
+        call_headers = mock_get.call_args[1]["headers"]
+        assert call_headers["X-API-Key"] == "test-key-123"
         call_params = mock_get.call_args[1]["params"]
-        assert call_params["key"] == "test-key-123"
+        assert "key" not in call_params
 
     @patch("src.connectors.transport.open_charge_map.requests.get")
     def test_fetch_without_api_key(self, mock_get):
@@ -102,6 +104,8 @@ class TestOpenChargeMapConnector:
         conn._settings.open_charge_map_api_key = ""
         conn.fetch()
 
+        call_headers = mock_get.call_args[1]["headers"]
+        assert "X-API-Key" not in call_headers
         call_params = mock_get.call_args[1]["params"]
         assert "key" not in call_params
 

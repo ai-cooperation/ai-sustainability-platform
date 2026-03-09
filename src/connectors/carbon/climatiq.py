@@ -9,15 +9,67 @@ import requests
 
 from src.connectors.base import BaseConnector, ConnectorError
 
+# Map common units to Climatiq parameter type keys.
+# The Climatiq API expects activity parameters keyed by type,
+# e.g. {"energy": 100, "energy_unit": "kWh"}.
+_UNIT_TO_PARAM_TYPE: dict[str, str] = {
+    "kWh": "energy",
+    "MWh": "energy",
+    "GWh": "energy",
+    "MJ": "energy",
+    "GJ": "energy",
+    "therm": "energy",
+    "BTU": "energy",
+    "kg": "weight",
+    "t": "weight",
+    "lb": "weight",
+    "g": "weight",
+    "ton": "weight",
+    "tonne": "weight",
+    "short_ton": "weight",
+    "long_ton": "weight",
+    "km": "distance",
+    "mi": "distance",
+    "m": "distance",
+    "nmi": "distance",
+    "ft": "distance",
+    "L": "volume",
+    "gal": "volume",
+    "m3": "volume",
+    "ft3": "volume",
+    "bbl": "volume",
+    "USD": "money",
+    "EUR": "money",
+    "GBP": "money",
+    "TWD": "money",
+    "JPY": "money",
+    "usd": "money",
+    "eur": "money",
+    "gbp": "money",
+    "number": "number",
+    "passenger": "passengers",
+    "tonne_km": "weight_distance",
+    "tkm": "weight_distance",
+}
+
+
+def _resolve_param_type(unit: str) -> str:
+    """Resolve a unit string to its Climatiq parameter type.
+
+    Falls back to ``"energy"`` when the unit is not recognised,
+    since electricity estimation is the most common use-case.
+    """
+    return _UNIT_TO_PARAM_TYPE.get(unit, "energy")
+
 
 class ClimatiqConnector(BaseConnector):
     """Estimate CO2e emissions using the Climatiq API.
 
-    Endpoint: https://api.climatiq.io/estimate
+    Endpoint: https://api.climatiq.io/data/v1/estimate
     Auth: API key required (Bearer token).
     """
 
-    BASE_URL = "https://api.climatiq.io/estimate"
+    BASE_URL = "https://api.climatiq.io/data/v1/estimate"
 
     @property
     def name(self) -> str:
@@ -58,13 +110,16 @@ class ClimatiqConnector(BaseConnector):
                 "and 'activity_unit' parameters."
             )
 
-        payload = {
+        param_type = _resolve_param_type(activity_unit)
+
+        payload: dict[str, Any] = {
             "emission_factor": {
-                "id": emission_factor_id,
+                "activity_id": emission_factor_id,
+                "data_version": "^6",
             },
             "parameters": {
-                "money": activity_value,
-                "money_unit": activity_unit,
+                param_type: activity_value,
+                f"{param_type}_unit": activity_unit,
             },
         }
 

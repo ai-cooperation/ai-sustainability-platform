@@ -45,6 +45,7 @@ const translations: Record<string, Record<Lang, string>> = {
   "status.latency": { en: "Latency", zh: "延遲" },
   "status.statusCol": { en: "Status", zh: "狀態" },
   "status.matrix": { en: "Health Check History (6h intervals)", zh: "健康檢查歷史（每 6 小時）" },
+  "status.history": { en: "History (6h)", zh: "歷史 (6h)" },
 
   // Overview page
   "overview.platformStatus": { en: "Platform Status", zh: "平台運作狀態" },

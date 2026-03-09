@@ -59,6 +59,27 @@ export async function fetchHistory(
   return fetchJson<HistoryEntry[]>(`status/history/${date}.json`);
 }
 
+/** Fetch history entries from the last N days, merged and sorted by time. */
+export async function fetchRecentHistory(
+  days: number = 3
+): Promise<HistoryEntry[]> {
+  const dates: string[] = [];
+  const now = new Date();
+  for (let i = 0; i < days; i++) {
+    const d = new Date(now);
+    d.setDate(d.getDate() - i);
+    dates.push(d.toISOString().split("T")[0]);
+  }
+  const results = await Promise.all(dates.map((d) => fetchHistory(d)));
+  const merged: HistoryEntry[] = [];
+  for (const r of results) {
+    if (r) merged.push(...r);
+  }
+  return merged.sort(
+    (a, b) => new Date(a.checked_at).getTime() - new Date(b.checked_at).getTime()
+  );
+}
+
 export async function fetchForecasts(): Promise<ForecastResult[] | null> {
   return fetchJson<ForecastResult[]>("forecasts/latest.json");
 }

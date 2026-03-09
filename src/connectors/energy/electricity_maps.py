@@ -13,11 +13,15 @@ from src.connectors.base import BaseConnector, ConnectorError
 class ElectricityMapsConnector(BaseConnector):
     """Fetch carbon intensity data from Electricity Maps.
 
-    Endpoint: https://api.electricitymaps.com/v3/carbon-intensity/latest
-    Auth: API key required (ELECTRICITY_MAPS_API_KEY).
+    Free tier endpoint: https://api.electricitymaps.com/free-tier/carbon-intensity/latest
+    Commercial endpoint: https://api.electricitymaps.com/v3/carbon-intensity/latest
+    Auth: API key via ``auth-token`` header (ELECTRICITY_MAPS_API_KEY).
+
+    Set ELECTRICITY_MAPS_API_TIER=v3 to use the commercial endpoint.
     """
 
-    BASE_URL = "https://api.electricitymaps.com/v3"
+    FREE_TIER_URL = "https://api.electricitymaps.com/free-tier"
+    COMMERCIAL_URL = "https://api.electricitymaps.com/v3"
 
     @property
     def name(self) -> str:
@@ -26,6 +30,17 @@ class ElectricityMapsConnector(BaseConnector):
     @property
     def domain(self) -> str:
         return "energy"
+
+    @property
+    def _base_url(self) -> str:
+        """Return base URL based on configured API tier.
+
+        Defaults to free-tier. Set ELECTRICITY_MAPS_API_TIER=v3 for commercial.
+        """
+        tier = getattr(self._settings, "electricity_maps_api_tier", "free-tier")
+        if tier == "v3":
+            return self.COMMERCIAL_URL
+        return self.FREE_TIER_URL
 
     def fetch(self, **params: Any) -> dict:
         """Fetch carbon intensity data for a zone.
@@ -46,7 +61,7 @@ class ElectricityMapsConnector(BaseConnector):
         zone = params.get("zone", "DE")
         endpoint = params.get("endpoint", "latest")
 
-        url = f"{self.BASE_URL}/carbon-intensity/{endpoint}"
+        url = f"{self._base_url}/carbon-intensity/{endpoint}"
         headers = {"auth-token": api_key}
         request_params = {"zone": zone}
 

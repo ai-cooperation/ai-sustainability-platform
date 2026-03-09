@@ -5,7 +5,7 @@ import StatusBadge from "@/components/StatusBadge";
 import ApiDetailModal from "@/components/ApiDetailModal";
 import {
   fetchStatus,
-  fetchHistory,
+  fetchRecentHistory,
   type StatusReport,
   type ApiStatus,
   type HistoryEntry,
@@ -17,6 +17,44 @@ function formatDomain(domain: string, lang: "en" | "zh"): string {
   return t(`domain.${domain}`, lang) || domain;
 }
 
+const statusColor: Record<string, string> = {
+  healthy: "bg-green-500",
+  degraded: "bg-yellow-500",
+  down: "bg-red-500",
+};
+
+function HistoryDots({
+  apiId,
+  history,
+}: {
+  apiId: string;
+  history: HistoryEntry[];
+}) {
+  return (
+    <div className="flex items-center gap-0.5">
+      {history.map((h, i) => {
+        const api = h.apis.find((a) => a.id === apiId);
+        const status = api?.status ?? "unknown";
+        const time = new Date(h.checked_at).toLocaleString([], {
+          month: "numeric",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        return (
+          <span
+            key={i}
+            title={`${time}: ${status}`}
+            className={`inline-block h-3 w-3 rounded-full ${
+              statusColor[status] ?? "bg-gray-300 dark:bg-gray-600"
+            }`}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
 export default function StatusPage() {
   const { lang } = useApp();
   const [report, setReport] = useState<StatusReport | null>(null);
@@ -25,10 +63,9 @@ export default function StatusPage() {
   const [selectedApi, setSelectedApi] = useState<string | null>(null);
 
   useEffect(() => {
-    const today = new Date().toISOString().split("T")[0];
-    Promise.all([fetchStatus(), fetchHistory(today)]).then(([s, h]) => {
+    Promise.all([fetchStatus(), fetchRecentHistory(3)]).then(([s, h]) => {
       setReport(s);
-      setHistory(h ?? []);
+      setHistory(h);
       setLoading(false);
     });
   }, []);
@@ -52,21 +89,6 @@ export default function StatusPage() {
   const checkedAt = report?.checked_at
     ? new Date(report.checked_at).toLocaleString()
     : "N/A";
-
-  // Build matrix: rows = API names, cols = check timestamps
-  const checkTimes = history.map((h) => {
-    const d = new Date(h.checked_at);
-    return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-  });
-
-  const allApiIds = apis.map((a) => a.id);
-  const matrixData: Record<string, string[]> = {};
-  for (const apiId of allApiIds) {
-    matrixData[apiId] = history.map((h) => {
-      const found = h.apis.find((a) => a.id === apiId);
-      return found?.status ?? "unknown";
-    });
-  }
 
   return (
     <div>
@@ -93,57 +115,7 @@ export default function StatusPage() {
         </div>
       </div>
 
-      {/* Status Matrix */}
-      {history.length > 0 && (
-        <div className="mt-6 overflow-hidden rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
-          <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-            {t("status.matrix", lang)}
-          </h2>
-          <div className="overflow-x-auto">
-            <table className="text-xs">
-              <thead>
-                <tr>
-                  <th className="sticky left-0 bg-white px-2 py-1 text-left text-gray-500 dark:bg-gray-800 dark:text-gray-400">
-                    {t("status.api", lang)}
-                  </th>
-                  {checkTimes.map((time, i) => (
-                    <th key={i} className="px-2 py-1 text-center text-gray-500 dark:text-gray-400">
-                      {time}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {allApiIds.map((apiId) => (
-                  <tr key={apiId}>
-                    <td className="sticky left-0 bg-white px-2 py-1 font-medium text-gray-700 dark:bg-gray-800 dark:text-gray-300">
-                      {t(`api.${apiId}.name`, lang)}
-                    </td>
-                    {(matrixData[apiId] ?? []).map((status, i) => (
-                      <td key={i} className="px-2 py-1 text-center">
-                        <span
-                          className={`inline-block h-4 w-4 rounded-full ${
-                            status === "healthy"
-                              ? "bg-green-500"
-                              : status === "degraded"
-                                ? "bg-yellow-500"
-                                : status === "down"
-                                  ? "bg-red-500"
-                                  : "bg-gray-300 dark:bg-gray-600"
-                          }`}
-                          title={`${apiId}: ${status}`}
-                        />
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
-
-      {/* Detail table */}
+      {/* Detail table with integrated history */}
       <div className="mt-6 overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
         <table className="w-full text-left text-sm">
           <thead className="bg-gray-50 text-xs uppercase text-gray-500 dark:bg-gray-700 dark:text-gray-400">
@@ -152,6 +124,9 @@ export default function StatusPage() {
               <th className="px-4 py-3">{t("status.domain", lang)}</th>
               <th className="px-4 py-3">{t("status.statusCol", lang)}</th>
               <th className="px-4 py-3">{t("status.latency", lang)}</th>
+              {history.length > 0 && (
+                <th className="px-4 py-3">{t("status.history", lang)}</th>
+              )}
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
@@ -172,6 +147,11 @@ export default function StatusPage() {
                 <td className="px-4 py-2.5">
                   {api.latency_ms > 0 ? `${api.latency_ms}ms` : "—"}
                 </td>
+                {history.length > 0 && (
+                  <td className="px-4 py-2.5">
+                    <HistoryDots apiId={api.id} history={history} />
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>

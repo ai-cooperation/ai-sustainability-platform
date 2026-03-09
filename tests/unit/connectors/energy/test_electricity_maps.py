@@ -16,6 +16,7 @@ def connector():
     with patch("src.connectors.base.get_settings") as mock_s:
         mock_settings = MagicMock()
         mock_settings.electricity_maps_api_key = "test-api-key"
+        mock_settings.electricity_maps_api_tier = "free-tier"
         mock_s.return_value = mock_settings
         yield ElectricityMapsConnector()
 
@@ -130,6 +131,31 @@ class TestElectricityMapsConnector:
         params = connector._health_check_params()
         assert params["zone"] == "DE"
         assert params["endpoint"] == "latest"
+
+    def test_base_url_free_tier(self, connector):
+        assert connector._base_url == "https://api.electricitymaps.com/free-tier"
+
+    def test_base_url_commercial(self):
+        with patch("src.connectors.base.get_settings") as mock_s:
+            mock_settings = MagicMock()
+            mock_settings.electricity_maps_api_key = "test-api-key"
+            mock_settings.electricity_maps_api_tier = "v3"
+            mock_s.return_value = mock_settings
+            conn = ElectricityMapsConnector()
+            assert conn._base_url == "https://api.electricitymaps.com/v3"
+
+    @patch("src.connectors.energy.electricity_maps.requests.get")
+    def test_fetch_uses_free_tier_url(self, mock_get, connector, sample_response):
+        mock_resp = MagicMock()
+        mock_resp.json.return_value = sample_response
+        mock_resp.raise_for_status.return_value = None
+        mock_get.return_value = mock_resp
+
+        connector.fetch(zone="DE")
+
+        call_args = mock_get.call_args
+        assert "free-tier" in call_args[0][0]
+        assert "/v3/" not in call_args[0][0]
 
 
 @pytest.mark.integration

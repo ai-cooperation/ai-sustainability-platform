@@ -496,7 +496,7 @@ datasets:
     provider: Climatiq
     access:
       type: api
-      endpoint: https://api.climatiq.io/estimate
+      endpoint: https://api.climatiq.io/data/v1/estimate
       auth: api_key
       rate_limit: ""
     update_frequency: regular

@@ -27,6 +27,7 @@ dev = [
     "respx>=0.21",
 ]
 groq = ["groq>=0.9"]
+cds = ["cdsapi>=0.7"]
 
 [build-system]
 requires = ["hatchling"]

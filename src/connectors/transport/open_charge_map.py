@@ -47,13 +47,14 @@ class OpenChargeMapConnector(BaseConnector):
             "maxresults": maxresults,
         }
 
+        headers: dict[str, str] = {}
         api_key = self._settings.open_charge_map_api_key
         if api_key:
-            request_params["key"] = api_key
+            headers["X-API-Key"] = api_key
 
         try:
             response = requests.get(
-                self.BASE_URL, params=request_params, timeout=30
+                self.BASE_URL, params=request_params, headers=headers, timeout=30
             )
             response.raise_for_status()
         except requests.RequestException as exc:

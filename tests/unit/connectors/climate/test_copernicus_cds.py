@@ -99,6 +99,56 @@ class TestCopernicusCDSFetch:
                 connector._get_client()
 
 
+class TestCopernicusCDSHealthCheck:
+    @patch("src.connectors.climate.copernicus_cds.requests.get")
+    def test_health_check_healthy(self, mock_get, connector):
+        mock_resp = MagicMock()
+        mock_resp.status_code = 200
+        mock_get.return_value = mock_resp
+
+        result = connector.health_check()
+
+        assert result["status"] == "healthy"
+        assert "latency_ms" in result
+        assert "CDS API reachable" in result["message"]
+        mock_get.assert_called_once_with(
+            "https://cds.climate.copernicus.eu/api", timeout=15
+        )
+
+    @patch("src.connectors.climate.copernicus_cds.requests.get")
+    def test_health_check_degraded(self, mock_get, connector):
+        mock_resp = MagicMock()
+        mock_resp.status_code = 503
+        mock_get.return_value = mock_resp
+
+        result = connector.health_check()
+
+        assert result["status"] == "degraded"
+        assert "503" in result["message"]
+
+    @patch("src.connectors.climate.copernicus_cds.requests.get")
+    def test_health_check_down(self, mock_get, connector):
+        import requests
+
+        mock_get.side_effect = requests.ConnectionError("Connection refused")
+
+        result = connector.health_check()
+
+        assert result["status"] == "down"
+        assert "Connection refused" in result["message"]
+
+    @patch("src.connectors.climate.copernicus_cds.requests.get")
+    def test_health_check_does_not_require_cdsapi(self, mock_get, connector):
+        """Health check should work even without cdsapi installed."""
+        mock_resp = MagicMock()
+        mock_resp.status_code = 200
+        mock_get.return_value = mock_resp
+
+        # Should NOT raise ImportError for cdsapi
+        result = connector.health_check()
+        assert result["status"] == "healthy"
+
+
 class TestCopernicusCDSNormalize:
     def test_normalize_success(self, connector):
         raw_data = {

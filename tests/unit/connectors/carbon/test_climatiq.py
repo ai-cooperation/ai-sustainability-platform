@@ -81,6 +81,48 @@ class TestClimatiqConnector:
         headers = call_kwargs.kwargs.get("headers") or call_kwargs[1].get("headers")
         assert headers["Authorization"] == "Bearer test-api-key"
 
+        # Verify correct payload structure (energy params for kWh)
+        sent_json = call_kwargs.kwargs.get("json") or call_kwargs[1].get("json")
+        assert sent_json["emission_factor"]["activity_id"] == "ef-123"
+        assert sent_json["parameters"]["energy"] == 100
+        assert sent_json["parameters"]["energy_unit"] == "kWh"
+
+    @patch("src.connectors.carbon.climatiq.requests.post")
+    def test_fetch_weight_unit(self, mock_post, connector: ClimatiqConnector):
+        mock_response = MagicMock()
+        mock_response.json.return_value = SAMPLE_RESPONSE
+        mock_response.raise_for_status = MagicMock()
+        mock_post.return_value = mock_response
+
+        connector.fetch(
+            emission_factor_id="ef-456",
+            activity_value=50,
+            activity_unit="kg",
+        )
+
+        call_kwargs = mock_post.call_args
+        sent_json = call_kwargs.kwargs.get("json") or call_kwargs[1].get("json")
+        assert sent_json["parameters"]["weight"] == 50
+        assert sent_json["parameters"]["weight_unit"] == "kg"
+
+    @patch("src.connectors.carbon.climatiq.requests.post")
+    def test_fetch_money_unit(self, mock_post, connector: ClimatiqConnector):
+        mock_response = MagicMock()
+        mock_response.json.return_value = SAMPLE_RESPONSE
+        mock_response.raise_for_status = MagicMock()
+        mock_post.return_value = mock_response
+
+        connector.fetch(
+            emission_factor_id="ef-789",
+            activity_value=1000,
+            activity_unit="USD",
+        )
+
+        call_kwargs = mock_post.call_args
+        sent_json = call_kwargs.kwargs.get("json") or call_kwargs[1].get("json")
+        assert sent_json["parameters"]["money"] == 1000
+        assert sent_json["parameters"]["money_unit"] == "USD"
+
     @patch("src.connectors.carbon.climatiq.requests.post")
     def test_fetch_with_body_override(self, mock_post, connector: ClimatiqConnector):
         mock_response = MagicMock()

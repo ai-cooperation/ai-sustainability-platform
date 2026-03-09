@@ -50,6 +50,9 @@ class OpenMeteoWeatherConnector(BaseConnector):
             ),
         }
 
+        if "forecast_days" in params:
+            request_params["forecast_days"] = params["forecast_days"]
+
         try:
             response = requests.get(self.BASE_URL, params=request_params, timeout=30)
             response.raise_for_status()
@@ -97,5 +100,14 @@ class OpenMeteoWeatherConnector(BaseConnector):
         return df
 
     def _health_check_params(self) -> dict:
-        """Minimal params for health check."""
-        return {"latitude": 0.0, "longitude": 0.0}
+        """Minimal params for health check.
+
+        Request only 1 day of a single variable to minimize response size
+        and avoid timeouts on the free Open-Meteo API.
+        """
+        return {
+            "latitude": 0.0,
+            "longitude": 0.0,
+            "hourly": "temperature_2m",
+            "forecast_days": 1,
+        }
