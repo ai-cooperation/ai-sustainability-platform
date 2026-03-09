@@ -83,3 +83,46 @@ export async function fetchRecentHistory(
 export async function fetchForecasts(): Promise<ForecastResult[] | null> {
   return fetchJson<ForecastResult[]>("forecasts/latest.json");
 }
+
+// --- Domain dashboard data ---
+
+export interface KpiSummary {
+  latest: number;
+  mean: number;
+  min: number;
+  max: number;
+  count: number;
+}
+
+export interface TimeSeriesData {
+  timestamps: string[];
+  data: Record<string, number[]>;
+}
+
+export interface DomainData {
+  domain: string;
+  updated_at: string;
+  record_count: number;
+  file: string;
+  sources: string[];
+  columns: string[];
+  kpis: Record<string, KpiSummary>;
+  time_series: Record<string, TimeSeriesData>;
+}
+
+export interface OverviewData {
+  updated_at: string;
+  domains: Record<string, {
+    record_count: number;
+    sources: string[];
+    kpis: Record<string, KpiSummary>;
+  }>;
+}
+
+export async function fetchDomainData(domain: string): Promise<DomainData | null> {
+  return fetchJson<DomainData>(`dashboard/${domain}.json`);
+}
+
+export async function fetchOverview(): Promise<OverviewData | null> {
+  return fetchJson<OverviewData>("dashboard/overview.json");
+}
