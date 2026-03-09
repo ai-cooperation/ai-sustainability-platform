@@ -1,11 +1,13 @@
 {
   "domain": "environment",
-  "updated_at": "2026-03-09T01:42:26.217136Z",
-  "record_count": 220,
+  "updated_at": "2026-03-09T07:09:58.676786Z",
+  "record_count": 320,
   "file": "environment_2026-03-09.parquet",
   "sources": [
+    "aqicn",
     "epa_envirofacts",
-    "open_meteo_air_quality"
+    "open_meteo_air_quality",
+    "openaq"
   ],
   "columns": [
     "timestamp",
@@ -36,6 +38,13 @@
     "co2e_emission",
     "gas_code",
     "gas_name",
+    "location",
+    "parameter",
+    "value",
+    "unit",
+    "country",
+    "pm25",
+    "so2",
     "domain"
   ],
   "kpis": {
@@ -61,39 +70,39 @@
       "count": 109
     },
     "pm10": {
-      "latest": 5.4,
-      "mean": 16.106422018348624,
+      "latest": 9.0,
+      "mean": 16.04181818181818,
       "min": 3.8,
       "max": 43.6,
-      "count": 109
+      "count": 110
     },
     "co": {
-      "latest": 157.0,
-      "mean": 271.0174311926606,
-      "min": 154.0,
+      "latest": 1.9,
+      "mean": 268.57090909090914,
+      "min": 1.9,
       "max": 524.0,
-      "count": 109
+      "count": 110
     },
     "no2": {
-      "latest": 5.8,
-      "mean": 29.284403669724774,
+      "latest": 4.2,
+      "mean": 29.05636363636364,
       "min": 2.5,
       "max": 87.2,
-      "count": 109
+      "count": 110
     },
     "o3": {
-      "latest": 76.0,
-      "mean": 42.731192660550455,
+      "latest": 34.6,
+      "mean": 42.657272727272726,
       "min": 1.0,
       "max": 102.0,
-      "count": 109
+      "count": 110
     },
     "aqi": {
-      "latest": 12.0,
-      "mean": 37.49090909090909,
+      "latest": 35.0,
+      "mean": 37.468468468468465,
       "min": 12.0,
       "max": 72.0,
-      "count": 110
+      "count": 111
     },
     "facility_id": {
       "latest": 1000003.0,
@@ -115,9 +124,51 @@
       "min": 17.0,
       "max": 714523.1,
       "count": 100
+    },
+    "pm25": {
+      "latest": 25.0,
+      "mean": 25.0,
+      "min": 25.0,
+      "max": 25.0,
+      "count": 1
+    },
+    "so2": {
+      "latest": 2.1,
+      "mean": 2.1,
+      "min": 2.1,
+      "max": 2.1,
+      "count": 1
     }
   },
   "time_series": {
+    "aqicn": {
+      "timestamps": [
+        "2026-03-09 06:00:00"
+      ],
+      "data": {
+        "pm10": [
+          9.0
+        ],
+        "co": [
+          1.9
+        ],
+        "no2": [
+          4.2
+        ],
+        "o3": [
+          34.6
+        ],
+        "aqi": [
+          35.0
+        ],
+        "pm25": [
+          25.0
+        ],
+        "so2": [
+          2.1
+        ]
+      }
+    },
     "epa_envirofacts": {
       "timestamps": [
         "2019-01-01",
