@@ -35,7 +35,7 @@ jobs:
           GLOBAL_FOREST_WATCH_API_KEY: ${{ secrets.GLOBAL_FOREST_WATCH_API_KEY }}
           USDA_NASS_API_KEY: ${{ secrets.USDA_NASS_API_KEY }}
           CLIMATIQ_API_KEY: ${{ secrets.CLIMATIQ_API_KEY }}
-          OPEN_CHARGE_MAP_API_KEY: ${{ secrets.OPEN_CHARGE_MAP_API_KEY }}
+          OPEN_CHARGE_MAP_API_KEY: ${{ secrets.OPEN_CHARGE_MAP_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: uv run python -m src.monitor.scheduler
