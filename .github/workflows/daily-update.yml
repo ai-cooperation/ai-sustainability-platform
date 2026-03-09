@@ -42,37 +42,45 @@ jobs:
       - name: Install dependencies
         run: uv sync
 
+      - name: Create output directories
+        run: |
+          mkdir -p data/processed/energy data/processed/climate data/processed/environment
+          mkdir -p data/processed/agriculture data/processed/carbon data/processed/cross_domain
+          mkdir -p data/forecasts data/dashboard
+
       - name: Run Energy Pipeline
         continue-on-error: true
-        run: uv run python -m src.pipelines.energy
+        run: uv run python -c "from src.pipelines.energy import EnergyPipeline; EnergyPipeline().run()"
 
       - name: Run Climate Pipeline
         continue-on-error: true
-        run: uv run python -m src.pipelines.climate
+        run: uv run python -c "from src.pipelines.climate import ClimatePipeline; ClimatePipeline().run()"
 
       - name: Run Environment Pipeline
         continue-on-error: true
-        run: uv run python -m src.pipelines.environment
+        run: uv run python -c "from src.pipelines.environment import EnvironmentPipeline; EnvironmentPipeline().run()"
 
       - name: Run Agriculture Pipeline
         continue-on-error: true
-        run: uv run python -m src.pipelines.agriculture
+        run: uv run python -c "from src.pipelines.agriculture import AgriculturePipeline; AgriculturePipeline().run()"
 
       - name: Run Carbon Pipeline
         continue-on-error: true
-        run: uv run python -m src.pipelines.carbon
+        run: uv run python -c "from src.pipelines.carbon import CarbonPipeline; CarbonPipeline().run()"
 
       - name: Run Cross-Domain Pipeline
         continue-on-error: true
-        run: uv run python -m src.pipelines.cross_domain
+        run: uv run python -c "from src.pipelines.cross_domain import CrossDomainPipeline; CrossDomainPipeline().run()"
 
       - name: Run AI Forecast
         continue-on-error: true
         run: |
           uv run python -c "
           import json
+          from pathlib import Path
           from src.decision.orchestrator import ForecastOrchestrator
 
+          Path('data/forecasts').mkdir(parents=True, exist_ok=True)
           orchestrator = ForecastOrchestrator()
           questions = [
               'Will UK grid carbon intensity exceed 200g CO2/kWh in the next 7 days?',
@@ -101,7 +109,12 @@ jobs:
 
           with open('data/forecasts/latest.json', 'w') as f:
               json.dump(results, f, indent=2)
+          print(f'Saved {len(results)} forecasts')
           "
+
+      - name: Export dashboard JSON
+        continue-on-error: true
+        run: uv run python scripts/export_dashboard_json.py
 
       - name: Send daily summary via Telegram
         continue-on-error: true
@@ -112,7 +125,7 @@ jobs:
           import json
 
           # Pipeline results
-          processed = list(Path('data/processed').glob('*.parquet')) if Path('data/processed').exists() else []
+          processed = list(Path('data/processed').rglob('*.parquet')) if Path('data/processed').exists() else []
 
           # Forecast results
           forecast_text = 'No forecasts'
@@ -138,8 +151,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          mkdir -p data/forecasts
-          git add data/processed/ data/status/ data/forecasts/ || true
+          git add data/processed/ data/status/ data/forecasts/ data/dashboard/ || true
           git diff --cached --quiet || git commit -m "chore: daily pipeline update $(date -u +%Y-%m-%d)"
           git push || true
 
