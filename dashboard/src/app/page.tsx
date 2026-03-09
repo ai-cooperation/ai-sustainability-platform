@@ -6,9 +6,11 @@ import {
   fetchStatus,
   fetchForecasts,
   fetchOverview,
+  fetchDomainData,
   type StatusReport,
   type ForecastResult,
   type OverviewData,
+  type DomainData,
 } from "@/lib/data";
 import { useApp } from "@/lib/context";
 import { t } from "@/lib/i18n";
@@ -18,11 +20,22 @@ export default function Overview() {
   const [status, setStatus] = useState<StatusReport | null>(null);
   const [forecasts, setForecasts] = useState<ForecastResult[] | null>(null);
   const [overview, setOverview] = useState<OverviewData | null>(null);
+  const [domains, setDomains] = useState<Record<string, DomainData>>({});
 
   useEffect(() => {
     fetchStatus().then(setStatus);
     fetchForecasts().then(setForecasts);
     fetchOverview().then(setOverview);
+
+    // Load all domain data for sparklines
+    const names = ["energy", "climate", "environment", "agriculture", "carbon"];
+    Promise.all(names.map((n) => fetchDomainData(n))).then((results) => {
+      const map: Record<string, DomainData> = {};
+      results.forEach((r, i) => {
+        if (r) map[names[i]] = r;
+      });
+      setDomains(map);
+    });
   }, []);
 
   const healthy = status?.healthy ?? 0;
@@ -31,12 +44,17 @@ export default function Overview() {
     ? `${status.degraded} ${t("status.degraded", lang)}, ${status.down} ${t("status.down", lang)}`
     : t("overview.loading", lang);
 
-  // Extract real KPIs from overview data
-  const carbonKpi = overview?.domains?.carbon?.kpis?.co2;
-  const intensityKpi = overview?.domains?.energy?.kpis?.intensity_forecast;
-  const solarKpi = overview?.domains?.energy?.kpis?.shortwave_radiation;
-  const pm25Kpi = overview?.domains?.environment?.kpis?.pm2_5;
-  const co2ppmKpi = overview?.domains?.climate?.kpis?.co2_ppm;
+  // Extract KPIs + sparklines from domain data
+  const energyKpis = overview?.domains?.energy?.kpis ?? {};
+  const climateKpis = overview?.domains?.climate?.kpis ?? {};
+  const envKpis = overview?.domains?.environment?.kpis ?? {};
+  const carbonKpis = overview?.domains?.carbon?.kpis ?? {};
+
+  // Time series for sparklines
+  const energyTs = domains.energy?.time_series ?? {};
+  const climateTs = domains.climate?.time_series ?? {};
+  const envTs = domains.environment?.time_series ?? {};
+  const carbonTs = domains.carbon?.time_series ?? {};
 
   // Build domain list from real data
   const domainEntries = overview
@@ -73,54 +91,64 @@ export default function Overview() {
 
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <KPICard
-          title={t("kpi.co2", lang)}
-          value={carbonKpi ? carbonKpi.latest.toFixed(1) : "—"}
-          unit="Gt/yr"
-          trend={carbonKpi && carbonKpi.latest > carbonKpi.mean ? "up" : "neutral"}
-          trendValue={carbonKpi ? `avg ${carbonKpi.mean.toFixed(1)}` : ""}
-          color="red"
-          sparkColor="#ef4444"
+          title={t("kpi.carbonIntensity", lang)}
+          value={energyKpis.intensity_forecast?.latest?.toFixed(0) ?? "—"}
+          unit="gCO2/kWh"
+          trend={energyKpis.intensity_forecast && energyKpis.intensity_forecast.latest < energyKpis.intensity_forecast.mean ? "down" : "neutral"}
+          trendValue={energyKpis.intensity_forecast ? `avg ${energyKpis.intensity_forecast.mean.toFixed(0)}` : ""}
+          sparkData={energyTs.open_meteo_solar?.data?.shortwave_radiation}
+          sparkColor="#10b981"
+          sparkLabel={lang === "zh" ? "太陽輻射" : "Solar rad."}
         />
         <KPICard
           title={t("kpi.renewable", lang)}
-          value={solarKpi ? solarKpi.mean.toFixed(0) : "—"}
+          value={energyKpis.shortwave_radiation?.mean?.toFixed(0) ?? "—"}
           unit="W/m²"
           trend="up"
-          trendValue={solarKpi ? `max ${solarKpi.max.toFixed(0)}` : ""}
-          sparkColor="#10b981"
+          trendValue={energyKpis.shortwave_radiation ? `max ${energyKpis.shortwave_radiation.max.toFixed(0)} W/m²` : ""}
+          sparkData={energyTs.open_meteo_solar?.data?.direct_radiation}
+          sparkColor="#f59e0b"
+          sparkLabel={lang === "zh" ? "直射輻射" : "Direct rad."}
         />
         <KPICard
           title={t("kpi.aqi", lang)}
-          value={pm25Kpi ? pm25Kpi.latest.toFixed(1) : "—"}
+          value={envKpis.pm2_5?.latest?.toFixed(1) ?? "—"}
           unit="µg/m³ PM2.5"
-          trend={pm25Kpi && pm25Kpi.latest < pm25Kpi.mean ? "down" : "up"}
-          trendValue={pm25Kpi ? `avg ${pm25Kpi.mean.toFixed(1)}` : ""}
+          trend={envKpis.pm2_5 && envKpis.pm2_5.latest < envKpis.pm2_5.mean ? "down" : "up"}
+          trendValue={envKpis.pm2_5 ? `avg ${envKpis.pm2_5.mean.toFixed(1)}` : ""}
+          sparkData={envTs.open_meteo_air_quality?.data?.pm2_5}
           sparkColor="#10b981"
+          sparkLabel="PM2.5"
         />
         <KPICard
-          title={t("kpi.carbonIntensity", lang)}
-          value={intensityKpi ? intensityKpi.latest.toFixed(0) : "—"}
-          unit="gCO2/kWh"
-          trend={intensityKpi && intensityKpi.latest < intensityKpi.mean ? "down" : "up"}
-          trendValue={intensityKpi ? `avg ${intensityKpi.mean.toFixed(0)}` : ""}
-          sparkColor="#10b981"
+          title="CO₂ (ppm)"
+          value={climateKpis.co2_ppm?.latest?.toFixed(1) ?? "—"}
+          unit="ppm"
+          trend="up"
+          trendValue={climateKpis.co2_ppm ? `avg ${climateKpis.co2_ppm.mean.toFixed(1)} ppm` : ""}
+          sparkData={climateTs.open_meteo_weather?.data?.temperature}
+          sparkColor="#ef4444"
+          sparkLabel={lang === "zh" ? "溫度" : "Temp."}
+          color="red"
+        />
+        <KPICard
+          title={t("kpi.co2", lang)}
+          value={carbonKpis.co2?.latest?.toFixed(1) ?? "—"}
+          unit="Mt CO₂"
+          trend={carbonKpis.co2 && carbonKpis.co2.latest > carbonKpis.co2.mean ? "up" : "down"}
+          trendValue={carbonKpis.co2 ? `avg ${carbonKpis.co2.mean.toFixed(0)} Mt` : ""}
+          sparkData={carbonTs.owid_carbon?.data?.co2}
+          sparkColor="#ef4444"
+          sparkLabel={lang === "zh" ? "排放趨勢" : "Emissions"}
+          color="red"
         />
         <KPICard
           title={t("kpi.apiHealth", lang)}
           value={status ? `${healthy}/${total}` : "—"}
           unit={t("overview.online", lang)}
-          trend="neutral"
+          trend={healthy >= 25 ? "up" : healthy >= 20 ? "neutral" : "down"}
           trendValue={statusLabel}
           sparkColor="#6b7280"
-        />
-        <KPICard
-          title="CO₂ (ppm)"
-          value={co2ppmKpi ? co2ppmKpi.latest.toFixed(1) : "—"}
-          unit="ppm"
-          trend="up"
-          trendValue={co2ppmKpi ? `avg ${co2ppmKpi.mean.toFixed(1)}` : ""}
-          color="red"
-          sparkColor="#ef4444"
         />
       </div>
 
