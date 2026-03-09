@@ -9,36 +9,42 @@
 - **步驟**: 填 email → 收信 → 拿 key
 - **GitHub Secret 名稱**: `EIA_API_KEY`
 - **提供資料**: 美國能源生產、消費、價格、排放數據
+- **狀態**: ✅ 已設定
 
 ### 2. NREL — 美國國家再生能源實驗室
 - **申請網址**: https://developer.nrel.gov/signup/
 - **步驟**: 填 email + 姓名 → 即時拿 key
 - **GitHub Secret 名稱**: `NREL_API_KEY`
 - **提供資料**: 太陽能資源、風力數據、替代燃料站
+- **狀態**: ✅ 已設定
 
 ### 3. NOAA CDO — 美國國家氣候資料中心
 - **申請網址**: https://www.ncdc.noaa.gov/cdo-web/token
 - **步驟**: 填 email → 收信 → 拿 token
 - **GitHub Secret 名稱**: `NOAA_CDO_TOKEN`
 - **提供資料**: 歷史天氣與氣候紀錄
+- **狀態**: ✅ 已設定
 
 ### 4. OpenAQ — 全球開源空氣品質
 - **申請網址**: https://docs.openaq.org/using-the-api/quick-start
 - **步驟**: 註冊帳號 → Dashboard 拿 key
 - **GitHub Secret 名稱**: `OPENAQ_API_KEY`
 - **提供資料**: 100+ 國家、300+ 資料來源的即時空氣品質
+- **狀態**: ✅ 已設定
 
 ### 5. AQICN — 世界空氣品質指數
 - **申請網址**: https://aqicn.org/data-platform/token/
 - **步驟**: 填 email → 收信 → 拿 token
 - **GitHub Secret 名稱**: `AQICN_API_TOKEN`
 - **提供資料**: 12,000+ 監測站即時 AQI（PM2.5, PM10, O3, NO2, SO2, CO）
+- **狀態**: ✅ 已設定
 
 ### 6. USDA NASS — 美國農業部統計
 - **申請網址**: https://quickstats.nass.usda.gov/api/
 - **步驟**: 填 email → 即時拿 key
 - **GitHub Secret 名稱**: `USDA_NASS_API_KEY`
 - **提供資料**: 美國農作物面積、產量、收成、畜牧、價格
+- **狀態**: ✅ 已設定
 
 ---
 
@@ -49,24 +55,28 @@
 - **步驟**: 註冊 → 選 Free tier → Dashboard 拿 key
 - **GitHub Secret 名稱**: `ELECTRICITY_MAPS_API_KEY`
 - **提供資料**: 160+ 電力區域即時碳排強度與電力結構
+- **狀態**: ✅ 已設定
 
 ### 8. Climatiq — 碳排放因子
 - **申請網址**: https://www.climatiq.io/pricing
 - **步驟**: 註冊 → 選 Free plan → API key
 - **GitHub Secret 名稱**: `CLIMATIQ_API_KEY`
 - **提供資料**: 碳足跡計算排放因子資料庫
+- **狀態**: ✅ 已設定
 
 ### 9. Copernicus CDS — 歐盟哥白尼氣候資料庫
 - **申請網址**: https://cds.climate.copernicus.eu/user/register
 - **步驟**: 註冊 → 接受授權 → Profile 頁面拿 key
-- **GitHub Secret 名稱**: `CDS_API_KEY`
+- **GitHub Secret 名稱**: `COPERNICUS_CDS_KEY`
 - **提供資料**: ERA5 再分析資料、全球大氣與地表變量
+- **狀態**: ✅ 已設定
 
 ### 10. Open Charge Map — 全球電動車充電站
 - **申請網址**: https://openchargemap.org/site/develop/api
 - **步驟**: 可選（無 key 也能用，有限速）
 - **GitHub Secret 名稱**: `OPEN_CHARGE_MAP_KEY`
 - **提供資料**: 300,000+ 充電站位置、即時可用性、定價
+- **狀態**: ✅ 已設定
 
 ---
 
