@@ -126,15 +126,15 @@ export default function EnergyPage() {
     </div>
   );
 
-  // Generation mix items for bar chart
+  // Generation mix items for bar chart (TaiPower official colors)
   const mixItems = tpLatest ? [
-    { label: t("taipower.solar", lang), mw: Number(tpLatest.solar_mw ?? 0), color: "#f59e0b" },
-    { label: t("taipower.wind", lang), mw: Number(tpLatest.wind_mw ?? 0), color: "#06b6d4" },
-    { label: t("taipower.hydro", lang), mw: Number(tpLatest.hydro_mw ?? 0), color: "#3b82f6" },
-    { label: t("taipower.lng", lang), mw: Number(tpLatest.lng_mw ?? 0) + Number(tpLatest.ipp_lng_mw ?? 0), color: "#6b7280" },
-    { label: t("taipower.coal", lang), mw: Number(tpLatest.coal_mw ?? 0) + Number(tpLatest.ipp_coal_mw ?? 0), color: "#374151" },
-    { label: t("taipower.nuclear", lang), mw: Number(tpLatest.nuclear_mw ?? 0), color: "#8b5cf6" },
-    { label: t("taipower.other", lang), mw: Number(tpLatest.oil_mw ?? 0) + Number(tpLatest.cogen_mw ?? 0) + Number(tpLatest.storage_mw ?? 0) + Number(tpLatest.other_renewable_mw ?? 0), color: "#9ca3af" },
+    { label: t("taipower.solar", lang), mw: Number(tpLatest.solar_mw ?? 0), color: "#00CC00" },
+    { label: t("taipower.wind", lang), mw: Number(tpLatest.wind_mw ?? 0), color: "#009933" },
+    { label: t("taipower.hydro", lang), mw: Number(tpLatest.hydro_mw ?? 0), color: "#0000B2" },
+    { label: t("taipower.lng", lang), mw: Number(tpLatest.lng_mw ?? 0) + Number(tpLatest.ipp_lng_mw ?? 0), color: "#008A20" },
+    { label: t("taipower.coal", lang), mw: Number(tpLatest.coal_mw ?? 0) + Number(tpLatest.ipp_coal_mw ?? 0), color: "#E65C00" },
+    { label: t("taipower.nuclear", lang), mw: Number(tpLatest.nuclear_mw ?? 0), color: "#CC0099" },
+    { label: t("taipower.other", lang), mw: Number(tpLatest.oil_mw ?? 0) + Number(tpLatest.cogen_mw ?? 0) + Number(tpLatest.storage_mw ?? 0) + Number(tpLatest.other_renewable_mw ?? 0), color: "#6699FF" },
   ] : [];
 
   // Filter valid numbers for sparklines
@@ -176,7 +176,7 @@ export default function EnergyPage() {
               unit="MW"
               trend="up"
               sparkData={filterNums(tpTs?.solar_mw)}
-              sparkColor="#f59e0b"
+              sparkColor="#00CC00"
             />
             <KPICard
               title={t("taipower.wind", lang)}
@@ -184,7 +184,7 @@ export default function EnergyPage() {
               unit="MW"
               trend="up"
               sparkData={filterNums(tpTs?.wind_mw)}
-              sparkColor="#06b6d4"
+              sparkColor="#009933"
             />
             <KPICard
               title={t("taipower.hydro", lang)}
@@ -192,7 +192,7 @@ export default function EnergyPage() {
               unit="MW"
               trend="neutral"
               sparkData={filterNums(tpTs?.hydro_mw)}
-              sparkColor="#3b82f6"
+              sparkColor="#0000B2"
             />
             <KPICard
               title={t("taipower.totalGen", lang)}
@@ -249,7 +249,7 @@ export default function EnergyPage() {
                   <p className="text-xs text-gray-500 mb-2">{t("taipower.solarPeak", lang)} (MW)</p>
                   <Sparkline
                     data={tpDaily.map((d) => d.solar_mw_max)}
-                    color="#f59e0b"
+                    color="#00CC00"
                     width={400}
                     height={80}
                   />
@@ -262,7 +262,7 @@ export default function EnergyPage() {
                   <p className="text-xs text-gray-500 mb-2">{t("taipower.windPeak", lang)} (MW)</p>
                   <Sparkline
                     data={tpDaily.map((d) => d.wind_mw_max)}
-                    color="#06b6d4"
+                    color="#009933"
                     width={400}
                     height={80}
                   />
