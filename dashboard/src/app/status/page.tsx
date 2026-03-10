@@ -80,13 +80,12 @@ export default function StatusPage() {
   const [report, setReport] = useState<StatusReport | null>(null);
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [selectedApi, setSelectedApi] = useState<string | null>(null);
   const [sortCol, setSortCol] = useState<SortCol>("status");
   const [sortDir, setSortDir] = useState<SortDir>("asc");
   const [filterDomain, setFilterDomain] = useState<string>("all");
   const [filterStatus, setFilterStatus] = useState<StatusFilter>("all");
-
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     Promise.all([fetchStatus(), fetchRecentHistory(3)])
@@ -99,28 +98,6 @@ export default function StatusPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) {
-    return (
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-          {t("status.title", lang)}
-        </h1>
-        <p className="mt-4 text-gray-500">{t("overview.loading", lang)}</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-          {t("status.title", lang)}
-        </h1>
-        <p className="mt-4 text-red-500">{error}</p>
-      </div>
-    );
-  }
-
   const apis = report?.apis ?? [];
   const healthy = report?.healthy ?? 0;
   const degraded = report?.degraded ?? 0;
@@ -129,20 +106,6 @@ export default function StatusPage() {
   const checkedAt = report?.checked_at
     ? new Date(report.checked_at).toLocaleString()
     : "N/A";
-
-  const handleSort = (col: SortCol) => {
-    if (sortCol === col) {
-      setSortDir((prev) => (prev === "asc" ? "desc" : "asc"));
-    } else {
-      setSortCol(col);
-      setSortDir("asc");
-    }
-  };
-
-  const sortArrow = (col: SortCol) => {
-    if (sortCol !== col) return null;
-    return <span className="ml-1">{sortDir === "asc" ? "▲" : "▼"}</span>;
-  };
 
   const statusCounts = useMemo(() => {
     const counts = { all: apis.length, healthy: 0, degraded: 0, down: 0 };
@@ -183,6 +146,20 @@ export default function StatusPage() {
     });
   }, [apis, filterDomain, filterStatus, sortCol, sortDir]);
 
+  const handleSort = (col: SortCol) => {
+    if (sortCol === col) {
+      setSortDir((prev) => (prev === "asc" ? "desc" : "asc"));
+    } else {
+      setSortCol(col);
+      setSortDir("asc");
+    }
+  };
+
+  const sortArrow = (col: SortCol) => {
+    if (sortCol !== col) return null;
+    return <span className="ml-1">{sortDir === "asc" ? "▲" : "▼"}</span>;
+  };
+
   const statusFilterItems: {
     key: StatusFilter;
     label: string;
@@ -218,6 +195,28 @@ export default function StatusPage() {
         "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300",
     },
   ];
+
+  if (loading) {
+    return (
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          {t("status.title", lang)}
+        </h1>
+        <p className="mt-4 text-gray-500">{t("overview.loading", lang)}</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          {t("status.title", lang)}
+        </h1>
+        <p className="mt-4 text-red-500">{error}</p>
+      </div>
+    );
+  }
 
   return (
     <div>
