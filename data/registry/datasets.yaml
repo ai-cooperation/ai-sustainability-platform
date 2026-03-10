@@ -121,6 +121,23 @@ datasets:
     status: active
     description: US solar and wind resource data from NREL
 
+  - id: taipower
+    name: TaiPower Generation Mix
+    domain: energy
+    provider: TaiPower (台灣電力公司)
+    access:
+      type: api
+      endpoint: https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/genary.json
+      auth: none
+      rate_limit: ""
+    update_frequency: hourly
+    data_format: json
+    connector_class: TaiPowerConnector
+    connector_module: src.connectors.energy.taipower
+    fields: [timestamp, solar_mw, wind_mw, hydro_mw, renewable_mw, total_mw, renewable_pct]
+    status: active
+    description: Taiwan real-time power generation mix and renewable energy share
+
   # ============================================================
   # CLIMATE DOMAIN (6)
   # ============================================================

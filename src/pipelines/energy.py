@@ -13,6 +13,7 @@ from src.connectors.energy import (
     NRELConnector,
     OpenMeteoSolarConnector,
     OpenPowerSystemConnector,
+    TaiPowerConnector,
 )
 from src.pipelines.base import BasePipeline
 
@@ -38,6 +39,7 @@ class EnergyPipeline(BasePipeline):
             EIAConnector,
             ElectricityMapsConnector,
             NRELConnector,
+            TaiPowerConnector,
         ]
 
     def extract(self) -> list[ConnectorResult]:

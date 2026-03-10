@@ -128,3 +128,45 @@ export async function fetchDomainData(domain: string): Promise<DomainData | null
 export async function fetchOverview(): Promise<OverviewData | null> {
   return fetchJson<OverviewData>("dashboard/overview.json");
 }
+
+// --- TaiPower real-time data ---
+
+export interface TaiPowerDailyPeak {
+  date: string;
+  solar_mw_max: number;
+  wind_mw_max: number;
+  hydro_mw_max: number;
+  renewable_mw_max: number;
+  total_mw_max: number;
+  renewable_pct_max: number;
+  count: number;
+}
+
+export interface TaiPowerData {
+  updated_at: string;
+  latest: Record<string, number | string>;
+  record_count: number;
+  time_series: {
+    timestamps: string[];
+    renewable_pct: (number | null)[];
+    solar_mw: (number | null)[];
+    wind_mw: (number | null)[];
+    hydro_mw: (number | null)[];
+    total_mw: (number | null)[];
+    renewable_mw: (number | null)[];
+  };
+  daily_peaks: TaiPowerDailyPeak[];
+}
+
+const TAIPOWER_BASE =
+  "https://raw.githubusercontent.com/ai-cooperation/taipower-data/main/data";
+
+export async function fetchTaiPower(): Promise<TaiPowerData | null> {
+  try {
+    const res = await fetch(`${TAIPOWER_BASE}/dashboard.json`, { cache: "no-store" });
+    if (!res.ok) return null;
+    return (await res.json()) as TaiPowerData;
+  } catch {
+    return null;
+  }
+}

@@ -22,6 +22,8 @@ KPI_WHITELIST: dict[str, list[str]] = {
         "solar_radiation", "temperature", "temperature_2m", "intensity_forecast",
         "DE_solar_generation_actual", "DE_wind_generation_actual",
         "DE_load_actual_entsoe_transparency", "DE_price_day_ahead",
+        "renewable_mw", "total_mw", "renewable_pct",
+        "solar_mw", "wind_mw", "hydro_mw",
     ],
     "climate": [
         "co2_ppm", "trend", "temperature_max", "temperature_min", "precipitation",
@@ -45,6 +47,7 @@ SPARKLINE_WHITELIST: dict[str, list[str]] = {
         "shortwave_radiation", "direct_radiation",
         "solar_radiation", "temperature", "temperature_2m",
         "DE_solar_generation_actual", "DE_wind_generation_actual",
+        "renewable_pct", "solar_mw", "wind_mw",
     ],
     "climate": [
         "co2_ppm", "temperature_max", "precipitation",

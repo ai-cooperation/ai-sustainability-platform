@@ -9,6 +9,7 @@ from src.connectors.energy.nasa_power import NASAPowerConnector
 from src.connectors.energy.nrel import NRELConnector
 from src.connectors.energy.open_meteo_solar import OpenMeteoSolarConnector
 from src.connectors.energy.open_power_system import OpenPowerSystemConnector
+from src.connectors.energy.taipower import TaiPowerConnector
 
 __all__ = [
     "CarbonIntensityUKConnector",
@@ -18,4 +19,5 @@ __all__ = [
     "NRELConnector",
     "OpenMeteoSolarConnector",
     "OpenPowerSystemConnector",
+    "TaiPowerConnector",
 ]

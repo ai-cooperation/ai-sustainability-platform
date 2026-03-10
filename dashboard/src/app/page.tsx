@@ -8,10 +8,12 @@ import {
   fetchForecasts,
   fetchOverview,
   fetchDomainData,
+  fetchTaiPower,
   type StatusReport,
   type ForecastResult,
   type OverviewData,
   type DomainData,
+  type TaiPowerData,
 } from "@/lib/data";
 import { useApp } from "@/lib/context";
 import { t } from "@/lib/i18n";
@@ -22,6 +24,7 @@ export default function Overview() {
   const [forecasts, setForecasts] = useState<ForecastResult[] | null>(null);
   const [overview, setOverview] = useState<OverviewData | null>(null);
   const [domains, setDomains] = useState<Record<string, DomainData>>({});
+  const [taipower, setTaipower] = useState<TaiPowerData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -33,6 +36,7 @@ export default function Overview() {
       fetchStatus().then(setStatus),
       fetchForecasts().then(setForecasts),
       fetchOverview().then(setOverview),
+      fetchTaiPower().then(setTaipower),
       Promise.all(names.map((n) => fetchDomainData(n))).then((results) => {
         const map: Record<string, DomainData> = {};
         results.forEach((r, i) => {
@@ -129,15 +133,14 @@ export default function Overview() {
         />
         <KPICard
           title={t("kpi.renewable", lang)}
-          value={energyKpis.shortwave_radiation?.mean?.toFixed(0) ?? "—"}
-          unit="W/m²"
-          trend="up"
-          trendValue={energyKpis.shortwave_radiation ? `max ${energyKpis.shortwave_radiation.max.toFixed(0)} W/m²` : ""}
-          sparkData={energyTs.open_meteo_solar?.data?.shortwave_radiation}
-          sparkForecast={energyTs.open_meteo_solar?.forecast?.shortwave_radiation}
-          sparkColor="#f59e0b"
-          sparkLabel={t("spark.solarRad", lang)}
-          sparkRange={t("spark.range.7d+7d", lang)}
+          value={taipower?.latest?.renewable_pct != null ? Number(taipower.latest.renewable_pct).toFixed(1) : "—"}
+          unit="%"
+          trend={taipower?.latest?.renewable_pct != null && Number(taipower.latest.renewable_pct) > 15 ? "up" : "down"}
+          trendValue={taipower?.latest ? `${Number(taipower.latest.solar_mw ?? 0).toFixed(0)} MW ☀️ + ${Number(taipower.latest.wind_mw ?? 0).toFixed(0)} MW 💨` : ""}
+          sparkData={taipower?.time_series?.renewable_pct?.filter((v): v is number => v != null)}
+          sparkColor="#10b981"
+          sparkLabel={t("spark.renewablePct", lang)}
+          sparkRange={t("spark.range.realtime", lang)}
         />
         <KPICard
           title={t("kpi.solarTaipei", lang)}

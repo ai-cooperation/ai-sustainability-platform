@@ -66,7 +66,7 @@ const translations: Record<string, Record<Lang, string>> = {
 
   // KPI titles
   "kpi.co2": { en: "Global CO2 Emissions", zh: "全球 CO2 排放量" },
-  "kpi.renewable": { en: "Renewable Share", zh: "再生能源佔比" },
+  "kpi.renewable": { en: "Renewable Share (Taiwan)", zh: "再生能源佔比（台灣）" },
   "kpi.aqi": { en: "Global Avg AQI", zh: "全球平均空氣品質" },
   "kpi.carbonIntensity": { en: "UK Carbon Intensity", zh: "英國碳排強度" },
   "kpi.apiHealth": { en: "API Health", zh: "API 健康度" },
@@ -177,6 +177,8 @@ const translations: Record<string, Record<Lang, string>> = {
   "spark.temp": { en: "Temp.", zh: "溫度" },
   "spark.emissions": { en: "Emissions", zh: "排放趨勢" },
   "spark.co2ppm": { en: "CO₂ trend", zh: "CO₂ 趨勢" },
+  "spark.renewablePct": { en: "Renewable %", zh: "再生能源 %" },
+  "spark.range.realtime": { en: "Real-time", zh: "即時數據" },
   "spark.range.7d": { en: "Past 7 days", zh: "過去 7 天" },
   "spark.range.6m": { en: "Past 6 months", zh: "過去 6 個月" },
   "spark.range.14y": { en: "Past ~14 years", zh: "過去約 14 年" },
@@ -209,6 +211,25 @@ const translations: Record<string, Record<Lang, string>> = {
   // Energy extras
   "energy.directRad": { en: "Direct Radiation", zh: "直射輻射" },
   "energy.nasaSolar": { en: "NASA Solar", zh: "NASA 太陽能" },
+  "energy.globalData": { en: "Global Energy Data", zh: "全球能源數據" },
+
+  // TaiPower
+  "taipower.title": { en: "Taiwan Power Generation (TaiPower)", zh: "台灣電力發電即時數據（台電）" },
+  "taipower.renewablePct": { en: "Renewable Share", zh: "再生能源佔比" },
+  "taipower.solar": { en: "Solar", zh: "太陽能" },
+  "taipower.wind": { en: "Wind", zh: "風力" },
+  "taipower.hydro": { en: "Hydro", zh: "水力" },
+  "taipower.lng": { en: "LNG", zh: "燃氣" },
+  "taipower.coal": { en: "Coal", zh: "燃煤" },
+  "taipower.nuclear": { en: "Nuclear", zh: "核能" },
+  "taipower.other": { en: "Other", zh: "其他" },
+  "taipower.totalGen": { en: "Total Generation", zh: "總發電量" },
+  "taipower.genMix": { en: "Generation Mix", zh: "發電結構" },
+  "taipower.dailyPeaks": { en: "Daily Peak Values (History)", zh: "每日峰值（歷史）" },
+  "taipower.solarPeak": { en: "Solar Peak", zh: "太陽能峰值" },
+  "taipower.windPeak": { en: "Wind Peak", zh: "風力峰值" },
+  "taipower.renewablePctPeak": { en: "Renewable Share Peak", zh: "再生能源佔比峰值" },
+  "taipower.totalPeak": { en: "Total Generation Peak", zh: "總發電峰值" },
 
   // Sidebar
   "sidebar.title": { en: "AI Sustainability", zh: "AI 永續平台" },
@@ -225,6 +246,14 @@ const translations: Record<string, Record<Lang, string>> = {
   "apiDetail.close": { en: "Close", zh: "關閉" },
 
   // API names (full)
+  "api.taipower.name": { en: "TaiPower Generation", zh: "台電即時發電" },
+  "api.taipower.desc": {
+    en: "Real-time power generation mix from Taiwan Power Company. Updated every 10 minutes with solar, wind, hydro, and thermal breakdown.",
+    zh: "台灣電力公司即時發電結構。每 10 分鐘更新，包含太陽能、風力、水力及火力分類。",
+  },
+  "api.taipower.source": { en: "taipower.com.tw", zh: "taipower.com.tw（台灣電力公司）" },
+  "api.taipower.format": { en: "JSON, free, no key required", zh: "JSON，免費，無需金鑰" },
+
   "api.open_meteo_solar.name": { en: "Open-Meteo Solar Radiation", zh: "Open-Meteo 太陽輻射" },
   "api.open_meteo_solar.desc": {
     en: "Hourly and daily solar radiation forecasts including GHI, DNI, and diffuse radiation for any location worldwide.",
