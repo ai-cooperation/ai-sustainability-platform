@@ -25,6 +25,9 @@ jobs:
       - name: Install dependencies
         run: uv sync
 
+      - name: Create data directories
+        run: mkdir -p data/realtime
+
       - name: Run Carbon Intensity UK (real-time)
         continue-on-error: true
         run: |
@@ -58,9 +61,30 @@ jobs:
           print(f'Weather: {r.record_count} records')
           "
 
+      - name: Run Taiwan AQI (real-time)
+        continue-on-error: true
+        run: |
+          uv run python -c "
+          from src.connectors.environment.tw_epa_aqi import TwEpaAqiConnector
+          c = TwEpaAqiConnector()
+          r = c.run()
+          r.data.to_json('data/realtime/tw_aqi.json', orient='records', indent=2, force_ascii=False)
+          print(f'Taiwan AQI: {r.record_count} records')
+          "
+
+      - name: Run Taiwan Reservoir (real-time)
+        continue-on-error: true
+        run: |
+          uv run python -c "
+          from src.connectors.environment.tw_wra_reservoir import TwWraReservoirConnector
+          c = TwWraReservoirConnector()
+          r = c.run()
+          r.data.to_json('data/realtime/tw_reservoir.json', orient='records', indent=2, force_ascii=False)
+          print(f'Taiwan Reservoir: {r.record_count} records')
+          "
+
       - name: Commit realtime data
         run: |
-          mkdir -p data/realtime
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/realtime/ || true
