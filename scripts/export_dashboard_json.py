@@ -123,10 +123,11 @@ def export_domain(domain: str) -> dict | None:
         for source in summary["sources"]:
             source_df = df[df["source"] == source].sort_values("timestamp").tail(168)
             ts_data = {}
-            for col in numeric_cols:
-                if col not in allowed_sparklines:
+            for col in allowed_sparklines:
+                if col not in source_df.columns:
                     continue
-                values = source_df[col].dropna().tolist()
+                series = pd.to_numeric(source_df[col], errors="coerce").dropna()
+                values = series.tolist()
                 if values:
                     ts_data[col] = [safe_json_value(v) for v in values]
             if ts_data:

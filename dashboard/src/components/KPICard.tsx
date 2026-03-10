@@ -56,13 +56,15 @@ export default function KPICard({
               width={140}
               height={36}
             />
-            {sparkLabel && (
-              <span className="ml-2 text-[10px] text-gray-400">{sparkLabel}</span>
-            )}
+            <div className="ml-2 text-right">
+              {sparkLabel && (
+                <span className="block text-[11px] text-gray-400">{sparkLabel}</span>
+              )}
+              {sparkRange && (
+                <span className="block text-[11px] text-gray-400 dark:text-gray-500">{sparkRange}</span>
+              )}
+            </div>
           </div>
-          {sparkRange && (
-            <p className="mt-1 text-[10px] text-gray-400 dark:text-gray-500">{sparkRange}</p>
-          )}
         </div>
       )}
     </div>
