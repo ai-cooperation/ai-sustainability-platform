@@ -86,12 +86,17 @@ export default function StatusPage() {
   const [filterDomain, setFilterDomain] = useState<string>("all");
   const [filterStatus, setFilterStatus] = useState<StatusFilter>("all");
 
+  const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
-    Promise.all([fetchStatus(), fetchRecentHistory(3)]).then(([s, h]) => {
-      setReport(s);
-      setHistory(h);
-      setLoading(false);
-    });
+    Promise.all([fetchStatus(), fetchRecentHistory(3)])
+      .then(([s, h]) => {
+        setReport(s);
+        setHistory(h);
+        if (!s) setError("Failed to load status data");
+      })
+      .catch(() => setError("Failed to load status data"))
+      .finally(() => setLoading(false));
   }, []);
 
   if (loading) {
@@ -101,6 +106,17 @@ export default function StatusPage() {
           {t("status.title", lang)}
         </h1>
         <p className="mt-4 text-gray-500">{t("overview.loading", lang)}</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          {t("status.title", lang)}
+        </h1>
+        <p className="mt-4 text-red-500">{error}</p>
       </div>
     );
   }
