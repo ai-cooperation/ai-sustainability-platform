@@ -1,8 +1,8 @@
 {
-  "updated_at": "2026-03-10T03:31:51.170623Z",
+  "updated_at": "2026-03-10T03:49:22.035696Z",
   "domains": {
     "energy": {
-      "record_count": 5640,
+      "record_count": 5808,
       "sources": [
         "carbon_intensity_uk",
         "eia",
@@ -13,32 +13,32 @@
       ],
       "kpis": {
         "shortwave_radiation": {
-          "latest": 71.0,
-          "mean": 198.9702380952381,
+          "latest": 72.0,
+          "mean": 108.19940476190476,
           "min": 0.0,
-          "max": 902.0,
-          "count": 168
+          "max": 859.0,
+          "count": 336
         },
         "direct_radiation": {
-          "latest": 39.0,
-          "mean": 127.20238095238095,
+          "latest": 41.0,
+          "mean": 54.779761904761905,
           "min": 0.0,
-          "max": 739.0,
-          "count": 168
+          "max": 669.0,
+          "count": 336
         },
         "diffuse_radiation": {
-          "latest": 32.0,
-          "mean": 71.76785714285714,
+          "latest": 31.0,
+          "mean": 53.419642857142854,
           "min": 0.0,
           "max": 319.0,
-          "count": 168
+          "count": 336
         },
         "temperature_2m": {
           "latest": 18.4,
-          "mean": 16.782738095238095,
+          "mean": 16.90059523809524,
           "min": 11.3,
           "max": 26.8,
-          "count": 168
+          "count": 336
         },
         "solar_radiation": {
           "latest": 3.0979,
@@ -55,10 +55,10 @@
           "count": 366
         },
         "intensity_forecast": {
-          "latest": 130.0,
-          "mean": 130.0,
-          "min": 130.0,
-          "max": 130.0,
+          "latest": 127.0,
+          "mean": 127.0,
+          "min": 127.0,
+          "max": 127.0,
           "count": 1
         },
         "DE_load_actual_entsoe_transparency": {
