@@ -139,6 +139,7 @@ export interface TaiPowerDailyPeak {
   renewable_mw_max: number;
   total_mw_max: number;
   renewable_pct_max: number;
+  load_mw_max: number;
   count: number;
 }
 
@@ -154,6 +155,9 @@ export interface TaiPowerData {
     hydro_mw: (number | null)[];
     total_mw: (number | null)[];
     renewable_mw: (number | null)[];
+    load_mw: (number | null)[];
+    util_rate_pct: (number | null)[];
+    fore_reserve_pct: (number | null)[];
   };
   daily_peaks: TaiPowerDailyPeak[];
 }

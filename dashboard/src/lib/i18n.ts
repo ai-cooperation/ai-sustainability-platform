@@ -230,6 +230,10 @@ const translations: Record<string, Record<Lang, string>> = {
   "taipower.windPeak": { en: "Wind Peak", zh: "風力峰值" },
   "taipower.renewablePctPeak": { en: "Renewable Share Peak", zh: "再生能源佔比峰值" },
   "taipower.totalPeak": { en: "Total Generation Peak", zh: "總發電峰值" },
+  "taipower.load": { en: "System Load", zh: "系統負載" },
+  "taipower.reserve": { en: "Operating Reserve", zh: "備轉容量" },
+  "taipower.reserveIndicator": { en: "Reserve Status", zh: "備轉燈號" },
+  "taipower.loadPeak": { en: "Load Peak", zh: "負載峰值" },
 
   // Sidebar
   "sidebar.title": { en: "AI Sustainability", zh: "AI 永續平台" },

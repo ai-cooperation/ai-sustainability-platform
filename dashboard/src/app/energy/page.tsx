@@ -37,6 +37,51 @@ function GenMixBar({ items }: { items: { label: string; mw: number; color: strin
   );
 }
 
+/** Reserve indicator card with G/Y/O/R traffic light */
+const RESERVE_COLORS: Record<string, { bg: string; text: string; label: Record<string, string> }> = {
+  G: { bg: "bg-green-500", text: "text-green-700 dark:text-green-400", label: { en: "Adequate", zh: "供電充裕" } },
+  Y: { bg: "bg-yellow-400", text: "text-yellow-700 dark:text-yellow-400", label: { en: "Tight", zh: "供電吃緊" } },
+  O: { bg: "bg-orange-500", text: "text-orange-700 dark:text-orange-400", label: { en: "Critical", zh: "供電警戒" } },
+  R: { bg: "bg-red-500", text: "text-red-700 dark:text-red-400", label: { en: "Emergency", zh: "限電警戒" } },
+};
+
+function ReserveCard({
+  lang,
+  indicator,
+  reservePct,
+  reserveMw,
+  sparkData,
+}: {
+  lang: "en" | "zh";
+  indicator: string;
+  reservePct: number;
+  reserveMw: number;
+  sparkData: number[];
+}) {
+  const color = RESERVE_COLORS[indicator] ?? RESERVE_COLORS.G;
+  return (
+    <div className="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+      <p className="text-xs font-medium text-gray-500 dark:text-gray-400">
+        {t("taipower.reserve", lang)}
+      </p>
+      <div className="mt-2 flex items-center gap-3">
+        <span className={`inline-block h-5 w-5 rounded-full ${color.bg}`} />
+        <span className={`text-2xl font-bold ${color.text}`}>
+          {reservePct.toFixed(1)}%
+        </span>
+      </div>
+      <p className="mt-1 text-xs text-gray-500">
+        {reserveMw.toLocaleString()} MW — {color.label[lang] ?? color.label.en}
+      </p>
+      {sparkData.length > 1 && (
+        <div className="mt-2">
+          <Sparkline data={sparkData} color="#ef4444" width={200} height={32} />
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function EnergyPage() {
   const { lang } = useApp();
   const [data, setData] = useState<DomainData | null>(null);
@@ -116,7 +161,7 @@ export default function EnergyPage() {
           </div>
 
           {/* KPI cards row */}
-          <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+          <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
             <KPICard
               title={t("taipower.renewablePct", lang)}
               value={Number(tpLatest.renewable_pct ?? 0).toFixed(1)}
@@ -156,6 +201,22 @@ export default function EnergyPage() {
               trend="neutral"
               sparkData={filterNums(tpTs?.total_mw)}
               sparkColor="#6b7280"
+            />
+            <KPICard
+              title={t("taipower.load", lang)}
+              value={Number(tpLatest.load_mw ?? 0).toLocaleString()}
+              unit="MW"
+              trendValue={`${t("taipower.reserve", lang)}: ${Number(tpLatest.fore_reserve_pct ?? 0).toFixed(1)}%`}
+              trend={Number(tpLatest.util_rate_pct ?? 0) > 90 ? "up" : "neutral"}
+              sparkData={filterNums(tpTs?.load_mw)}
+              sparkColor="#8b5cf6"
+            />
+            <ReserveCard
+              lang={lang}
+              indicator={String(tpLatest.reserve_indicator ?? "")}
+              reservePct={Number(tpLatest.fore_reserve_pct ?? 0)}
+              reserveMw={Number(tpLatest.fore_reserve_mw ?? 0)}
+              sparkData={filterNums(tpTs?.fore_reserve_pct)}
             />
           </div>
 
