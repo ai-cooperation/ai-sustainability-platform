@@ -113,17 +113,18 @@ export default function Overview() {
       </p>
 
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Row 1: Temperature, Renewable Energy, Solar Radiation */}
         <KPICard
-          title={t("common.co2ppm", lang)}
-          value={climateKpis.co2_ppm?.latest?.toFixed(1) ?? "—"}
-          unit="ppm"
-          trend="up"
-          trendValue={climateKpis.co2_ppm ? `avg ${climateKpis.co2_ppm.mean.toFixed(1)} ppm` : ""}
-          sparkData={climateTs.noaa_ghg?.data?.co2_ppm}
-          sparkColor="#ef4444"
-          sparkLabel={t("spark.co2ppm", lang)}
-          sparkRange={t("spark.range.14y", lang)}
-          color="red"
+          title={t("kpi.temperature", lang)}
+          value={energyKpis.temperature?.latest?.toFixed(1) ?? "—"}
+          unit="°C"
+          trend={energyKpis.temperature && energyKpis.temperature.latest > energyKpis.temperature.mean ? "up" : "down"}
+          trendValue={energyKpis.temperature ? `avg ${energyKpis.temperature.mean.toFixed(1)}°C` : ""}
+          sparkData={energyTs.nasa_power?.data?.temperature}
+          sparkColor="#3b82f6"
+          sparkLabel={t("spark.temp", lang)}
+          sparkRange={t("spark.range.1y", lang)}
+          color="blue"
         />
         <KPICard
           title={t("kpi.renewable", lang)}
@@ -137,15 +138,29 @@ export default function Overview() {
           sparkRange={t("spark.range.7d", lang)}
         />
         <KPICard
-          title={t("kpi.aqi", lang)}
-          value={envKpis.pm2_5?.latest?.toFixed(1) ?? "—"}
-          unit="µg/m³ PM2.5"
-          trend={envKpis.pm2_5 && envKpis.pm2_5.latest < envKpis.pm2_5.mean ? "down" : "up"}
-          trendValue={envKpis.pm2_5 ? `avg ${envKpis.pm2_5.mean.toFixed(1)}` : ""}
-          sparkData={envTs.open_meteo_air_quality?.data?.pm2_5}
-          sparkColor="#10b981"
-          sparkLabel="PM2.5"
+          title={t("kpi.solarTaipei", lang)}
+          value={energyKpis.direct_radiation?.latest?.toFixed(0) ?? "—"}
+          unit="W/m²"
+          trend={energyKpis.direct_radiation && energyKpis.direct_radiation.latest > energyKpis.direct_radiation.mean ? "up" : "down"}
+          trendValue={energyKpis.direct_radiation ? `avg ${energyKpis.direct_radiation.mean.toFixed(0)} W/m²` : ""}
+          sparkData={energyTs.open_meteo_solar?.data?.direct_radiation}
+          sparkColor="#f97316"
+          sparkLabel={t("spark.directRad", lang)}
           sparkRange={t("spark.range.7d", lang)}
+          color="amber"
+        />
+        {/* Row 2: CO₂ ppm, Global Emissions, Air Quality */}
+        <KPICard
+          title={t("common.co2ppm", lang)}
+          value={climateKpis.co2_ppm?.latest?.toFixed(1) ?? "—"}
+          unit="ppm"
+          trend="up"
+          trendValue={climateKpis.co2_ppm ? `avg ${climateKpis.co2_ppm.mean.toFixed(1)} ppm` : ""}
+          sparkData={climateTs.noaa_ghg?.data?.co2_ppm}
+          sparkColor="#ef4444"
+          sparkLabel={t("spark.co2ppm", lang)}
+          sparkRange={t("spark.range.14y", lang)}
+          color="red"
         />
         <KPICard
           title={t("kpi.co2", lang)}
@@ -160,32 +175,38 @@ export default function Overview() {
           color="red"
         />
         <KPICard
-          title={t("kpi.temperature", lang)}
-          value={climateKpis.temperature_max?.latest?.toFixed(1) ?? "—"}
-          unit="°C"
-          trend={climateKpis.temperature_max && climateKpis.temperature_max.latest > climateKpis.temperature_max.mean ? "up" : "down"}
-          trendValue={climateKpis.temperature_max ? `avg ${climateKpis.temperature_max.mean.toFixed(1)}°C` : ""}
-          sparkData={climateTs.open_meteo_climate?.data?.temperature_max}
-          sparkColor="#3b82f6"
-          sparkLabel={t("spark.temp", lang)}
-          sparkRange={t("spark.range.6m", lang)}
-          color="blue"
-        />
-        <KPICard
-          title={t("kpi.apiHealth", lang)}
-          value={status ? `${healthy}/${total}` : "—"}
-          unit={t("overview.online", lang)}
-          trend={healthy >= 25 ? "up" : healthy >= 20 ? "neutral" : "down"}
-          trendValue={statusLabel}
-          sparkColor="#6b7280"
+          title={t("kpi.aqi", lang)}
+          value={envKpis.pm2_5?.latest?.toFixed(1) ?? "—"}
+          unit="µg/m³ PM2.5"
+          trend={envKpis.pm2_5 && envKpis.pm2_5.latest < envKpis.pm2_5.mean ? "down" : "up"}
+          trendValue={envKpis.pm2_5 ? `avg ${envKpis.pm2_5.mean.toFixed(1)}` : ""}
+          sparkData={envTs.open_meteo_air_quality?.data?.pm2_5}
+          sparkColor="#10b981"
+          sparkLabel="PM2.5"
+          sparkRange={t("spark.range.7d", lang)}
         />
       </div>
 
       <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
         <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-            {t("overview.platformStatus", lang)}
-          </h2>
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+              {t("overview.platformStatus", lang)}
+            </h2>
+            {status && (
+              <div className="flex items-center gap-2">
+                <span className={`inline-block h-2.5 w-2.5 rounded-full ${healthy === total ? "bg-green-500" : healthy >= 25 ? "bg-yellow-500" : "bg-red-500"}`} />
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  {healthy}/{total} {t("overview.online", lang)}
+                </span>
+                {(status.degraded > 0 || status.down > 0) && (
+                  <span className="text-xs text-gray-500">
+                    ({statusLabel})
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
           <div className="mt-4 space-y-3">
             {domainEntries.map((d) => (
               <div

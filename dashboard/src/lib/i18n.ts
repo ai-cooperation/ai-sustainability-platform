@@ -181,7 +181,9 @@ const translations: Record<string, Record<Lang, string>> = {
   "spark.range.6m": { en: "Past 6 months", zh: "過去 6 個月" },
   "spark.range.14y": { en: "Past ~14 years", zh: "過去約 14 年" },
   "spark.range.historical": { en: "Historical", zh: "歷史數據" },
-  "kpi.temperature": { en: "Temperature", zh: "氣溫" },
+  "kpi.temperature": { en: "Temperature (Taipei)", zh: "氣溫（台北）" },
+  "kpi.solarTaipei": { en: "Solar Radiation (Taipei)", zh: "太陽輻射（台北）" },
+  "spark.range.1y": { en: "Past 1 year", zh: "過去 1 年" },
 
   // Agriculture extras
   "agri.priceIndex": { en: "Price Index", zh: "農產品價格指數" },
