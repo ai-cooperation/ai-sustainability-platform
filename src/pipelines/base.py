@@ -71,6 +71,12 @@ class BasePipeline(ABC):
         if path is None:
             path = self._output_path()
         path.parent.mkdir(parents=True, exist_ok=True)
+        # Coerce mixed-type object columns to numeric where possible
+        # (prevents pyarrow ArrowInvalid errors from mixed str/float columns)
+        for col in df.select_dtypes(include=["object"]).columns:
+            converted = pd.to_numeric(df[col], errors="coerce")
+            if converted.notna().sum() > df[col].notna().sum() * 0.5:
+                df = df.assign(**{col: converted})
         df.to_parquet(path, index=False)
         self.logger.info(f"Saved {len(df)} records to {path}")
         return path
