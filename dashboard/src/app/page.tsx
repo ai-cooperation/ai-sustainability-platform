@@ -87,6 +87,32 @@ export default function Overview() {
     ? new Date(overview.updated_at).toLocaleString()
     : null;
 
+  // Daily peak renewable % (history: one point per day from daily_peaks)
+  const dailyRenewablePct = (taipower?.daily_peaks ?? []).map((d) => d.renewable_pct_max);
+
+  // Forecast renewable % proxy: scale solar radiation forecast daily max values
+  // to approximate renewable share (solar is the main variable driver)
+  const forecastRenewablePct = (() => {
+    const solarForecast = energyTs.open_meteo_solar?.forecast?.shortwave_radiation;
+    if (!solarForecast || solarForecast.length === 0 || dailyRenewablePct.length === 0) return undefined;
+    // Downsample hourly forecast to daily max (Open-Meteo gives hourly data for 7 days)
+    const dailyMaxes: number[] = [];
+    for (let i = 0; i < solarForecast.length; i += 24) {
+      const daySlice = solarForecast.slice(i, i + 24);
+      dailyMaxes.push(Math.max(...daySlice));
+    }
+    if (dailyMaxes.length === 0) return undefined;
+    // Scale: map radiation range to renewable % range based on historical correlation
+    const lastPct = dailyRenewablePct[dailyRenewablePct.length - 1] ?? 15;
+    const maxRad = Math.max(...dailyMaxes);
+    if (maxRad === 0) return undefined;
+    return dailyMaxes.map((rad) => {
+      // Higher radiation → higher renewable %; base ~8% (wind+hydro) + solar contribution
+      const solarContrib = (rad / maxRad) * (lastPct - 8);
+      return Math.round((8 + solarContrib) * 10) / 10;
+    });
+  })();
+
   if (loading) return (
     <div>
       <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t("app.title", lang)}</h1>
@@ -137,10 +163,11 @@ export default function Overview() {
           unit="%"
           trend={taipower?.latest?.renewable_pct != null && Number(taipower.latest.renewable_pct) > 15 ? "up" : "down"}
           trendValue={taipower?.latest ? `${Number(taipower.latest.solar_mw ?? 0).toFixed(0)} MW ☀️ + ${Number(taipower.latest.wind_mw ?? 0).toFixed(0)} MW 💨` : ""}
-          sparkData={taipower?.time_series?.renewable_pct?.filter((v): v is number => v != null)}
+          sparkData={dailyRenewablePct}
+          sparkForecast={forecastRenewablePct}
           sparkColor="#10b981"
           sparkLabel={t("spark.renewablePct", lang)}
-          sparkRange={t("spark.range.realtime", lang)}
+          sparkRange={t("spark.range.7d+7d", lang)}
         />
         <KPICard
           title={t("kpi.solarTaipei", lang)}
