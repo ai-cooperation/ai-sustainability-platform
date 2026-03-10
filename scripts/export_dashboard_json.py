@@ -15,6 +15,51 @@ PROCESSED_DIR = Path("data/processed")
 DASHBOARD_DIR = Path("data/dashboard")
 DOMAINS = ["energy", "climate", "environment", "agriculture", "carbon"]
 
+# Only these columns will be exported as KPIs per domain
+KPI_WHITELIST: dict[str, list[str]] = {
+    "energy": [
+        "shortwave_radiation", "direct_radiation", "diffuse_radiation",
+        "solar_radiation", "temperature", "intensity_forecast",
+        "DE_solar_generation_actual", "DE_wind_generation_actual",
+        "DE_load_actual_entsoe_transparency", "DE_price_day_ahead",
+    ],
+    "climate": [
+        "co2_ppm", "trend", "temperature_max", "temperature_min", "precipitation",
+    ],
+    "environment": [
+        "pm2_5", "pm10", "no2", "o3", "co", "aqi",
+    ],
+    "agriculture": [
+        "price",
+    ],
+    "carbon": [
+        "co2", "co2_per_capita", "energy_per_capita",
+        "Fossil-Fuel-And-Industry", "Land-Use-Change-Emissions",
+        "Ocean-Sink", "Land-Sink",
+    ],
+}
+
+# Only these columns will appear in time_series sparklines
+SPARKLINE_WHITELIST: dict[str, list[str]] = {
+    "energy": [
+        "shortwave_radiation", "direct_radiation",
+        "solar_radiation", "temperature",
+        "DE_solar_generation_actual", "DE_wind_generation_actual",
+    ],
+    "climate": [
+        "co2_ppm", "temperature_max", "precipitation",
+    ],
+    "environment": [
+        "pm2_5", "pm10", "no2", "o3",
+    ],
+    "agriculture": [
+        "price",
+    ],
+    "carbon": [
+        "co2", "co2_per_capita", "Fossil-Fuel-And-Industry",
+    ],
+}
+
 
 def find_latest_parquet(domain: str) -> Path | None:
     """Find the most recent parquet file for a domain."""
@@ -53,10 +98,12 @@ def export_domain(domain: str) -> dict | None:
         "columns": list(df.columns),
     }
 
-    # Extract numeric columns for KPI summary
+    # Extract KPIs — only whitelisted columns
+    allowed_kpis = KPI_WHITELIST.get(domain, [])
     numeric_cols = df.select_dtypes(include="number").columns.tolist()
+    kpi_cols = [c for c in numeric_cols if c in allowed_kpis]
     kpis = {}
-    for col in numeric_cols:
+    for col in kpi_cols:
         series = df[col].dropna()
         if len(series) == 0:
             continue
@@ -69,13 +116,16 @@ def export_domain(domain: str) -> dict | None:
         }
     summary["kpis"] = kpis
 
-    # Extract time series for sparklines (last 30 data points per source)
+    # Extract time series for sparklines (last 168 points = 7 days × 24 hours)
+    allowed_sparklines = SPARKLINE_WHITELIST.get(domain, [])
     time_series = {}
     if "timestamp" in df.columns:
         for source in summary["sources"]:
-            source_df = df[df["source"] == source].sort_values("timestamp").tail(30)
+            source_df = df[df["source"] == source].sort_values("timestamp").tail(168)
             ts_data = {}
             for col in numeric_cols:
+                if col not in allowed_sparklines:
+                    continue
                 values = source_df[col].dropna().tolist()
                 if values:
                     ts_data[col] = [safe_json_value(v) for v in values]

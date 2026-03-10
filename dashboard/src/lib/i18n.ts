@@ -78,7 +78,7 @@ const translations: Record<string, Record<Lang, string>> = {
   "energy.title": { en: "Energy Dashboard", zh: "能源儀表板" },
   "energy.subtitle": { en: "7 data sources: Solar, Wind, Grid Carbon Intensity, Power Systems", zh: "7 個資料來源：太陽能、風力、電網碳排強度、電力系統" },
   "energy.ukCarbon": { en: "UK Carbon Intensity", zh: "英國碳排強度" },
-  "energy.solarRadiation": { en: "Solar Radiation", zh: "太陽輻射量" },
+  "energy.solarRadiation": { en: "Solar Radiation (Taipei)", zh: "太陽總輻射（台北）" },
   "energy.windGeneration": { en: "Wind Generation", zh: "風力發電量" },
   "energy.renewablePct": { en: "Renewable %", zh: "再生能源佔比" },
   "energy.peakHour": { en: "Peak hour", zh: "尖峰時段" },
@@ -130,7 +130,7 @@ const translations: Record<string, Record<Lang, string>> = {
   "carbon.title": { en: "Carbon Emissions Dashboard", zh: "碳排放儀表板" },
   "carbon.subtitle": { en: "5 data sources: OWID, Climate Watch, Climate TRACE, Climatiq", zh: "5 個資料來源：OWID、Climate Watch、Climate TRACE、Climatiq" },
   "carbon.globalCo2": { en: "Global CO2 Emissions", zh: "全球 CO2 排放量" },
-  "carbon.perCapita": { en: "Per Capita (World)", zh: "人均排放（全球）" },
+  "carbon.perCapita": { en: "CO₂ Per Capita", zh: "人均碳排放" },
   "carbon.budgetLeft": { en: "Carbon Budget Left", zh: "剩餘碳預算" },
   "carbon.budgetUnit": { en: "Gt CO2 (1.5°C)", zh: "Gt CO2（1.5°C 目標）" },
   "carbon.yearsLeft": { en: "~7 years at current rate", zh: "按目前速率約剩 7 年" },
@@ -176,6 +176,8 @@ const translations: Record<string, Record<Lang, string>> = {
   "spark.directRad": { en: "Direct rad.", zh: "直射輻射" },
   "spark.temp": { en: "Temp.", zh: "溫度" },
   "spark.emissions": { en: "Emissions", zh: "排放趨勢" },
+  "spark.co2ppm": { en: "CO₂ trend", zh: "CO₂ 趨勢" },
+  "kpi.temperature": { en: "Temperature", zh: "氣溫" },
 
   // Agriculture extras
   "agri.priceIndex": { en: "Price Index", zh: "農產品價格指數" },
@@ -189,6 +191,8 @@ const translations: Record<string, Record<Lang, string>> = {
 
   // Climate extras
   "climate.humidity": { en: "Humidity", zh: "濕度" },
+  "climate.tempMax": { en: "Max Temperature", zh: "最高溫度" },
+  "climate.precipitation": { en: "Precipitation", zh: "降水量" },
   "climate.tempTrend": { en: "Temperature Trend", zh: "溫度趨勢" },
 
   // Carbon extras

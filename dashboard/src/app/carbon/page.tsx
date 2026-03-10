@@ -56,9 +56,9 @@ export default function CarbonPage() {
 
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <KPICard
-          title={t("carbon.globalCo2", lang)}
+          title={t("kpi.co2", lang)}
           value={kpis.co2?.latest?.toFixed(1) ?? "—"}
-          unit="Mt/yr"
+          unit="Mt CO₂"
           trend={kpis.co2 && kpis.co2.latest > kpis.co2.mean ? "up" : "down"}
           trendValue={kpis.co2 ? `avg ${kpis.co2.mean.toFixed(0)}` : ""}
           color="red"
@@ -68,7 +68,7 @@ export default function CarbonPage() {
         <KPICard
           title={t("carbon.perCapita", lang)}
           value={kpis.co2_per_capita?.latest?.toFixed(2) ?? "—"}
-          unit="t CO2/person"
+          unit="t/person"
           trend={kpis.co2_per_capita && kpis.co2_per_capita.latest < kpis.co2_per_capita.mean ? "down" : "up"}
           trendValue={kpis.co2_per_capita ? `avg ${kpis.co2_per_capita.mean.toFixed(2)}` : ""}
           sparkData={owidTs?.co2_per_capita}
@@ -76,8 +76,8 @@ export default function CarbonPage() {
         />
         <KPICard
           title={t("carbon.fossilIndustry", lang)}
-          value={kpis["Fossil-Fuel-And-Industry"]?.latest?.toFixed(1) ?? "—"}
-          unit="GtC/yr"
+          value={kpis["Fossil-Fuel-And-Industry"]?.latest?.toFixed(2) ?? "—"}
+          unit="GtC"
           trend="up"
           trendValue={kpis["Fossil-Fuel-And-Industry"] ? `avg ${kpis["Fossil-Fuel-And-Industry"].mean.toFixed(1)}` : ""}
           color="red"

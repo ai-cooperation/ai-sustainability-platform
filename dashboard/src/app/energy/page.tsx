@@ -52,18 +52,11 @@ export default function EnergyPage() {
 
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <KPICard
-          title={t("energy.ukCarbon", lang)}
-          value={kpis.intensity_forecast?.latest?.toFixed(0) ?? "—"}
-          unit="gCO2/kWh"
-          trend={kpis.intensity_forecast && kpis.intensity_forecast.latest < kpis.intensity_forecast.mean ? "down" : "neutral"}
-          trendValue={kpis.intensity_forecast ? `avg ${kpis.intensity_forecast.mean.toFixed(0)}` : ""}
-        />
-        <KPICard
           title={t("energy.solarRadiation", lang)}
           value={kpis.shortwave_radiation?.mean?.toFixed(0) ?? "—"}
           unit="W/m²"
           trend="up"
-          trendValue={kpis.shortwave_radiation ? `max ${kpis.shortwave_radiation.max.toFixed(0)}` : ""}
+          trendValue={kpis.shortwave_radiation ? `max ${kpis.shortwave_radiation.max.toFixed(0)} W/m²` : ""}
           sparkData={ts.open_meteo_solar?.data?.shortwave_radiation}
           sparkColor="#f59e0b"
         />
@@ -72,18 +65,26 @@ export default function EnergyPage() {
           value={kpis.direct_radiation?.mean?.toFixed(0) ?? "—"}
           unit="W/m²"
           trend="up"
-          trendValue={kpis.direct_radiation ? `max ${kpis.direct_radiation.max.toFixed(0)}` : ""}
+          trendValue={kpis.direct_radiation ? `max ${kpis.direct_radiation.max.toFixed(0)} W/m²` : ""}
           sparkData={ts.open_meteo_solar?.data?.direct_radiation}
-          sparkColor="#ef4444"
+          sparkColor="#10b981"
         />
         <KPICard
           title={t("energy.nasaSolar", lang)}
-          value={kpis.solar_radiation?.latest?.toFixed(2) ?? "—"}
+          value={kpis.solar_radiation?.mean?.toFixed(2) ?? "—"}
           unit="kWh/m²/day"
           trend="neutral"
-          trendValue={kpis.solar_radiation ? `avg ${kpis.solar_radiation.mean.toFixed(2)}` : ""}
+          trendValue="from NASA POWER"
           sparkData={ts.nasa_power?.data?.solar_radiation}
-          sparkColor="#10b981"
+          sparkColor="#6366f1"
+        />
+        <KPICard
+          title={t("kpi.carbonIntensity", lang)}
+          value={kpis.intensity_forecast?.latest?.toFixed(0) ?? "—"}
+          unit="gCO₂/kWh"
+          trend={kpis.intensity_forecast && kpis.intensity_forecast.latest < kpis.intensity_forecast.mean ? "down" : "neutral"}
+          trendValue=""
+          sparkColor="#ef4444"
         />
       </div>
 

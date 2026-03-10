@@ -67,12 +67,10 @@ export default function AgriculturePage() {
         />
         <KPICard
           title={t("agri.biodiversity", lang)}
-          value={kpis.latitude?.count ?? "—"}
+          value={data?.record_count?.toLocaleString() ?? "—"}
           unit={t("agri.records", lang)}
           trend="neutral"
           trendValue={`GBIF ${t("agri.gbifData", lang)}`}
-          sparkData={ts.gbif_biodiversity?.data?.latitude}
-          sparkColor="#6366f1"
         />
         <KPICard
           title={t("agri.totalRecords", lang)}

@@ -114,14 +114,15 @@ export default function Overview() {
 
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <KPICard
-          title={t("kpi.carbonIntensity", lang)}
-          value={energyKpis.intensity_forecast?.latest?.toFixed(0) ?? "—"}
-          unit="gCO2/kWh"
-          trend={energyKpis.intensity_forecast && energyKpis.intensity_forecast.latest < energyKpis.intensity_forecast.mean ? "down" : "neutral"}
-          trendValue={energyKpis.intensity_forecast ? `avg ${energyKpis.intensity_forecast.mean.toFixed(0)}` : ""}
-          sparkData={energyTs.open_meteo_solar?.data?.shortwave_radiation}
-          sparkColor="#10b981"
-          sparkLabel={t("spark.solarRad", lang)}
+          title={t("common.co2ppm", lang)}
+          value={climateKpis.co2_ppm?.latest?.toFixed(1) ?? "—"}
+          unit="ppm"
+          trend="up"
+          trendValue={climateKpis.co2_ppm ? `avg ${climateKpis.co2_ppm.mean.toFixed(1)} ppm` : ""}
+          sparkData={climateTs.noaa_ghg?.data?.co2_ppm}
+          sparkColor="#ef4444"
+          sparkLabel={t("spark.co2ppm", lang)}
+          color="red"
         />
         <KPICard
           title={t("kpi.renewable", lang)}
@@ -129,9 +130,9 @@ export default function Overview() {
           unit="W/m²"
           trend="up"
           trendValue={energyKpis.shortwave_radiation ? `max ${energyKpis.shortwave_radiation.max.toFixed(0)} W/m²` : ""}
-          sparkData={energyTs.open_meteo_solar?.data?.direct_radiation}
+          sparkData={energyTs.open_meteo_solar?.data?.shortwave_radiation}
           sparkColor="#f59e0b"
-          sparkLabel={t("spark.directRad", lang)}
+          sparkLabel={t("spark.solarRad", lang)}
         />
         <KPICard
           title={t("kpi.aqi", lang)}
@@ -144,17 +145,6 @@ export default function Overview() {
           sparkLabel="PM2.5"
         />
         <KPICard
-          title={t("common.co2ppm", lang)}
-          value={climateKpis.co2_ppm?.latest?.toFixed(1) ?? "—"}
-          unit="ppm"
-          trend="up"
-          trendValue={climateKpis.co2_ppm ? `avg ${climateKpis.co2_ppm.mean.toFixed(1)} ppm` : ""}
-          sparkData={climateTs.open_meteo_weather?.data?.temperature}
-          sparkColor="#ef4444"
-          sparkLabel={t("spark.temp", lang)}
-          color="red"
-        />
-        <KPICard
           title={t("kpi.co2", lang)}
           value={carbonKpis.co2?.latest?.toFixed(1) ?? "—"}
           unit="Mt CO₂"
@@ -164,6 +154,17 @@ export default function Overview() {
           sparkColor="#ef4444"
           sparkLabel={t("spark.emissions", lang)}
           color="red"
+        />
+        <KPICard
+          title={t("kpi.temperature", lang)}
+          value={climateKpis.temperature_max?.latest?.toFixed(1) ?? "—"}
+          unit="°C"
+          trend={climateKpis.temperature_max && climateKpis.temperature_max.latest > climateKpis.temperature_max.mean ? "up" : "down"}
+          trendValue={climateKpis.temperature_max ? `avg ${climateKpis.temperature_max.mean.toFixed(1)}°C` : ""}
+          sparkData={climateTs.open_meteo_climate?.data?.temperature_max}
+          sparkColor="#3b82f6"
+          sparkLabel={t("spark.temp", lang)}
+          color="blue"
         />
         <KPICard
           title={t("kpi.apiHealth", lang)}

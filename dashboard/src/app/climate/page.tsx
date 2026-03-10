@@ -52,44 +52,46 @@ export default function ClimatePage() {
 
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <KPICard
-          title={t("climate.co2", lang)}
+          title={t("common.co2ppm", lang)}
           value={kpis.co2_ppm?.latest?.toFixed(1) ?? "—"}
           unit="ppm"
           trend="up"
           trendValue={kpis.co2_ppm ? `avg ${kpis.co2_ppm.mean.toFixed(1)}` : ""}
+          sparkData={ts.noaa_ghg?.data?.co2_ppm}
+          sparkColor="#ef4444"
           color="red"
         />
         <KPICard
-          title={t("climate.tempAnomaly", lang)}
-          value={kpis.temperature?.mean?.toFixed(1) ?? "—"}
+          title={t("climate.tempMax", lang)}
+          value={kpis.temperature_max?.latest?.toFixed(1) ?? "—"}
           unit="°C"
-          trend={kpis.temperature && kpis.temperature.latest > kpis.temperature.mean ? "up" : "down"}
-          trendValue={kpis.temperature ? `${kpis.temperature.min.toFixed(1)}–${kpis.temperature.max.toFixed(1)}°C` : ""}
-          sparkData={ts.open_meteo_weather?.data?.temperature}
+          trend={kpis.temperature_max && kpis.temperature_max.latest > kpis.temperature_max.mean ? "up" : "down"}
+          trendValue={kpis.temperature_max ? `avg ${kpis.temperature_max.mean.toFixed(1)}°C` : ""}
+          sparkData={ts.open_meteo_climate?.data?.temperature_max}
           sparkColor="#ef4444"
         />
         <KPICard
-          title={t("climate.humidity", lang)}
-          value={kpis.humidity?.mean?.toFixed(0) ?? "—"}
-          unit="%"
-          trend="neutral"
-          trendValue={kpis.humidity ? `${kpis.humidity.min.toFixed(0)}–${kpis.humidity.max.toFixed(0)}%` : ""}
-          sparkData={ts.open_meteo_weather?.data?.humidity}
+          title={t("climate.precipitation", lang)}
+          value={kpis.precipitation?.latest?.toFixed(1) ?? "—"}
+          unit="mm"
+          trend={kpis.precipitation && kpis.precipitation.latest > kpis.precipitation.mean ? "up" : "down"}
+          trendValue={kpis.precipitation ? `avg ${kpis.precipitation.mean.toFixed(1)} mm` : ""}
+          sparkData={ts.open_meteo_climate?.data?.precipitation}
           sparkColor="#3b82f6"
         />
       </div>
 
-      {ts.open_meteo_weather?.data?.temperature && (
+      {ts.open_meteo_climate?.data?.temperature_max && (
         <div className="mt-8 rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
             {t("climate.tempTrend", lang)}
           </h2>
           <div className="mt-4">
-            <Sparkline data={ts.open_meteo_weather.data.temperature} color="#ef4444" width={600} height={120} />
+            <Sparkline data={ts.open_meteo_climate.data.temperature_max} color="#ef4444" width={600} height={120} />
           </div>
           <div className="mt-1 flex justify-between text-xs text-gray-400">
-            <span>{ts.open_meteo_weather.timestamps[0]?.split("T")[0] ?? ""}</span>
-            <span>{ts.open_meteo_weather.timestamps.at(-1)?.split("T")[0] ?? ""}</span>
+            <span>{ts.open_meteo_climate.timestamps[0]?.split("T")[0] ?? ""}</span>
+            <span>{ts.open_meteo_climate.timestamps.at(-1)?.split("T")[0] ?? ""}</span>
           </div>
         </div>
       )}
