@@ -7,6 +7,7 @@ from src.connectors.carbon.climate_watch import ClimateWatchConnector
 from src.connectors.carbon.climatiq import ClimatiqConnector
 from src.connectors.carbon.open_climate_data import OpenClimateDataConnector
 from src.connectors.carbon.owid_carbon import OWIDCarbonConnector
+from src.connectors.carbon.tw_epa_ghg import TwEpaGhgConnector
 
 __all__ = [
     "ClimateTRACEConnector",
@@ -14,4 +15,5 @@ __all__ = [
     "ClimatiqConnector",
     "OpenClimateDataConnector",
     "OWIDCarbonConnector",
+    "TwEpaGhgConnector",
 ]

@@ -60,8 +60,8 @@ class TestCarbonPipelineExtract:
             results = pipeline.extract()
         assert len(results) == 1
 
-    def test_extract_has_five_connectors(self, pipeline):
-        assert len(pipeline._connector_classes()) == 5
+    def test_extract_has_six_connectors(self, pipeline):
+        assert len(pipeline._connector_classes()) == 6
 
 
 class TestCarbonPipelineTransform:

@@ -13,6 +13,8 @@ from src.connectors.environment import (
     GlobalForestWatchConnector,
     OpenAQConnector,
     OpenMeteoAirQualityConnector,
+    TwEpaAqiConnector,
+    TwWraReservoirConnector,
 )
 from src.pipelines.base import BasePipeline
 
@@ -38,6 +40,8 @@ class EnvironmentPipeline(BasePipeline):
             OpenAQConnector,
             AQICNConnector,
             GlobalForestWatchConnector,
+            TwEpaAqiConnector,
+            TwWraReservoirConnector,
         ]
 
     def extract(self) -> list[ConnectorResult]:

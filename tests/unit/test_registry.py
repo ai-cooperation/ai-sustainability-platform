@@ -12,7 +12,7 @@ from src.registry.loader import filter_by_domain, find_dataset, load_registry
 class TestRegistry:
     def test_load_registry(self):
         registry = load_registry()
-        assert len(registry.datasets) == 31
+        assert len(registry.datasets) == 35
 
     def test_all_ids_unique(self):
         registry = load_registry()
@@ -30,11 +30,11 @@ class TestRegistry:
         counts = {}
         for ds in registry.datasets:
             counts[ds.domain] = counts.get(ds.domain, 0) + 1
-        assert counts["energy"] == 7
+        assert counts["energy"] == 8
         assert counts["climate"] == 6
-        assert counts["environment"] == 7
+        assert counts["environment"] == 9
         assert counts["agriculture"] == 4
-        assert counts["carbon"] == 5
+        assert counts["carbon"] == 6
         assert counts["transport"] == 2
 
     def test_find_dataset(self):
@@ -50,7 +50,7 @@ class TestRegistry:
     def test_filter_by_domain(self):
         registry = load_registry()
         energy = filter_by_domain(registry, "energy")
-        assert len(energy) == 7
+        assert len(energy) == 8
         assert all(ds.domain == "energy" for ds in energy)
 
     def test_file_not_found(self):

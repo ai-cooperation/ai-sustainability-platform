@@ -71,7 +71,7 @@ function ReserveCard({
         </span>
       </div>
       <p className="mt-1 text-xs text-gray-500">
-        {reserveMw.toLocaleString()} MW — {color.label[lang] ?? color.label.en}
+        {reserveMw >= 10000 ? `${(reserveMw / 1000).toFixed(1)} GW` : `${reserveMw.toLocaleString()} MW`} — {color.label[lang] ?? color.label.en}
       </p>
       {sparkData.length > 1 && (
         <div className="mt-2">
@@ -140,6 +140,10 @@ export default function EnergyPage() {
   // Filter valid numbers for sparklines
   const filterNums = (arr?: (number | null)[]) => arr?.filter((v): v is number => v != null) ?? [];
 
+  /** Format MW: show as GW if >= 10,000 MW */
+  const fmtMW = (mw: number) => mw >= 10000 ? `${(mw / 1000).toFixed(1)}` : mw.toLocaleString();
+  const fmtMWUnit = (mw: number) => mw >= 10000 ? "GW" : "MW";
+
   return (
     <div>
       <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t("energy.title", lang)}</h1>
@@ -196,16 +200,16 @@ export default function EnergyPage() {
             />
             <KPICard
               title={t("taipower.totalGen", lang)}
-              value={Number(tpLatest.total_mw ?? 0).toLocaleString()}
-              unit="MW"
+              value={fmtMW(Number(tpLatest.total_mw ?? 0))}
+              unit={fmtMWUnit(Number(tpLatest.total_mw ?? 0))}
               trend="neutral"
               sparkData={filterNums(tpTs?.total_mw)}
               sparkColor="#6b7280"
             />
             <KPICard
               title={t("taipower.load", lang)}
-              value={Number(tpLatest.load_mw ?? 0).toLocaleString()}
-              unit="MW"
+              value={fmtMW(Number(tpLatest.load_mw ?? 0))}
+              unit={fmtMWUnit(Number(tpLatest.load_mw ?? 0))}
               trendValue={`${t("taipower.reserve", lang)}: ${Number(tpLatest.fore_reserve_pct ?? 0).toFixed(1)}%`}
               trend={Number(tpLatest.util_rate_pct ?? 0) > 90 ? "up" : "neutral"}
               sparkData={filterNums(tpTs?.load_mw)}

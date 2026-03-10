@@ -365,6 +365,40 @@ datasets:
     status: active
     description: Satellite-based deforestation and forest fire monitoring
 
+  - id: tw_epa_aqi
+    name: 台灣環境部空氣品質 (AQI)
+    domain: environment
+    provider: 環境部 (MOENV)
+    access:
+      type: api
+      endpoint: https://data.moenv.gov.tw/api/v2/aqx_p_432
+      auth: api_key
+      rate_limit: ""
+    update_frequency: hourly
+    data_format: json
+    connector_class: TwEpaAqiConnector
+    connector_module: src.connectors.environment.tw_epa_aqi
+    fields: [timestamp, station, county, aqi, pm25, pm10, o3, status]
+    status: active
+    description: 台灣全島即時空氣品質監測資料，含各測站 AQI、PM2.5、PM10、O3
+
+  - id: tw_wra_reservoir
+    name: 台灣水庫即時水情
+    domain: environment
+    provider: 經濟部水利署 (WRA)
+    access:
+      type: api
+      endpoint: https://data.wra.gov.tw/Service/OpenData.aspx
+      auth: none
+      rate_limit: ""
+    update_frequency: hourly
+    data_format: json
+    connector_class: TwWraReservoirConnector
+    connector_module: src.connectors.environment.tw_wra_reservoir
+    fields: [timestamp, reservoir_name, water_level, storage_percentage, inflow_cms, outflow_cms]
+    status: active
+    description: 台灣主要水庫即時水位、蓄水率、進出水量
+
   # ============================================================
   # AGRICULTURE DOMAIN (4)
   # ============================================================
@@ -523,6 +557,23 @@ datasets:
     fields: [activity, emission_factor, co2e, unit, source]
     status: active
     description: Carbon emission factors and calculation engine
+
+  - id: tw_epa_ghg
+    name: 台灣溫室氣體排放統計
+    domain: carbon
+    provider: 環境部 (MOENV)
+    access:
+      type: api
+      endpoint: https://data.moenv.gov.tw/api/v2/GHP_P_01
+      auth: api_key
+      rate_limit: ""
+    update_frequency: annual
+    data_format: json
+    connector_class: TwEpaGhgConnector
+    connector_module: src.connectors.carbon.tw_epa_ghg
+    fields: [timestamp, sector, gas_type, emissions_kt, unit]
+    status: active
+    description: 台灣各部門年度溫室氣體排放清冊統計
 
   # ============================================================
   # TRANSPORT / URBAN DOMAIN (2)

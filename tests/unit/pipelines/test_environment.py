@@ -58,8 +58,8 @@ class TestEnvironmentPipelineExtract:
             results = pipeline.extract()
         assert len(results) == 1
 
-    def test_extract_has_seven_connectors(self, pipeline):
-        assert len(pipeline._connector_classes()) == 7
+    def test_extract_has_nine_connectors(self, pipeline):
+        assert len(pipeline._connector_classes()) == 9
 
 
 class TestEnvironmentPipelineTransform:

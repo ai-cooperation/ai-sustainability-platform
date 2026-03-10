@@ -72,8 +72,8 @@ class TestEnergyPipelineExtract:
             results = pipeline.extract()
         assert results == []
 
-    def test_extract_has_seven_connectors(self, pipeline):
-        assert len(pipeline._connector_classes()) == 7
+    def test_extract_has_eight_connectors(self, pipeline):
+        assert len(pipeline._connector_classes()) == 8
 
 
 class TestEnergyPipelineTransform:

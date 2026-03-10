@@ -11,6 +11,7 @@ from src.connectors.carbon import (
     ClimatiqConnector,
     OpenClimateDataConnector,
     OWIDCarbonConnector,
+    TwEpaGhgConnector,
 )
 from src.pipelines.base import BasePipeline
 
@@ -34,6 +35,7 @@ class CarbonPipeline(BasePipeline):
             OpenClimateDataConnector,
             ClimateTRACEConnector,
             ClimatiqConnector,
+            TwEpaGhgConnector,
         ]
 
     def extract(self) -> list[ConnectorResult]:
