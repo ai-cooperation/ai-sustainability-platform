@@ -51,15 +51,17 @@ export default function KPICard({
       )}
       {sparkData && sparkData.length > 1 && (
         <div className="mt-3">
-          <div className="flex items-end justify-between">
-            <Sparkline
-              data={sparkData}
-              forecastData={sparkForecast}
-              color={sparkColor ?? defaultSparkColor}
-              width={140}
-              height={36}
-            />
-            <div className="ml-2 text-right">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex-1 min-w-0">
+              <Sparkline
+                data={sparkData}
+                forecastData={sparkForecast}
+                color={sparkColor ?? defaultSparkColor}
+                width={280}
+                height={72}
+              />
+            </div>
+            <div className="shrink-0 text-right">
               {sparkLabel && (
                 <span className="block text-[11px] text-gray-400">{sparkLabel}</span>
               )}

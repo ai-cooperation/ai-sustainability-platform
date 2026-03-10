@@ -61,7 +61,12 @@ export default function Sparkline({
   }
 
   return (
-    <svg width={width} height={height} className="overflow-visible">
+    <svg
+      viewBox={`0 0 ${width} ${height}`}
+      className="w-full overflow-visible"
+      style={{ height }}
+      preserveAspectRatio="none"
+    >
       <defs>
         <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor={color} stopOpacity={0.25} />
