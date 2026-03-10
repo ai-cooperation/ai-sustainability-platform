@@ -1,10 +1,11 @@
 {
   "domain": "environment",
-  "updated_at": "2026-03-10T03:08:01.141852Z",
-  "record_count": 268,
+  "updated_at": "2026-03-10T03:31:51.253678Z",
+  "record_count": 368,
   "file": "environment_2026-03-10.parquet",
   "sources": [
     "aqicn",
+    "epa_envirofacts",
     "open_meteo_air_quality",
     "openaq"
   ],
@@ -19,12 +20,29 @@
     "o3",
     "aqi",
     "source",
+    "facility_id",
+    "facility_name",
+    "address1",
+    "address2",
+    "city",
+    "state",
+    "upper",
+    "zip",
+    "county_fips",
+    "county",
+    "year",
+    "sector_name",
+    "sector_type",
+    "subsector_name",
+    "subsector_desc",
+    "co2e_emission",
+    "gas_code",
+    "gas_name",
     "location",
     "parameter",
     "value",
     "unit",
     "country",
-    "city",
     "pm25",
     "so2",
     "domain"
@@ -38,55 +56,55 @@
       "count": 109
     },
     "pm10": {
-      "latest": 58.0,
-      "mean": 23.168181818181818,
+      "latest": 59.0,
+      "mean": 23.177272727272726,
       "min": 12.9,
-      "max": 58.0,
+      "max": 59.0,
       "count": 110
     },
     "co": {
-      "latest": 7.3,
-      "mean": 308.4618181818182,
-      "min": 7.3,
+      "latest": 6.4,
+      "mean": 308.45363636363635,
+      "min": 6.4,
       "max": 527.0,
       "count": 110
     },
     "no2": {
-      "latest": 16.0,
-      "mean": 13.044545454545453,
+      "latest": 14.7,
+      "mean": 13.032727272727271,
       "min": 2.8,
       "max": 42.9,
       "count": 110
     },
     "o3": {
-      "latest": 18.7,
-      "mean": 104.50636363636364,
-      "min": 18.7,
+      "latest": 22.8,
+      "mean": 104.54363636363635,
+      "min": 22.8,
       "max": 131.0,
       "count": 110
     },
     "aqi": {
-      "latest": 129.0,
-      "mean": 45.693693693693696,
+      "latest": 134.0,
+      "mean": 45.73873873873874,
       "min": 22.0,
-      "max": 129.0,
+      "max": 134.0,
       "count": 111
     }
   },
   "time_series": {
     "aqicn": {
       "timestamps": [
-        "2026-03-10 02:00:00"
+        "2026-03-10 03:00:00"
       ],
       "data": {
         "pm10": [
-          58.0
+          59.0
         ],
         "no2": [
-          16.0
+          14.7
         ],
         "o3": [
-          18.7
+          22.8
         ]
       }
     },

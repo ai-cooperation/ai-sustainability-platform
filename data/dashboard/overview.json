@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-03-10T03:08:01.064932Z",
+  "updated_at": "2026-03-10T03:31:51.170623Z",
   "domains": {
     "energy": {
       "record_count": 5640,
@@ -31,6 +31,13 @@
           "mean": 71.76785714285714,
           "min": 0.0,
           "max": 319.0,
+          "count": 168
+        },
+        "temperature_2m": {
+          "latest": 18.4,
+          "mean": 16.782738095238095,
+          "min": 11.3,
+          "max": 26.8,
           "count": 168
         },
         "solar_radiation": {
@@ -123,9 +130,10 @@
       }
     },
     "environment": {
-      "record_count": 268,
+      "record_count": 368,
       "sources": [
         "aqicn",
+        "epa_envirofacts",
         "open_meteo_air_quality",
         "openaq"
       ],
@@ -138,38 +146,38 @@
           "count": 109
         },
         "pm10": {
-          "latest": 58.0,
-          "mean": 23.168181818181818,
+          "latest": 59.0,
+          "mean": 23.177272727272726,
           "min": 12.9,
-          "max": 58.0,
+          "max": 59.0,
           "count": 110
         },
         "co": {
-          "latest": 7.3,
-          "mean": 308.4618181818182,
-          "min": 7.3,
+          "latest": 6.4,
+          "mean": 308.45363636363635,
+          "min": 6.4,
           "max": 527.0,
           "count": 110
         },
         "no2": {
-          "latest": 16.0,
-          "mean": 13.044545454545453,
+          "latest": 14.7,
+          "mean": 13.032727272727271,
           "min": 2.8,
           "max": 42.9,
           "count": 110
         },
         "o3": {
-          "latest": 18.7,
-          "mean": 104.50636363636364,
-          "min": 18.7,
+          "latest": 22.8,
+          "mean": 104.54363636363635,
+          "min": 22.8,
           "max": 131.0,
           "count": 110
         },
         "aqi": {
-          "latest": 129.0,
-          "mean": 45.693693693693696,
+          "latest": 134.0,
+          "mean": 45.73873873873874,
           "min": 22.0,
-          "max": 129.0,
+          "max": 134.0,
           "count": 111
         }
       }
