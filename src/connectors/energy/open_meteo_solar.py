@@ -52,6 +52,7 @@ class OpenMeteoSolarConnector(BaseConnector):
             "hourly": hourly,
         }
 
+        request_params["past_days"] = params.get("past_days", 7)
         request_params["forecast_days"] = params.get("forecast_days", 7)
 
         try:

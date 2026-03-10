@@ -10,6 +10,7 @@ interface KPICardProps {
   trendValue?: string;
   color?: string;
   sparkData?: number[];
+  sparkForecast?: number[];
   sparkColor?: string;
   sparkLabel?: string;
   sparkRange?: string;
@@ -23,6 +24,7 @@ export default function KPICard({
   trendValue,
   color = "emerald",
   sparkData,
+  sparkForecast,
   sparkColor,
   sparkLabel,
   sparkRange,
@@ -52,6 +54,7 @@ export default function KPICard({
           <div className="flex items-end justify-between">
             <Sparkline
               data={sparkData}
+              forecastData={sparkForecast}
               color={sparkColor ?? defaultSparkColor}
               width={140}
               height={36}

@@ -97,6 +97,8 @@ export interface KpiSummary {
 export interface TimeSeriesData {
   timestamps: string[];
   data: Record<string, number[]>;
+  forecast_timestamps?: string[];
+  forecast?: Record<string, number[]>;
 }
 
 export interface DomainData {

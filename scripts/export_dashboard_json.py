@@ -116,25 +116,47 @@ def export_domain(domain: str) -> dict | None:
         }
     summary["kpis"] = kpis
 
-    # Extract time series for sparklines (last 168 points = 7 days × 24 hours)
+    # Extract time series for sparklines
+    # For sources with forecast data (past_days + forecast_days), split into
+    # historical data and forecast data at the current time boundary.
     allowed_sparklines = SPARKLINE_WHITELIST.get(domain, [])
+    now = pd.Timestamp.utcnow()
     time_series = {}
     if "timestamp" in df.columns:
         for source in summary["sources"]:
-            source_df = df[df["source"] == source].sort_values("timestamp").tail(168)
+            source_df = df[df["source"] == source].sort_values("timestamp")
+            # Parse timestamps for comparison
+            ts_col = pd.to_datetime(source_df["timestamp"], utc=True, errors="coerce")
+
+            # Split into historical (past) and forecast (future)
+            hist_mask = ts_col <= now
+            fcst_mask = ts_col > now
+            hist_df = source_df[hist_mask].tail(168)
+            fcst_df = source_df[fcst_mask].head(168)
+
             ts_data = {}
+            fc_data = {}
             for col in allowed_sparklines:
                 if col not in source_df.columns:
                     continue
-                series = pd.to_numeric(source_df[col], errors="coerce").dropna()
-                values = series.tolist()
-                if values:
-                    ts_data[col] = [safe_json_value(v) for v in values]
+                # Historical
+                hist_series = pd.to_numeric(hist_df[col], errors="coerce").dropna()
+                if len(hist_series) > 0:
+                    ts_data[col] = [safe_json_value(v) for v in hist_series.tolist()]
+                # Forecast
+                fcst_series = pd.to_numeric(fcst_df[col], errors="coerce").dropna()
+                if len(fcst_series) > 0:
+                    fc_data[col] = [safe_json_value(v) for v in fcst_series.tolist()]
+
             if ts_data:
-                time_series[source] = {
-                    "timestamps": source_df["timestamp"].astype(str).tolist(),
+                entry: dict = {
+                    "timestamps": hist_df["timestamp"].astype(str).tolist(),
                     "data": ts_data,
                 }
+                if fc_data:
+                    entry["forecast_timestamps"] = fcst_df["timestamp"].astype(str).tolist()
+                    entry["forecast"] = fc_data
+                time_series[source] = entry
     summary["time_series"] = time_series
 
     return summary

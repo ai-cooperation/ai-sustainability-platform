@@ -121,9 +121,10 @@ export default function Overview() {
           trend={energyKpis.temperature_2m && energyKpis.temperature_2m.latest > energyKpis.temperature_2m.mean ? "up" : "down"}
           trendValue={energyKpis.temperature_2m ? `avg ${energyKpis.temperature_2m.mean.toFixed(1)}°C` : ""}
           sparkData={energyTs.open_meteo_solar?.data?.temperature_2m}
+          sparkForecast={energyTs.open_meteo_solar?.forecast?.temperature_2m}
           sparkColor="#3b82f6"
           sparkLabel={t("spark.temp", lang)}
-          sparkRange={t("spark.range.7d", lang)}
+          sparkRange={t("spark.range.7d+7d", lang)}
           color="blue"
         />
         <KPICard
@@ -133,9 +134,10 @@ export default function Overview() {
           trend="up"
           trendValue={energyKpis.shortwave_radiation ? `max ${energyKpis.shortwave_radiation.max.toFixed(0)} W/m²` : ""}
           sparkData={energyTs.open_meteo_solar?.data?.shortwave_radiation}
+          sparkForecast={energyTs.open_meteo_solar?.forecast?.shortwave_radiation}
           sparkColor="#f59e0b"
           sparkLabel={t("spark.solarRad", lang)}
-          sparkRange={t("spark.range.7d", lang)}
+          sparkRange={t("spark.range.7d+7d", lang)}
         />
         <KPICard
           title={t("kpi.solarTaipei", lang)}
@@ -144,9 +146,10 @@ export default function Overview() {
           trend={energyKpis.direct_radiation && energyKpis.direct_radiation.latest > energyKpis.direct_radiation.mean ? "up" : "down"}
           trendValue={energyKpis.direct_radiation ? `avg ${energyKpis.direct_radiation.mean.toFixed(0)} W/m²` : ""}
           sparkData={energyTs.open_meteo_solar?.data?.direct_radiation}
+          sparkForecast={energyTs.open_meteo_solar?.forecast?.direct_radiation}
           sparkColor="#f97316"
           sparkLabel={t("spark.directRad", lang)}
-          sparkRange={t("spark.range.7d", lang)}
+          sparkRange={t("spark.range.7d+7d", lang)}
           color="amber"
         />
         {/* Row 2: CO₂ ppm, Global Emissions, Air Quality */}
