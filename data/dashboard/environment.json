@@ -1,11 +1,10 @@
 {
   "domain": "environment",
-  "updated_at": "2026-03-10T02:07:07.101200Z",
-  "record_count": 368,
+  "updated_at": "2026-03-10T03:08:01.141852Z",
+  "record_count": 268,
   "file": "environment_2026-03-10.parquet",
   "sources": [
     "aqicn",
-    "epa_envirofacts",
     "open_meteo_air_quality",
     "openaq"
   ],
@@ -20,29 +19,12 @@
     "o3",
     "aqi",
     "source",
-    "facility_id",
-    "facility_name",
-    "address1",
-    "address2",
-    "city",
-    "state",
-    "upper",
-    "zip",
-    "county_fips",
-    "county",
-    "year",
-    "sector_name",
-    "sector_type",
-    "subsector_name",
-    "subsector_desc",
-    "co2e_emission",
-    "gas_code",
-    "gas_name",
     "location",
     "parameter",
     "value",
     "unit",
     "country",
+    "city",
     "pm25",
     "so2",
     "domain"
@@ -56,10 +38,10 @@
       "count": 109
     },
     "pm10": {
-      "latest": 59.0,
-      "mean": 23.177272727272726,
+      "latest": 58.0,
+      "mean": 23.168181818181818,
       "min": 12.9,
-      "max": 59.0,
+      "max": 58.0,
       "count": 110
     },
     "co": {
@@ -70,41 +52,41 @@
       "count": 110
     },
     "no2": {
-      "latest": 21.5,
-      "mean": 13.094545454545454,
+      "latest": 16.0,
+      "mean": 13.044545454545453,
       "min": 2.8,
       "max": 42.9,
       "count": 110
     },
     "o3": {
-      "latest": 10.2,
-      "mean": 104.42909090909092,
-      "min": 10.2,
+      "latest": 18.7,
+      "mean": 104.50636363636364,
+      "min": 18.7,
       "max": 131.0,
       "count": 110
     },
     "aqi": {
-      "latest": 134.0,
-      "mean": 45.73873873873874,
+      "latest": 129.0,
+      "mean": 45.693693693693696,
       "min": 22.0,
-      "max": 134.0,
+      "max": 129.0,
       "count": 111
     }
   },
   "time_series": {
     "aqicn": {
       "timestamps": [
-        "2026-03-10 01:00:00"
+        "2026-03-10 02:00:00"
       ],
       "data": {
         "pm10": [
-          59.0
+          58.0
         ],
         "no2": [
-          21.5
+          16.0
         ],
         "o3": [
-          10.2
+          18.7
         ]
       }
     },

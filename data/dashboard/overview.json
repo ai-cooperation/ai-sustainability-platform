@@ -1,6 +1,82 @@
 {
-  "updated_at": "2026-03-10T02:07:07.068462Z",
+  "updated_at": "2026-03-10T03:08:01.064932Z",
   "domains": {
+    "energy": {
+      "record_count": 5640,
+      "sources": [
+        "carbon_intensity_uk",
+        "eia",
+        "nasa_power",
+        "nrel",
+        "open_meteo_solar",
+        "open_power_system"
+      ],
+      "kpis": {
+        "shortwave_radiation": {
+          "latest": 71.0,
+          "mean": 198.9702380952381,
+          "min": 0.0,
+          "max": 902.0,
+          "count": 168
+        },
+        "direct_radiation": {
+          "latest": 39.0,
+          "mean": 127.20238095238095,
+          "min": 0.0,
+          "max": 739.0,
+          "count": 168
+        },
+        "diffuse_radiation": {
+          "latest": 32.0,
+          "mean": 71.76785714285714,
+          "min": 0.0,
+          "max": 319.0,
+          "count": 168
+        },
+        "solar_radiation": {
+          "latest": 3.0979,
+          "mean": 3.749758196721312,
+          "min": 0.4488,
+          "max": 7.7724,
+          "count": 366
+        },
+        "temperature": {
+          "latest": 16.8,
+          "mean": 23.935519125683065,
+          "min": 10.68,
+          "max": 30.89,
+          "count": 366
+        },
+        "intensity_forecast": {
+          "latest": 130.0,
+          "mean": 130.0,
+          "min": 130.0,
+          "max": 130.0,
+          "count": 1
+        },
+        "DE_load_actual_entsoe_transparency": {
+          "latest": 43294.0,
+          "mean": 54516.47055288462,
+          "min": 32418.0,
+          "max": 72934.0,
+          "count": 4992
+        },
+        "DE_solar_generation_actual": {
+          "latest": 0.0,
+          "mean": 4523.7768595041325,
+          "min": 0.0,
+          "max": 25812.0,
+          "count": 4961
+        },
+        "DE_wind_generation_actual": {
+          "latest": 16000.0,
+          "mean": 8075.117788461538,
+          "min": 189.0,
+          "max": 30155.0,
+          "count": 4992
+        }
+      }
+    },
     "climate": {
       "record_count": 12146,
       "sources": [
@@ -47,10 +123,9 @@
       }
     },
     "environment": {
-      "record_count": 368,
+      "record_count": 268,
       "sources": [
         "aqicn",
-        "epa_envirofacts",
         "open_meteo_air_quality",
         "openaq"
       ],
@@ -63,10 +138,10 @@
           "count": 109
         },
         "pm10": {
-          "latest": 59.0,
-          "mean": 23.177272727272726,
+          "latest": 58.0,
+          "mean": 23.168181818181818,
           "min": 12.9,
-          "max": 59.0,
+          "max": 58.0,
           "count": 110
         },
         "co": {
@@ -77,24 +152,24 @@
           "count": 110
         },
         "no2": {
-          "latest": 21.5,
-          "mean": 13.094545454545454,
+          "latest": 16.0,
+          "mean": 13.044545454545453,
           "min": 2.8,
           "max": 42.9,
           "count": 110
         },
         "o3": {
-          "latest": 10.2,
-          "mean": 104.42909090909092,
-          "min": 10.2,
+          "latest": 18.7,
+          "mean": 104.50636363636364,
+          "min": 18.7,
           "max": 131.0,
           "count": 110
         },
         "aqi": {
-          "latest": 134.0,
-          "mean": 45.73873873873874,
+          "latest": 129.0,
+          "mean": 45.693693693693696,
           "min": 22.0,
-          "max": 134.0,
+          "max": 129.0,
           "count": 111
         }
       }
