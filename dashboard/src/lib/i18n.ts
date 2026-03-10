@@ -177,6 +177,10 @@ const translations: Record<string, Record<Lang, string>> = {
   "spark.temp": { en: "Temp.", zh: "溫度" },
   "spark.emissions": { en: "Emissions", zh: "排放趨勢" },
   "spark.co2ppm": { en: "CO₂ trend", zh: "CO₂ 趨勢" },
+  "spark.range.7d": { en: "Past 7 days", zh: "過去 7 天" },
+  "spark.range.6m": { en: "Past 6 months", zh: "過去 6 個月" },
+  "spark.range.14y": { en: "Past ~14 years", zh: "過去約 14 年" },
+  "spark.range.historical": { en: "Historical", zh: "歷史數據" },
   "kpi.temperature": { en: "Temperature", zh: "氣溫" },
 
   // Agriculture extras

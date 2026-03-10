@@ -122,6 +122,7 @@ export default function Overview() {
           sparkData={climateTs.noaa_ghg?.data?.co2_ppm}
           sparkColor="#ef4444"
           sparkLabel={t("spark.co2ppm", lang)}
+          sparkRange={t("spark.range.14y", lang)}
           color="red"
         />
         <KPICard
@@ -133,6 +134,7 @@ export default function Overview() {
           sparkData={energyTs.open_meteo_solar?.data?.shortwave_radiation}
           sparkColor="#f59e0b"
           sparkLabel={t("spark.solarRad", lang)}
+          sparkRange={t("spark.range.7d", lang)}
         />
         <KPICard
           title={t("kpi.aqi", lang)}
@@ -143,6 +145,7 @@ export default function Overview() {
           sparkData={envTs.open_meteo_air_quality?.data?.pm2_5}
           sparkColor="#10b981"
           sparkLabel="PM2.5"
+          sparkRange={t("spark.range.7d", lang)}
         />
         <KPICard
           title={t("kpi.co2", lang)}
@@ -153,6 +156,7 @@ export default function Overview() {
           sparkData={carbonTs.owid_carbon?.data?.co2}
           sparkColor="#ef4444"
           sparkLabel={t("spark.emissions", lang)}
+          sparkRange={t("spark.range.historical", lang)}
           color="red"
         />
         <KPICard
@@ -164,6 +168,7 @@ export default function Overview() {
           sparkData={climateTs.open_meteo_climate?.data?.temperature_max}
           sparkColor="#3b82f6"
           sparkLabel={t("spark.temp", lang)}
+          sparkRange={t("spark.range.6m", lang)}
           color="blue"
         />
         <KPICard

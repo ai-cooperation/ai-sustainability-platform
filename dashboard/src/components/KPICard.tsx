@@ -12,6 +12,7 @@ interface KPICardProps {
   sparkData?: number[];
   sparkColor?: string;
   sparkLabel?: string;
+  sparkRange?: string;
 }
 
 export default function KPICard({
@@ -24,6 +25,7 @@ export default function KPICard({
   sparkData,
   sparkColor,
   sparkLabel,
+  sparkRange,
 }: KPICardProps) {
   const trendColor =
     trend === "up"
@@ -46,15 +48,20 @@ export default function KPICard({
         <p className={`mt-1 text-sm ${trendColor}`}>{trendValue}</p>
       )}
       {sparkData && sparkData.length > 1 && (
-        <div className="mt-3 flex items-end justify-between">
-          <Sparkline
-            data={sparkData}
-            color={sparkColor ?? defaultSparkColor}
-            width={140}
-            height={36}
-          />
-          {sparkLabel && (
-            <span className="ml-2 text-[10px] text-gray-400">{sparkLabel}</span>
+        <div className="mt-3">
+          <div className="flex items-end justify-between">
+            <Sparkline
+              data={sparkData}
+              color={sparkColor ?? defaultSparkColor}
+              width={140}
+              height={36}
+            />
+            {sparkLabel && (
+              <span className="ml-2 text-[10px] text-gray-400">{sparkLabel}</span>
+            )}
+          </div>
+          {sparkRange && (
+            <p className="mt-1 text-[10px] text-gray-400 dark:text-gray-500">{sparkRange}</p>
           )}
         </div>
       )}
