@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 import pandas as pd
@@ -105,11 +105,13 @@ class TaiPowerConnector(BaseConnector):
         # Parse timestamp from response (format: "2026-03-10 12:00")
         ts_str = raw_data.get("", "")
         try:
+            tw_tz = timezone(timedelta(hours=8))
             ts = datetime.strptime(ts_str, "%Y-%m-%d %H:%M").replace(
-                tzinfo=timezone.utc
+                tzinfo=tw_tz
             )
         except (ValueError, TypeError):
-            ts = datetime.now(timezone.utc)
+            tw_tz = timezone(timedelta(hours=8))
+            ts = datetime.now(tw_tz)
 
         # Find subtotal rows (小計) per energy type using HTML anchor name
         type_data: dict[str, dict[str, float | None]] = {}
