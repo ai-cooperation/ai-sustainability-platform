@@ -116,14 +116,14 @@ export default function Overview() {
         {/* Row 1: Temperature, Renewable Energy, Solar Radiation */}
         <KPICard
           title={t("kpi.temperature", lang)}
-          value={energyKpis.temperature?.latest?.toFixed(1) ?? "—"}
+          value={energyKpis.temperature_2m?.latest?.toFixed(1) ?? energyKpis.temperature?.latest?.toFixed(1) ?? "—"}
           unit="°C"
-          trend={energyKpis.temperature && energyKpis.temperature.latest > energyKpis.temperature.mean ? "up" : "down"}
-          trendValue={energyKpis.temperature ? `avg ${energyKpis.temperature.mean.toFixed(1)}°C` : ""}
-          sparkData={energyTs.nasa_power?.data?.temperature}
+          trend={energyKpis.temperature_2m && energyKpis.temperature_2m.latest > energyKpis.temperature_2m.mean ? "up" : "down"}
+          trendValue={energyKpis.temperature_2m ? `avg ${energyKpis.temperature_2m.mean.toFixed(1)}°C` : ""}
+          sparkData={energyTs.open_meteo_solar?.data?.temperature_2m}
           sparkColor="#3b82f6"
           sparkLabel={t("spark.temp", lang)}
-          sparkRange={t("spark.range.1y", lang)}
+          sparkRange={t("spark.range.7d", lang)}
           color="blue"
         />
         <KPICard

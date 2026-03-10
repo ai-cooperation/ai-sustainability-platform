@@ -19,7 +19,7 @@ DOMAINS = ["energy", "climate", "environment", "agriculture", "carbon"]
 KPI_WHITELIST: dict[str, list[str]] = {
     "energy": [
         "shortwave_radiation", "direct_radiation", "diffuse_radiation",
-        "solar_radiation", "temperature", "intensity_forecast",
+        "solar_radiation", "temperature", "temperature_2m", "intensity_forecast",
         "DE_solar_generation_actual", "DE_wind_generation_actual",
         "DE_load_actual_entsoe_transparency", "DE_price_day_ahead",
     ],
@@ -43,7 +43,7 @@ KPI_WHITELIST: dict[str, list[str]] = {
 SPARKLINE_WHITELIST: dict[str, list[str]] = {
     "energy": [
         "shortwave_radiation", "direct_radiation",
-        "solar_radiation", "temperature",
+        "solar_radiation", "temperature", "temperature_2m",
         "DE_solar_generation_actual", "DE_wind_generation_actual",
     ],
     "climate": [

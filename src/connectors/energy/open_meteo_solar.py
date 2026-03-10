@@ -43,7 +43,7 @@ class OpenMeteoSolarConnector(BaseConnector):
         longitude = params.get("longitude", 121.57)
         hourly = params.get(
             "hourly",
-            "shortwave_radiation,direct_radiation,diffuse_radiation",
+            "shortwave_radiation,direct_radiation,diffuse_radiation,temperature_2m",
         )
 
         request_params = {
@@ -86,6 +86,7 @@ class OpenMeteoSolarConnector(BaseConnector):
                 "shortwave_radiation": hourly.get("shortwave_radiation"),
                 "direct_radiation": hourly.get("direct_radiation"),
                 "diffuse_radiation": hourly.get("diffuse_radiation"),
+                "temperature_2m": hourly.get("temperature_2m"),
             }
         )
         return df
