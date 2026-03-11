@@ -1,17 +1,16 @@
 """台灣上市櫃公司永續報告書下載連接器。
 
 資料來源（優先順序）：
-1. TWSE ESG GenPlus API — esggenplus.twse.com.tw 的內部 API
-2. MOPS 公開資訊觀測站 — mopsov.twse.com.tw 永續報告書查詢頁面
-3. Playwright 瀏覽器自動化（僅介面，需外部執行）
+1. TWSE ESG GenPlus API — esggenplus.twse.com.tw 的公開 API
+2. MOPS 公開資訊觀測站 — mopsov.twse.com.tw 永續報告書查詢頁面（僅 2022 以前）
 
-ESG GenPlus 為 React SPA，背後透過 l40s.chase.com.tw:4500/api 提供資料。
-已知 API 路徑：
-- /api/mopsEsg/allCompanyCode — 所有公司代碼
-- /api/mopsEsg/singleCompanyData — 單一公司 ESG 資料
-- /api/DeclareDataManage/sustain-report/list — 永續報告書列表
+ESG GenPlus API 端點（無需認證）：
+- POST /api/api/MopsSustainReport/data           — 2023+ 報告列表
+- POST /api/api/MopsSustainReport/data/old       — 2022 以前報告列表
+- GET  /api/api/MopsSustainReport/data/FileStream?id={UUID} — TWSE 託管 PDF 下載
+- GET  /api/api/MopsSustainReport/industryAndCompanyCode    — 產業/公司代碼列表
 
-MOPS 備援：
+MOPS 備援（ROC 111 / 2022 以前）：
 - POST https://mopsov.twse.com.tw/mops/web/ajax_t100sb11
 - 回傳 HTML 表格，內含 PDF 連結
 """
@@ -31,9 +30,13 @@ from src.connectors.base import BaseConnector, ConnectorError
 
 # --- 常數 ---
 
-ESGGENPLUS_API_BASE = "https://l40s.chase.com.tw:4500/api"
-ESGGENPLUS_REPORT_LIST = f"{ESGGENPLUS_API_BASE}/DeclareDataManage/sustain-report/list"
-ESGGENPLUS_COMPANY_LIST = f"{ESGGENPLUS_API_BASE}/mopsEsg/allCompanyCode"
+ESGGENPLUS_API_BASE = "https://esggenplus.twse.com.tw/api/api"
+ESGGENPLUS_REPORT_DATA = f"{ESGGENPLUS_API_BASE}/MopsSustainReport/data"
+ESGGENPLUS_REPORT_DATA_OLD = f"{ESGGENPLUS_API_BASE}/MopsSustainReport/data/old"
+ESGGENPLUS_FILE_STREAM = f"{ESGGENPLUS_API_BASE}/MopsSustainReport/data/FileStream"
+
+# esggenplus 可查詢的最早年度（2023 起用新版 API，2022 以前用 /data/old）
+ESGGENPLUS_NEW_API_START_YEAR = 2023
 
 MOPS_BASE = "https://mopsov.twse.com.tw"
 MOPS_REPORT_URL = f"{MOPS_BASE}/mops/web/ajax_t100sb11"
@@ -42,8 +45,6 @@ DEFAULT_TIMEOUT = 30
 DEFAULT_OUTPUT_DIR = "data/raw/esg_reports"
 
 # MOPS 回傳 HTML 中 PDF 下載連結的 pattern
-# 格式：/server-java/FileDownLoad?step=9&filePath=...&fileName=t100sa11_XXXX_YYY.pdf
-# 或外部連結如：https://esg.tsmc.com/download/file/...pdf
 MOPS_PDF_LINK_PATTERN = re.compile(
     r'href=["\']([^"\']*(?:\.pdf|FileDownLoad[^"\']*\.pdf)[^"\']*)["\']',
     re.IGNORECASE,
@@ -51,6 +52,9 @@ MOPS_PDF_LINK_PATTERN = re.compile(
 
 # MOPS 在 ROC 112 年 (2023) 起改用 esggenplus，此前版本透過 MOPS 直接取得
 MOPS_LAST_DIRECT_ROC_YEAR = 111  # 西元 2022
+
+# esggenplus FileStream 的空 UUID（表示無 TWSE 託管副本）
+_NULL_UUID = "00000000-0000-0000-0000-000000000000"
 
 
 def _roc_year(western_year: int) -> int:
@@ -66,17 +70,17 @@ def _western_year(roc_year: int) -> int:
 class EsgReportDownloaderConnector(BaseConnector):
     """台灣上市櫃公司永續報告書下載連接器。
 
-    支援三種策略：
-    - esggenplus: 透過 ESG GenPlus 內部 API 取得報告列表與下載連結
-    - mops: 透過 MOPS 公開資訊觀測站查詢頁面
-    - playwright: 瀏覽器自動化介面（僅提供參數，不直接執行）
+    支援策略：
+    - esggenplus: 透過 ESG GenPlus 公開 API（涵蓋 2013-2024 所有年度）
+    - mops: 透過 MOPS 公開資訊觀測站（僅 2022 以前）
+    - auto: 優先 esggenplus，失敗回退 MOPS（2022 以前）
 
     使用方式：
         connector = EsgReportDownloaderConnector()
         # 列出某年度所有報告
-        reports = connector.list_available_reports(year=2023)
+        reports = connector.list_available_reports(year=2024)
         # 下載單一公司報告
-        path = connector.download_report(stock_id="2330", year=2023)
+        path = connector.download_report(stock_id="2330", year=2024)
     """
 
     def __init__(
@@ -88,7 +92,7 @@ class EsgReportDownloaderConnector(BaseConnector):
     ):
         super().__init__(config)
         self.output_dir = Path(output_dir or DEFAULT_OUTPUT_DIR)
-        self._strategy = strategy  # auto | esggenplus | mops | playwright
+        self._strategy = strategy  # auto | esggenplus | mops
         from src.connectors.corporate._ssl_helper import create_tw_gov_session
         self._session = create_tw_gov_session()
         self._session.headers.update({
@@ -117,6 +121,7 @@ class EsgReportDownloaderConnector(BaseConnector):
         Args:
             stock_id: 股票代號（選填）。指定時只查該公司。
             year: 西元年度（選填，預設前一年）。
+            market_type: 市場類型 0=上市 1=上櫃（選填，預設 0）。
             strategy: 覆蓋預設策略。
 
         Returns:
@@ -128,15 +133,18 @@ class EsgReportDownloaderConnector(BaseConnector):
         stock_id = params.get("stock_id")
         year = params.get("year", datetime.now(tz=UTC).year - 1)
         strategy = params.get("strategy", self._strategy)
+        market_type = params.get("market_type", 0)
 
         if strategy == "auto":
-            return self._fetch_auto(stock_id=stock_id, year=year)
+            return self._fetch_auto(
+                stock_id=stock_id, year=year, market_type=market_type,
+            )
         if strategy == "esggenplus":
-            return self._fetch_esggenplus(stock_id=stock_id, year=year)
+            return self._fetch_esggenplus(
+                stock_id=stock_id, year=year, market_type=market_type,
+            )
         if strategy == "mops":
             return self._fetch_mops(stock_id=stock_id, year=year)
-        if strategy == "playwright":
-            return self._build_playwright_params(stock_id=stock_id, year=year)
 
         raise ConnectorError(f"{self.name}: 不支援的策略 '{strategy}'")
 
@@ -171,8 +179,8 @@ class EsgReportDownloaderConnector(BaseConnector):
         return df
 
     def _health_check_params(self) -> dict:
-        """健康檢查：使用 MOPS 可用的最近年度。"""
-        return {"year": _western_year(MOPS_LAST_DIRECT_ROC_YEAR), "strategy": "mops"}
+        """健康檢查：使用 esggenplus API 查最新年度。"""
+        return {"year": datetime.now(tz=UTC).year - 1, "strategy": "esggenplus"}
 
     # ------------------------------------------------------------------
     # 公開方法
@@ -181,15 +189,7 @@ class EsgReportDownloaderConnector(BaseConnector):
     def list_available_reports(
         self, *, year: int | None = None, stock_id: str | None = None
     ) -> list[dict]:
-        """列出可下載的永續報告書。
-
-        Args:
-            year: 西元年度（預設前一年）。
-            stock_id: 篩選特定公司。
-
-        Returns:
-            報告資訊字典列表。
-        """
+        """列出可下載的永續報告書。"""
         target_year = year or (datetime.now(tz=UTC).year - 1)
         raw = self.fetch(stock_id=stock_id, year=target_year)
         records = raw if isinstance(raw, list) else raw.get("reports", [])
@@ -204,16 +204,8 @@ class EsgReportDownloaderConnector(BaseConnector):
     ) -> Path | None:
         """下載單一公司的永續報告書 PDF。
 
-        Args:
-            stock_id: 股票代號。
-            year: 報告年度（西元）。
-            timeout: 下載超時秒數。
-
         Returns:
             下載的 PDF 檔案路徑；若無法取得則回傳 None。
-
-        Raises:
-            ConnectorError: 下載失敗時。
         """
         reports = self.list_available_reports(year=year, stock_id=stock_id)
         matched = [r for r in reports if str(r.get("stock_id")) == str(stock_id)]
@@ -223,7 +215,14 @@ class EsgReportDownloaderConnector(BaseConnector):
             return None
 
         report = matched[0]
-        url = report.get("report_url", "")
+
+        # 優先用 TWSE 託管的 FileStream，其次用外部連結
+        download_id = report.get("download_id", "")
+        if download_id and download_id != _NULL_UUID:
+            url = f"{ESGGENPLUS_FILE_STREAM}?id={download_id}"
+        else:
+            url = report.get("report_url", "")
+
         if not url:
             self.logger.warning(f"{stock_id} 缺少報告下載連結")
             return None
@@ -234,29 +233,27 @@ class EsgReportDownloaderConnector(BaseConnector):
     # 策略實作：自動嘗試
     # ------------------------------------------------------------------
 
-    def _fetch_auto(self, *, stock_id: str | None, year: int) -> list:
-        """依據年度自動選擇策略。
-
-        - 2022 (ROC 111) 以前：使用 MOPS（穩定可靠）
-        - 2023 (ROC 112) 以後：嘗試 esggenplus API，失敗則回傳 Playwright 參數
-        """
+    def _fetch_auto(
+        self, *, stock_id: str | None, year: int, market_type: int = 0,
+    ) -> list:
+        """依據年度自動選擇策略。優先 esggenplus，失敗回退 MOPS。"""
         roc = _roc_year(year)
-        errors = []
+        errors: list[str] = []
 
-        # 2022 以前優先用 MOPS
+        strategies: list[tuple[str, Any]] = [
+            ("esggenplus", lambda: self._fetch_esggenplus(
+                stock_id=stock_id, year=year, market_type=market_type,
+            )),
+        ]
+        # 2022 以前可加 MOPS 備援
         if roc <= MOPS_LAST_DIRECT_ROC_YEAR:
-            strategies = [
-                ("mops", self._fetch_mops),
-                ("esggenplus", self._fetch_esggenplus),
-            ]
-        else:
-            strategies = [
-                ("esggenplus", self._fetch_esggenplus),
-            ]
+            strategies.append(
+                ("mops", lambda: self._fetch_mops(stock_id=stock_id, year=year)),
+            )
 
         for strategy_name, fetcher in strategies:
             try:
-                result = fetcher(stock_id=stock_id, year=year)
+                result = fetcher()
                 if result is not None:  # 空列表也是合法結果
                     self.logger.info(f"策略 '{strategy_name}' 成功取得資料")
                     return result
@@ -269,19 +266,29 @@ class EsgReportDownloaderConnector(BaseConnector):
         )
 
     # ------------------------------------------------------------------
-    # 策略 A: ESG GenPlus API
+    # 策略 A: ESG GenPlus API（涵蓋所有年度）
     # ------------------------------------------------------------------
 
-    def _fetch_esggenplus(self, *, stock_id: str | None, year: int) -> list:
-        """透過 ESG GenPlus 內部 API 取得報告列表。"""
+    def _fetch_esggenplus(
+        self, *, stock_id: str | None, year: int, market_type: int = 0,
+    ) -> list:
+        """透過 ESG GenPlus 公開 API 取得報告列表。
+
+        2023+ 使用 /data 端點，2022 以前使用 /data/old 端點。
+        """
         timeout = self.config.get("timeout", DEFAULT_TIMEOUT)
+        is_new = year >= ESGGENPLUS_NEW_API_START_YEAR
+
+        url = ESGGENPLUS_REPORT_DATA if is_new else ESGGENPLUS_REPORT_DATA_OLD
+        payload: dict[str, Any] = {
+            "year": year,
+            "marketType": market_type,
+            "industryNameList": [],
+            "companyCodeList": [stock_id] if stock_id else [],
+        }
 
         try:
-            resp = self._session.post(
-                ESGGENPLUS_REPORT_LIST,
-                json={"year": str(year), "companyCode": stock_id or ""},
-                timeout=timeout,
-            )
+            resp = self._session.post(url, json=payload, timeout=timeout)
             resp.raise_for_status()
             data = resp.json()
         except requests.RequestException as exc:
@@ -289,36 +296,73 @@ class EsgReportDownloaderConnector(BaseConnector):
                 f"{self.name}: ESG GenPlus API 請求失敗 - {exc}"
             ) from exc
 
-        # API 回傳格式可能是 {"data": [...]} 或直接 [...]
-        items = data if isinstance(data, list) else data.get("data", [])
+        items = data if isinstance(data, list) else data.get("data", data)
+        if not isinstance(items, list):
+            items = []
 
-        reports = []
+        if is_new:
+            return self._parse_esggenplus_new(items, year=year)
+        return self._parse_esggenplus_old(items, year=year)
+
+    def _parse_esggenplus_new(self, items: list[dict], *, year: int) -> list[dict]:
+        """解析 2023+ API 回傳欄位。
+
+        欄位：code, name, shortName, twDocLink, twFirstReportDownloadId,
+              enDocLink, enFirstReportDownloadId, ...
+        """
+        reports: list[dict] = []
         for item in items:
-            report_url = item.get("fileUrl", item.get("downloadUrl", ""))
-            if report_url and not report_url.startswith("http"):
-                report_url = urljoin(ESGGENPLUS_API_BASE, report_url)
+            tw_url = item.get("twDocLink", "") or ""
+            download_id = item.get("twFirstReportDownloadId", "") or ""
 
             reports.append({
-                "stock_id": item.get("companyCode", item.get("co_id", "")),
-                "company_name": item.get("companyName", item.get("co_name", "")),
+                "stock_id": item.get("code", ""),
+                "company_name": item.get("name", item.get("shortName", "")),
                 "year": year,
-                "report_url": report_url,
+                "report_url": tw_url,
+                "download_id": download_id,
                 "pdf_path": "",
-                "report_type": item.get("reportType", "sustainability"),
+                "report_type": "sustainability",
                 "source": "esggenplus",
             })
+        return reports
 
+    def _parse_esggenplus_old(self, items: list[dict], *, year: int) -> list[dict]:
+        """解析 2022 以前 API 回傳欄位（legacy 大小寫混合欄名）。
+
+        欄位：companY_ID, companY_NAME, weB_INFO, filE_NAME, ...
+        """
+        reports: list[dict] = []
+        for item in items:
+            sid = item.get("companY_ID", item.get("code", ""))
+            cname = item.get("companY_NAME", item.get("name", ""))
+            web_info = item.get("weB_INFO", "") or ""
+            file_name = item.get("filE_NAME", "") or ""
+            download_id = item.get("twFirstReportDownloadId", "") or ""
+
+            # 優先用 web_info（公司外部 URL），或 file_name
+            report_url = web_info or file_name
+
+            reports.append({
+                "stock_id": str(sid).strip(),
+                "company_name": str(cname).strip(),
+                "year": year,
+                "report_url": report_url,
+                "download_id": download_id,
+                "pdf_path": "",
+                "report_type": "sustainability",
+                "source": "esggenplus",
+            })
         return reports
 
     # ------------------------------------------------------------------
-    # 策略 B: MOPS 公開資訊觀測站
+    # 策略 B: MOPS 公開資訊觀測站（僅 2022 以前）
     # ------------------------------------------------------------------
 
     def _fetch_mops(self, *, stock_id: str | None, year: int) -> list:
         """透過 MOPS 查詢永續報告書。
 
-        POST 至 ajax_t100sb11，解析回傳的 HTML 表格。
-        注意：ROC 112+ (2023+) 會被重導向至 esggenplus（需 JWT），
+        注意：ROC 112+ (2023+) 會被重導向至 esggenplus，
         此策略僅適用於 ROC 111 (2022) 以前的年度。
         """
         timeout = self.config.get("timeout", DEFAULT_TIMEOUT)
@@ -328,7 +372,7 @@ class EsgReportDownloaderConnector(BaseConnector):
             raise ConnectorError(
                 f"{self.name}: MOPS 自 ROC {MOPS_LAST_DIRECT_ROC_YEAR + 1} "
                 f"({_western_year(MOPS_LAST_DIRECT_ROC_YEAR + 1)}) 起已轉移至 "
-                f"esggenplus，請使用 Playwright 策略"
+                f"esggenplus，請改用 esggenplus 策略"
             )
 
         form_data = {
@@ -364,14 +408,7 @@ class EsgReportDownloaderConnector(BaseConnector):
         return self._parse_mops_html(html, year=year)
 
     def _parse_mops_html(self, html: str, *, year: int) -> list:
-        """解析 MOPS 回傳的 HTML，提取報告資訊與 PDF 連結。
-
-        MOPS HTML 結構：每個公司一個 <tr>，包含公司代號、名稱、
-        以及多個 PDF 下載連結（中文版、英文版等）。
-        PDF 連結格式：
-        - /server-java/FileDownLoad?step=9&filePath=...&fileName=t100sa11_XXXX_YYY.pdf
-        - https://外部網站/xxx.pdf (公司自有 ESG 網站)
-        """
+        """解析 MOPS 回傳的 HTML，提取報告資訊與 PDF 連結。"""
         reports: list[dict] = []
 
         rows = re.split(r"<tr[^>]*>", html, flags=re.IGNORECASE)
@@ -420,46 +457,6 @@ class EsgReportDownloaderConnector(BaseConnector):
         return reports
 
     # ------------------------------------------------------------------
-    # 策略 C: Playwright 參數產生（不直接執行）
-    # ------------------------------------------------------------------
-
-    def _build_playwright_params(
-        self, *, stock_id: str | None, year: int
-    ) -> dict:
-        """產生 Playwright 瀏覽器自動化所需的參數。
-
-        不執行瀏覽器，僅回傳設定，可由外部 script 使用。
-        """
-        return {
-            "strategy": "playwright",
-            "url": "https://esggenplus.twse.com.tw",
-            "actions": [
-                {"type": "wait_for_selector", "selector": "#root"},
-                {"type": "navigate", "path": "/report/list"},
-                {
-                    "type": "fill",
-                    "selector": "input[name='year']",
-                    "value": str(year),
-                },
-                *(
-                    [
-                        {
-                            "type": "fill",
-                            "selector": "input[name='companyCode']",
-                            "value": stock_id,
-                        }
-                    ]
-                    if stock_id
-                    else []
-                ),
-                {"type": "click", "selector": "button[type='submit']"},
-                {"type": "wait_for_selector", "selector": ".report-table"},
-                {"type": "extract", "selector": ".report-table tr"},
-            ],
-            "reports": [],  # 由外部 script 填入
-        }
-
-    # ------------------------------------------------------------------
     # PDF 下載
     # ------------------------------------------------------------------
 
@@ -480,13 +477,25 @@ class EsgReportDownloaderConnector(BaseConnector):
             resp = self._session.get(url, timeout=timeout, stream=True)
             resp.raise_for_status()
 
+            # FileStream 端點 Content-Type 可能回報 text/html 但實際內容是 PDF
             content_type = resp.headers.get("Content-Type", "")
-            if "html" in content_type.lower() and "pdf" not in content_type.lower():
+            first_chunk = next(resp.iter_content(chunk_size=8192), b"")
+
+            is_filestream = ESGGENPLUS_FILE_STREAM in url
+            is_pdf_content = first_chunk[:5] == b"%PDF-"
+
+            if (
+                not is_filestream
+                and not is_pdf_content
+                and "html" in content_type.lower()
+                and "pdf" not in content_type.lower()
+            ):
                 raise ConnectorError(
                     f"{self.name}: 下載回傳 HTML 而非 PDF（可能被擋）"
                 )
 
             with open(filepath, "wb") as f:
+                f.write(first_chunk)
                 for chunk in resp.iter_content(chunk_size=8192):
                     f.write(chunk)
 

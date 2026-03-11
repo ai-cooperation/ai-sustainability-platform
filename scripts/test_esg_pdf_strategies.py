@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""測試 ESG 永續報告書下載器的三種策略。
+"""測試 ESG 永續報告書下載器的策略。
 
-小規模測試：10 家代表性公司，確認哪種策略可用。
+小規模測試：10 家代表性公司，確認 esggenplus API 是否可用。
 用法: uv run python scripts/test_esg_pdf_strategies.py
 """
 
@@ -33,13 +33,11 @@ TEST_COMPANIES = [
     ("6505", "台塑化"),
 ]
 
-TEST_YEAR = 2022  # 報告年度 (MOPS 支援至 2022, 2023+ 需 esggenplus JWT)
-
 
 def test_strategy(strategy_name: str, connector, year: int) -> dict:
     """測試單一策略，回傳結果摘要。"""
     print(f"\n{'='*60}")
-    print(f"策略: {strategy_name.upper()}")
+    print(f"策略: {strategy_name.upper()} | 年度: {year}")
     print(f"{'='*60}")
 
     try:
@@ -49,25 +47,34 @@ def test_strategy(strategy_name: str, connector, year: int) -> dict:
 
         records = result if isinstance(result, list) else result.get("reports", [])
         with_url = [r for r in records if r.get("report_url")]
+        with_download_id = [
+            r for r in records
+            if r.get("download_id") and r["download_id"] != "00000000-0000-0000-0000-000000000000"
+        ]
 
         print(f"  耗時: {elapsed:.1f}s")
         print(f"  總筆數: {len(records)}")
-        print(f"  有下載連結: {len(with_url)}")
+        print(f"  有外部連結: {len(with_url)}")
+        print(f"  有 TWSE FileStream: {len(with_download_id)}")
 
         # 顯示前 10 筆
         for r in records[:10]:
             sid = r.get("stock_id", "?")
             name = r.get("company_name", "?")
             url = r.get("report_url", "")
-            url_display = url[:60] + "..." if len(url) > 60 else url
-            has_url = "OK" if url else "--"
-            print(f"    [{sid}] {name}: {has_url} {url_display}")
+            did = r.get("download_id", "")
+            url_display = url[:55] + "..." if len(url) > 55 else url
+            has_url = "URL" if url else "--"
+            has_fs = "FS" if (did and did != "00000000-0000-0000-0000-000000000000") else "--"
+            print(f"    [{sid}] {name[:8]:8s}: {has_url} {has_fs} {url_display}")
 
         return {
             "strategy": strategy_name,
+            "year": year,
             "status": "OK",
             "total": len(records),
             "with_url": len(with_url),
+            "with_filestream": len(with_download_id),
             "elapsed": elapsed,
         }
 
@@ -75,6 +82,7 @@ def test_strategy(strategy_name: str, connector, year: int) -> dict:
         print(f"  FAILED: {exc}")
         return {
             "strategy": strategy_name,
+            "year": year,
             "status": "FAILED",
             "error": str(exc),
         }
@@ -93,9 +101,11 @@ def test_single_company(connector, stock_id: str, name: str, year: int) -> dict:
         has_url = bool(matched and matched[0].get("report_url"))
         source = matched[0].get("source", "?") if matched else "?"
         url = matched[0].get("report_url", "") if matched else ""
+        did = matched[0].get("download_id", "") if matched else ""
 
         status = "OK" if has_url else ("found" if matched else "miss")
-        print(f"  [{stock_id}] {name}: {status} via {source} ({elapsed:.1f}s)")
+        fs_tag = " +FS" if (did and did != "00000000-0000-0000-0000-000000000000") else ""
+        print(f"  [{stock_id}] {name}: {status} via {source}{fs_tag} ({elapsed:.1f}s)")
         if url:
             print(f"         URL: {url[:80]}")
 
@@ -105,6 +115,7 @@ def test_single_company(connector, stock_id: str, name: str, year: int) -> dict:
             "status": status,
             "source": source,
             "has_url": has_url,
+            "has_filestream": bool(did and did != "00000000-0000-0000-0000-000000000000"),
             "elapsed": elapsed,
         }
     except Exception as exc:
@@ -136,8 +147,6 @@ def test_download_one(connector, stock_id: str, name: str, year: int) -> dict:
 def main():
     print("=" * 60)
     print("ESG 永續報告書下載策略測試")
-    print(f"測試年度: {TEST_YEAR}")
-    print(f"測試公司: {len(TEST_COMPANIES)} 家")
     print("=" * 60)
 
     with patch("src.connectors.base.get_settings") as mock_s:
@@ -150,27 +159,31 @@ def main():
             output_dir="data/raw/esg_reports_test"
         )
 
-    # --- Phase 1: 測試各策略（全量列表） ---
+    # --- Phase 1: 測試 esggenplus 各年度 ---
     print("\n" + "#" * 60)
-    print("Phase 1: 各策略全量列表測試")
+    print("Phase 1: esggenplus API 各年度測試")
     print("#" * 60)
 
     strategy_results = []
-    for strat in ["esggenplus", "mops"]:
-        result = test_strategy(strat, connector, TEST_YEAR)
+    for year in [2024, 2023, 2022]:
+        result = test_strategy("esggenplus", connector, year)
         strategy_results.append(result)
-        time.sleep(1)
+        time.sleep(0.5)
 
-    # --- Phase 2: 逐家公司 auto 模式 ---
+    # MOPS 備援測試
+    result = test_strategy("mops", connector, 2022)
+    strategy_results.append(result)
+
+    # --- Phase 2: 逐家公司 auto 模式（2024 年度）---
     print("\n" + "#" * 60)
-    print("Phase 2: 逐家公司測試 (auto 策略)")
+    print("Phase 2: 逐家公司測試 (auto 策略, 2024 年度)")
     print("#" * 60)
 
     company_results = []
     for stock_id, name in TEST_COMPANIES:
-        result = test_single_company(connector, stock_id, name, TEST_YEAR)
+        result = test_single_company(connector, stock_id, name, 2024)
         company_results.append(result)
-        time.sleep(0.5)
+        time.sleep(0.3)
 
     # --- Phase 3: 試下載第一家有 URL 的 PDF ---
     print("\n" + "#" * 60)
@@ -184,7 +197,7 @@ def main():
     download_result = None
     if first_ok:
         download_result = test_download_one(
-            connector, first_ok["stock_id"], first_ok["name"], TEST_YEAR
+            connector, first_ok["stock_id"], first_ok["name"], 2024
         )
     else:
         print("  無可下載的報告，跳過下載測試")
@@ -197,15 +210,18 @@ def main():
     print("\n策略測試:")
     for r in strategy_results:
         if r["status"] == "OK":
-            print(f"  {r['strategy']:15s}: OK — {r['total']} 筆, {r['with_url']} 有URL ({r['elapsed']:.1f}s)")
+            fs = f", {r.get('with_filestream', 0)} 有FileStream" if r.get("with_filestream") else ""
+            print(f"  {r['strategy']:12s} {r['year']}: OK — {r['total']} 筆, {r['with_url']} 有URL{fs} ({r['elapsed']:.1f}s)")
         else:
-            print(f"  {r['strategy']:15s}: FAILED — {r.get('error', '?')}")
+            print(f"  {r['strategy']:12s} {r['year']}: FAILED — {r.get('error', '?')}")
 
-    print(f"\n逐家公司 ({len(company_results)} 家):")
+    print(f"\n逐家公司 ({len(company_results)} 家, 2024):")
     ok = sum(1 for r in company_results if r.get("has_url"))
+    fs = sum(1 for r in company_results if r.get("has_filestream"))
     found = sum(1 for r in company_results if r.get("status") == "found")
     fail = sum(1 for r in company_results if r.get("status") == "FAILED")
     print(f"  有下載連結: {ok}")
+    print(f"  有 FileStream: {fs}")
     print(f"  找到但無URL: {found}")
     print(f"  失敗: {fail}")
 
