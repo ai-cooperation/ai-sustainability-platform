@@ -11,6 +11,7 @@ from src.connectors.environment.open_meteo_air_quality import OpenMeteoAirQualit
 from src.connectors.environment.openaq import OpenAQConnector
 from src.connectors.environment.tw_epa_aqi import TwEpaAqiConnector
 from src.connectors.environment.tw_wra_reservoir import TwWraReservoirConnector
+from src.connectors.environment.moenv_uv import MoenvUvConnector
 
 __all__ = [
     "AQICNConnector",
@@ -18,6 +19,7 @@ __all__ = [
     "EPAEnvirofactsConnector",
     "EPAWaterQualityConnector",
     "GlobalForestWatchConnector",
+    "MoenvUvConnector",
     "OpenMeteoAirQualityConnector",
     "OpenAQConnector",
     "TwEpaAqiConnector",

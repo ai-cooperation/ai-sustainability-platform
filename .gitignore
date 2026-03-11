@@ -21,6 +21,7 @@ data/cache/
 *.parquet
 *.csv
 !data/registry/*.csv
+!data/seed/**/*.csv
 
 # Node.js (dashboard)
 node_modules/
