@@ -41,6 +41,7 @@ class Settings(BaseSettings):
 
     # Carbon APIs
     climatiq_api_key: str = ""
+    moenv_api_key: str = ""
 
     # Telegram
     telegram_bot_token: str = ""
