@@ -62,7 +62,7 @@ class TestTWSEEsgGhgConnector:
     def test_topic_id(self, connector):
         assert connector.topic_id == "1"
 
-    @patch("src.connectors.corporate._esg_base.requests.get")
+    @patch("src.connectors.corporate._esg_base.create_tw_gov_session")
     def test_fetch_combines_twse_and_tpex(self, mock_get, connector):
         """兩個端點都有資料時應合併。"""
         twse_resp = MagicMock()
@@ -73,43 +73,43 @@ class TestTWSEEsgGhgConnector:
         tpex_resp.json.return_value = [{"公司代號": "6488", "公司名稱": "環球晶"}]
         tpex_resp.raise_for_status = MagicMock()
 
-        mock_get.side_effect = [twse_resp, tpex_resp]
+        mock_get.return_value.get.side_effect = [twse_resp, tpex_resp]
         result = connector.fetch()
 
         assert len(result) == 2
         assert result[0]["_market"] == "TWSE"
         assert result[1]["_market"] == "TPEx"
 
-    @patch("src.connectors.corporate._esg_base.requests.get")
+    @patch("src.connectors.corporate._esg_base.create_tw_gov_session")
     def test_fetch_empty_arrays(self, mock_get, connector):
         """非申報季兩端點都回傳空陣列，不應拋錯。"""
         for _ in range(2):
             resp = MagicMock()
             resp.json.return_value = []
             resp.raise_for_status = MagicMock()
-        mock_get.return_value = resp
+        mock_get.return_value.get.return_value = resp
 
         result = connector.fetch()
         assert result == []
 
-    @patch("src.connectors.corporate._esg_base.requests.get")
+    @patch("src.connectors.corporate._esg_base.create_tw_gov_session")
     def test_fetch_one_fails_one_succeeds(self, mock_get, connector):
         """一個端點失敗、一個成功，應回傳成功的資料。"""
         twse_resp = MagicMock()
         twse_resp.json.return_value = [{"公司代號": "2330"}]
         twse_resp.raise_for_status = MagicMock()
 
-        mock_get.side_effect = [
+        mock_get.return_value.get.side_effect = [
             twse_resp,
             requests.RequestException("TPEx timeout"),
         ]
         result = connector.fetch()
         assert len(result) == 1
 
-    @patch("src.connectors.corporate._esg_base.requests.get")
+    @patch("src.connectors.corporate._esg_base.create_tw_gov_session")
     def test_fetch_both_fail(self, mock_get, connector):
         """兩個端點都失敗時應拋出 ConnectorError。"""
-        mock_get.side_effect = requests.RequestException("Network error")
+        mock_get.return_value.get.side_effect = requests.RequestException("Network error")
 
         with pytest.raises(ConnectorError, match="皆請求失敗"):
             connector.fetch()

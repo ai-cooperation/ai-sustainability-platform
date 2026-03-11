@@ -14,6 +14,7 @@ import pandas as pd
 import requests
 
 from src.connectors.base import BaseConnector, ConnectorError
+from src.connectors.corporate._ssl_helper import create_tw_gov_session
 
 
 def _safe_numeric(value: Any) -> float | None:
@@ -68,11 +69,12 @@ class TWSEIncomeConnector(BaseConnector):
             ConnectorError: API 呼叫失敗時。
         """
         timeout = params.get("timeout", 30)
+        session = create_tw_gov_session()
         results = []
 
         for url, market in [(self.TWSE_URL, "twse"), (self.TPEX_URL, "tpex")]:
             try:
-                resp = requests.get(url, timeout=timeout)
+                resp = session.get(url, timeout=timeout)
                 resp.raise_for_status()
                 data = resp.json()
                 for record in data:

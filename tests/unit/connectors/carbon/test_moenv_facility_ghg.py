@@ -98,21 +98,21 @@ class TestMoenvFacilityGhgConnector:
     def test_domain(self, connector):
         assert connector.domain == "carbon"
 
-    @patch("src.connectors.carbon.moenv_facility_ghg.requests.get")
+    @patch("src.connectors.carbon.moenv_facility_ghg.create_tw_gov_session")
     def test_fetch_single_page(self, mock_get, connector, sample_records):
         """單頁回應（筆數 < limit）應直接回傳。"""
         mock_resp = MagicMock()
         mock_resp.json.return_value = _mock_api_response(sample_records)
         mock_resp.raise_for_status = MagicMock()
-        mock_get.return_value = mock_resp
+        mock_get.return_value.get.return_value = mock_resp
 
         result = connector.fetch(limit=1000)
 
         assert len(result) == 3
         assert result[0]["事業名稱"] == "台積電股份有限公司"
-        mock_get.assert_called_once()
+        mock_get.return_value.get.assert_called_once()
 
-    @patch("src.connectors.carbon.moenv_facility_ghg.requests.get")
+    @patch("src.connectors.carbon.moenv_facility_ghg.create_tw_gov_session")
     def test_fetch_pagination(self, mock_get, connector):
         """多頁回應應自動分頁合併。"""
         page1 = [_make_record(name=f"公司{i}") for i in range(3)]
@@ -126,35 +126,35 @@ class TestMoenvFacilityGhgConnector:
         mock_resp2.json.return_value = _mock_api_response(page2)
         mock_resp2.raise_for_status = MagicMock()
 
-        mock_get.side_effect = [mock_resp1, mock_resp2]
+        mock_get.return_value.get.side_effect = [mock_resp1, mock_resp2]
 
         result = connector.fetch(limit=3)
 
         assert len(result) == 4
-        assert mock_get.call_count == 2
+        assert mock_get.return_value.get.call_count == 2
         # 驗證第二頁 offset = 3
-        second_call_params = mock_get.call_args_list[1][1]["params"]
+        second_call_params = mock_get.return_value.get.call_args_list[1][1]["params"]
         assert second_call_params["offset"] == 3
 
-    @patch("src.connectors.carbon.moenv_facility_ghg.requests.get")
+    @patch("src.connectors.carbon.moenv_facility_ghg.create_tw_gov_session")
     def test_fetch_http_error(self, mock_get, connector):
-        mock_get.side_effect = requests.RequestException("Connection timeout")
+        mock_get.return_value.get.side_effect = requests.RequestException("Connection timeout")
 
         with pytest.raises(ConnectorError, match="API 請求失敗"):
             connector.fetch()
 
-    @patch("src.connectors.carbon.moenv_facility_ghg.requests.get")
+    @patch("src.connectors.carbon.moenv_facility_ghg.create_tw_gov_session")
     def test_fetch_empty_response(self, mock_get, connector):
         """空 API 回應應回傳空列表。"""
         mock_resp = MagicMock()
         mock_resp.json.return_value = {"records": []}
         mock_resp.raise_for_status = MagicMock()
-        mock_get.return_value = mock_resp
+        mock_get.return_value.get.return_value = mock_resp
 
         result = connector.fetch()
         assert result == []
 
-    @patch("src.connectors.carbon.moenv_facility_ghg.requests.get")
+    @patch("src.connectors.carbon.moenv_facility_ghg.create_tw_gov_session")
     def test_fetch_uses_settings_api_key(self, mock_get, connector):
         """若 settings 有 moenv_api_key 則優先使用。"""
         connector._settings.moenv_api_key = "custom-key-123"
@@ -162,14 +162,14 @@ class TestMoenvFacilityGhgConnector:
         mock_resp = MagicMock()
         mock_resp.json.return_value = {"records": []}
         mock_resp.raise_for_status = MagicMock()
-        mock_get.return_value = mock_resp
+        mock_get.return_value.get.return_value = mock_resp
 
         connector.fetch()
 
-        call_params = mock_get.call_args[1]["params"]
+        call_params = mock_get.return_value.get.call_args[1]["params"]
         assert call_params["api_key"] == "custom-key-123"
 
-    @patch("src.connectors.carbon.moenv_facility_ghg.requests.get")
+    @patch("src.connectors.carbon.moenv_facility_ghg.create_tw_gov_session")
     def test_fetch_uses_default_api_key(self, mock_get, connector):
         """settings 無 key 時使用預設。"""
         connector._settings.moenv_api_key = ""
@@ -177,11 +177,11 @@ class TestMoenvFacilityGhgConnector:
         mock_resp = MagicMock()
         mock_resp.json.return_value = {"records": []}
         mock_resp.raise_for_status = MagicMock()
-        mock_get.return_value = mock_resp
+        mock_get.return_value.get.return_value = mock_resp
 
         connector.fetch()
 
-        call_params = mock_get.call_args[1]["params"]
+        call_params = mock_get.return_value.get.call_args[1]["params"]
         assert call_params["api_key"] == MoenvFacilityGhgConnector.DEFAULT_API_KEY
 
 

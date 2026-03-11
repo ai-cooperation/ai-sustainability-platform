@@ -74,7 +74,7 @@ class TestTWSECompanyConnector:
     def test_domain(self, connector):
         assert connector.domain == "corporate"
 
-    @patch("src.connectors.corporate.twse_company.requests.get")
+    @patch("src.connectors.corporate.twse_company.create_tw_gov_session")
     def test_fetch_success(self, mock_get, connector, twse_records, tpex_records):
         twse_resp = MagicMock()
         twse_resp.json.return_value = twse_records
@@ -84,29 +84,29 @@ class TestTWSECompanyConnector:
         tpex_resp.json.return_value = tpex_records
         tpex_resp.raise_for_status = MagicMock()
 
-        mock_get.side_effect = [twse_resp, tpex_resp]
+        mock_get.return_value.get.side_effect = [twse_resp, tpex_resp]
 
         result = connector.fetch()
 
         assert len(result) == 3
         assert result[0]["_market"] == "twse"
         assert result[2]["_market"] == "tpex"
-        assert mock_get.call_count == 2
+        assert mock_get.return_value.get.call_count == 2
 
-    @patch("src.connectors.corporate.twse_company.requests.get")
+    @patch("src.connectors.corporate.twse_company.create_tw_gov_session")
     def test_fetch_twse_error(self, mock_get, connector):
-        mock_get.side_effect = requests.RequestException("Connection refused")
+        mock_get.return_value.get.side_effect = requests.RequestException("Connection refused")
 
         with pytest.raises(ConnectorError, match="twse API 請求失敗"):
             connector.fetch()
 
-    @patch("src.connectors.corporate.twse_company.requests.get")
+    @patch("src.connectors.corporate.twse_company.create_tw_gov_session")
     def test_fetch_tpex_error(self, mock_get, connector, twse_records):
         twse_resp = MagicMock()
         twse_resp.json.return_value = twse_records
         twse_resp.raise_for_status = MagicMock()
 
-        mock_get.side_effect = [
+        mock_get.return_value.get.side_effect = [
             twse_resp,
             requests.RequestException("TPEx down"),
         ]

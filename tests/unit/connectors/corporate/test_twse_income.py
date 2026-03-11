@@ -71,7 +71,7 @@ class TestTWSEIncomeConnector:
     def test_domain(self, connector):
         assert connector.domain == "corporate"
 
-    @patch("src.connectors.corporate.twse_income.requests.get")
+    @patch("src.connectors.corporate.twse_income.create_tw_gov_session")
     def test_fetch_success(self, mock_get, connector, twse_records, tpex_records):
         twse_resp = MagicMock()
         twse_resp.json.return_value = twse_records
@@ -81,16 +81,16 @@ class TestTWSEIncomeConnector:
         tpex_resp.json.return_value = tpex_records
         tpex_resp.raise_for_status = MagicMock()
 
-        mock_get.side_effect = [twse_resp, tpex_resp]
+        mock_get.return_value.get.side_effect = [twse_resp, tpex_resp]
         result = connector.fetch()
 
         assert len(result) == 2
         assert result[0]["_market"] == "twse"
         assert result[1]["_market"] == "tpex"
 
-    @patch("src.connectors.corporate.twse_income.requests.get")
+    @patch("src.connectors.corporate.twse_income.create_tw_gov_session")
     def test_fetch_error(self, mock_get, connector):
-        mock_get.side_effect = requests.RequestException("500")
+        mock_get.return_value.get.side_effect = requests.RequestException("500")
 
         with pytest.raises(ConnectorError, match="twse API 請求失敗"):
             connector.fetch()

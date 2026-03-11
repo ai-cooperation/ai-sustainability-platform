@@ -93,7 +93,8 @@ class EsgReportDownloaderConnector(BaseConnector):
         super().__init__(config)
         self.output_dir = Path(output_dir or DEFAULT_OUTPUT_DIR)
         self._strategy = strategy  # auto | esggenplus | mops | playwright
-        self._session = requests.Session()
+        from src.connectors.corporate._ssl_helper import create_tw_gov_session
+        self._session = create_tw_gov_session()
         self._session.headers.update({
             "User-Agent": (
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "

@@ -14,6 +14,7 @@ import pandas as pd
 import requests
 
 from src.connectors.base import BaseConnector, ConnectorError
+from src.connectors.corporate._ssl_helper import create_tw_gov_session
 
 # MOENV API 預設每頁上限
 _DEFAULT_PAGE_SIZE = 1000
@@ -74,6 +75,7 @@ class MoenvFacilityGhgConnector(BaseConnector):
         max_pages = params.get("max_pages", 100)
 
         all_records: list[dict] = []
+        session = create_tw_gov_session()
 
         for _ in range(max_pages):
             query: dict[str, Any] = {
@@ -84,7 +86,7 @@ class MoenvFacilityGhgConnector(BaseConnector):
             }
 
             try:
-                response = requests.get(self.BASE_URL, params=query, timeout=30)
+                response = session.get(self.BASE_URL, params=query, timeout=30)
                 response.raise_for_status()
             except requests.RequestException as exc:
                 raise ConnectorError(

@@ -14,6 +14,7 @@ import pandas as pd
 import requests
 
 from src.connectors.base import BaseConnector, ConnectorError
+from src.connectors.corporate._ssl_helper import create_tw_gov_session
 
 
 def _safe_numeric(value: Any) -> float | None:
@@ -90,10 +91,11 @@ class TWSEEsgBaseConnector(BaseConnector):
 
         combined: list[dict] = []
         errors: list[str] = []
+        session = create_tw_gov_session()
 
         for label, url in [("TWSE", twse_url), ("TPEx", tpex_url)]:
             try:
-                resp = requests.get(url, timeout=30)
+                resp = session.get(url, timeout=30)
                 resp.raise_for_status()
                 data = resp.json()
                 if isinstance(data, list):
