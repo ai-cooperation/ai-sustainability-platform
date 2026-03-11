@@ -112,7 +112,22 @@ class TestMoenvUvConnector:
             connector.fetch()
 
     @patch("src.connectors.environment.moenv_uv.create_tw_gov_session")
-    def test_fetch_missing_records_key(self, mock_session_fn, connector):
+    def test_fetch_list_response(self, mock_session_fn, connector, sample_response):
+        """API 回傳 list 時應自動包裝為 {records: [...]}。"""
+        mock_resp = MagicMock()
+        mock_resp.json.return_value = sample_response["records"]  # 直接 list
+        mock_resp.raise_for_status = MagicMock()
+        mock_session = MagicMock()
+        mock_session.get.return_value = mock_resp
+        mock_session_fn.return_value = mock_session
+
+        result = connector.fetch()
+
+        assert "records" in result
+        assert len(result["records"]) == 3
+
+    @patch("src.connectors.environment.moenv_uv.create_tw_gov_session")
+    def test_fetch_invalid_response(self, mock_session_fn, connector):
         mock_resp = MagicMock()
         mock_resp.json.return_value = {"total": 0}
         mock_resp.raise_for_status = MagicMock()
@@ -120,7 +135,7 @@ class TestMoenvUvConnector:
         mock_session.get.return_value = mock_resp
         mock_session_fn.return_value = mock_session
 
-        with pytest.raises(ConnectorError, match="缺少 'records' 欄位"):
+        with pytest.raises(ConnectorError, match="回應格式異常"):
             connector.fetch()
 
     def test_normalize_success(self, connector, sample_response):

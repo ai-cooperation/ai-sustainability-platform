@@ -109,24 +109,30 @@ class MoenvUvConnector(BaseConnector):
             ) from exc
 
         data = response.json()
-        if "records" not in data:
-            raise ConnectorError(
-                f"{self.name}: 回應格式異常 - 缺少 'records' 欄位"
-            )
-        return data
+        # API 可能回傳 list 或 {records: [...]}
+        if isinstance(data, list):
+            return {"records": data}
+        if isinstance(data, dict) and "records" in data:
+            return data
+        raise ConnectorError(
+            f"{self.name}: 回應格式異常 - 預期 list 或含 'records' 的 dict"
+        )
 
-    def normalize(self, raw_data: dict) -> pd.DataFrame:
+    def normalize(self, raw_data: dict | list) -> pd.DataFrame:
         """將原始資料轉換為標準化 DataFrame。
 
         Args:
-            raw_data: fetch() 回傳的原始資料。
+            raw_data: fetch() 回傳的原始資料（dict 或 list）。
 
         Returns:
             包含以下欄位的 DataFrame：
             timestamp, station_name, county, uv_index,
             latitude, longitude, source_agency
         """
-        records = raw_data.get("records", [])
+        if isinstance(raw_data, list):
+            records = raw_data
+        else:
+            records = raw_data.get("records", [])
         if not records:
             raise ConnectorError(f"{self.name}: 回應中無監測資料")
 
