@@ -75,14 +75,14 @@ def sample_mops_html():
     <tr>
         <td>2330</td>
         <td>台積電</td>
-        <td>112</td>
-        <td><a href="/mops/web/ajax_t100sb11?step=2&amp;co_id=2330&amp;year=112&amp;filename=2330_112.pdf">下載</a></td>
+        <td>111</td>
+        <td><a href="/server-java/FileDownLoad?step=9&amp;filePath=/home/html/nas/protect/t100/&amp;fileName=t100sa11_2330_111.pdf">中文版</a></td>
     </tr>
     <tr>
         <td>2317</td>
         <td>鴻海精密</td>
-        <td>112</td>
-        <td><a href='/mops/web/ajax_t100sb11?step=2&amp;co_id=2317&amp;year=112&amp;filename=2317_112.pdf'>下載</a></td>
+        <td>111</td>
+        <td><a href='https://esg.foxconn.com/download/2022_report.pdf'>中文版</a></td>
     </tr>
     <tr>
         <td>Header</td>
@@ -102,7 +102,7 @@ def sample_mops_html_no_links():
     <tr>
         <td>2330</td>
         <td>台積電</td>
-        <td>112</td>
+        <td>111</td>
         <td>尚未上傳</td>
     </tr>
     </table>
@@ -260,19 +260,20 @@ class TestMopsStrategy:
         with patch.object(
             connector_mops._session, "post", return_value=mock_resp
         ) as mock_post:
-            result = connector_mops.fetch(year=2023)
+            result = connector_mops.fetch(year=2022)
 
         assert len(result) == 2
         assert result[0]["stock_id"] == "2330"
         assert result[0]["company_name"] == "台積電"
         assert result[0]["source"] == "mops"
-        assert "ajax_t100sb11" in result[0]["report_url"]
+        assert "FileDownLoad" in result[0]["report_url"]
         assert result[1]["stock_id"] == "2317"
+        assert result[1]["report_url"] == "https://esg.foxconn.com/download/2022_report.pdf"
 
         # 確認送出正確的 form data
         mock_post.assert_called_once()
         call_kwargs = mock_post.call_args
-        assert call_kwargs[1]["data"]["year"] == "112"  # 民國年
+        assert call_kwargs[1]["data"]["year"] == "111"  # 民國年
         assert call_kwargs[1]["data"]["TYPEK"] == "sii"
 
     def test_fetch_with_stock_id(self, connector_mops):
@@ -283,7 +284,7 @@ class TestMopsStrategy:
         with patch.object(
             connector_mops._session, "post", return_value=mock_resp
         ) as mock_post:
-            connector_mops.fetch(year=2023, stock_id="2330")
+            connector_mops.fetch(year=2022, stock_id="2330")
 
         form_data = mock_post.call_args[1]["data"]
         assert form_data["co_id"] == "2330"
@@ -295,11 +296,16 @@ class TestMopsStrategy:
             side_effect=requests.RequestException("Timeout"),
         ):
             with pytest.raises(ConnectorError, match="MOPS 請求失敗"):
-                connector_mops.fetch(year=2023)
+                connector_mops.fetch(year=2022)
+
+    def test_fetch_year_too_new_raises(self, connector_mops):
+        """ROC 112+ (2023+) 應拋出錯誤提示使用 Playwright。"""
+        with pytest.raises(ConnectorError, match="esggenplus"):
+            connector_mops.fetch(year=2023)
 
     def test_parse_html_no_pdf_links(self, connector_mops, sample_mops_html_no_links):
         reports = connector_mops._parse_mops_html(
-            sample_mops_html_no_links, year=2023
+            sample_mops_html_no_links, year=2022
         )
         assert len(reports) == 1
         assert reports[0]["stock_id"] == "2330"
@@ -327,19 +333,16 @@ class TestMopsStrategy:
 
 
 class TestAutoStrategy:
-    def test_auto_falls_back_to_mops(self, connector, sample_mops_html):
-        """ESG GenPlus 失敗時自動切換到 MOPS。"""
+    def test_auto_uses_mops_for_old_years(self, connector, sample_mops_html):
+        """2022 以前年度應優先使用 MOPS。"""
         mock_mops_resp = MagicMock()
         mock_mops_resp.text = sample_mops_html
         mock_mops_resp.raise_for_status = MagicMock()
 
-        def side_effect(url, **kwargs):
-            if "chase.com.tw" in url:
-                raise requests.ConnectionError("Connection refused")
-            return mock_mops_resp
-
-        with patch.object(connector._session, "post", side_effect=side_effect):
-            result = connector.fetch(year=2023)
+        with patch.object(
+            connector._session, "post", return_value=mock_mops_resp
+        ):
+            result = connector.fetch(year=2022)
 
         assert len(result) == 2
         assert result[0]["source"] == "mops"
@@ -445,17 +448,19 @@ class TestNormalize:
 
 
 class TestDownloadReport:
+    _MOPS_HTML_WITH_PDF = """
+    <table><tr>
+        <td>2330</td><td>台積電</td><td>111</td>
+        <td><a href="/server-java/FileDownLoad?step=9&amp;filePath=/t100/&amp;fileName=t100sa11_2330_111.pdf">PDF</a></td>
+    </tr></table>
+    """
+
     def test_download_success(self, connector, tmp_path):
         connector.output_dir = tmp_path
-        pdf_content = b"%PDF-1.4 " + b"x" * 2000  # 模擬 PDF
+        pdf_content = b"%PDF-1.4 " + b"x" * 2000
 
         mock_list_resp = MagicMock()
-        mock_list_resp.text = """
-        <table><tr>
-            <td>2330</td><td>台積電</td><td>112</td>
-            <td><a href="/mops/web/ajax_t100sb11?step=2&amp;co_id=2330">PDF</a></td>
-        </tr></table>
-        """
+        mock_list_resp.text = self._MOPS_HTML_WITH_PDF
         mock_list_resp.raise_for_status = MagicMock()
 
         mock_pdf_resp = MagicMock()
@@ -463,101 +468,61 @@ class TestDownloadReport:
         mock_pdf_resp.raise_for_status = MagicMock()
         mock_pdf_resp.iter_content = MagicMock(return_value=[pdf_content])
 
-        call_count = 0
-
-        def side_effect_post(url, **kwargs):
-            # MOPS list request
-            if "chase.com.tw" in url:
-                raise requests.ConnectionError("down")
-            return mock_list_resp
-
-        def side_effect_get(url, **kwargs):
-            return mock_pdf_resp
-
-        with patch.object(connector._session, "post", side_effect=side_effect_post):
-            with patch.object(connector._session, "get", side_effect=side_effect_get):
-                path = connector.download_report("2330", 2023)
+        with patch.object(connector._session, "post", return_value=mock_list_resp):
+            with patch.object(connector._session, "get", return_value=mock_pdf_resp):
+                path = connector.download_report("2330", 2022)
 
         assert path is not None
-        assert path.name == "2330_2023.pdf"
+        assert path.name == "2330_2022.pdf"
         assert path.exists()
         assert path.stat().st_size > 1024
 
     def test_download_no_report_found(self, connector):
-        """找不到報告時回傳 None。"""
         mock_resp = MagicMock()
         mock_resp.text = "<html></html>"
         mock_resp.raise_for_status = MagicMock()
 
-        def side_effect_post(url, **kwargs):
-            if "chase.com.tw" in url:
-                raise requests.ConnectionError("down")
-            return mock_resp
-
-        with patch.object(connector._session, "post", side_effect=side_effect_post):
-            result = connector.download_report("9999", 2023)
+        with patch.object(connector._session, "post", return_value=mock_resp):
+            result = connector.download_report("9999", 2022)
 
         assert result is None
 
     def test_download_empty_url(self, connector):
-        """報告存在但無下載連結。"""
         mock_resp = MagicMock()
         mock_resp.text = """
         <table><tr>
-            <td>2330</td><td>台積電</td><td>112</td>
+            <td>2330</td><td>台積電</td><td>111</td>
             <td>尚未上傳</td>
         </tr></table>
         """
         mock_resp.raise_for_status = MagicMock()
 
-        def side_effect(url, **kwargs):
-            if "chase.com.tw" in url:
-                raise requests.ConnectionError("down")
-            return mock_resp
-
-        with patch.object(connector._session, "post", side_effect=side_effect):
-            result = connector.download_report("2330", 2023)
+        with patch.object(connector._session, "post", return_value=mock_resp):
+            result = connector.download_report("2330", 2022)
 
         assert result is None
 
     def test_download_html_response_raises(self, connector, tmp_path):
-        """下載到 HTML 而非 PDF 時拋出錯誤。"""
         connector.output_dir = tmp_path
 
         mock_list_resp = MagicMock()
-        mock_list_resp.text = """
-        <table><tr>
-            <td>2330</td><td>台積電</td><td>112</td>
-            <td><a href="/mops/web/ajax_t100sb11?step=2&amp;co_id=2330">PDF</a></td>
-        </tr></table>
-        """
+        mock_list_resp.text = self._MOPS_HTML_WITH_PDF
         mock_list_resp.raise_for_status = MagicMock()
 
         mock_pdf_resp = MagicMock()
         mock_pdf_resp.headers = {"Content-Type": "text/html; charset=utf-8"}
         mock_pdf_resp.raise_for_status = MagicMock()
 
-        def side_effect_post(url, **kwargs):
-            if "chase.com.tw" in url:
-                raise requests.ConnectionError("down")
-            return mock_list_resp
-
-        with patch.object(connector._session, "post", side_effect=side_effect_post):
+        with patch.object(connector._session, "post", return_value=mock_list_resp):
             with patch.object(connector._session, "get", return_value=mock_pdf_resp):
                 with pytest.raises(ConnectorError, match="HTML 而非 PDF"):
-                    connector.download_report("2330", 2023)
+                    connector.download_report("2330", 2022)
 
     def test_download_too_small_raises(self, connector, tmp_path):
-        """下載檔案過小時拋出錯誤。"""
         connector.output_dir = tmp_path
 
         mock_list_resp = MagicMock()
-        mock_list_resp.text = """
-        <table><tr>
-            <td>2330</td><td>台積電</td><td>112</td>
-            <td><a href="/mops/web/ajax_t100sb11?step=2&amp;co_id=2330">PDF</a></td>
-        </tr></table>
-        """
+        mock_list_resp.text = self._MOPS_HTML_WITH_PDF
         mock_list_resp.raise_for_status = MagicMock()
 
         mock_pdf_resp = MagicMock()
@@ -565,42 +530,26 @@ class TestDownloadReport:
         mock_pdf_resp.raise_for_status = MagicMock()
         mock_pdf_resp.iter_content = MagicMock(return_value=[b"tiny"])
 
-        def side_effect_post(url, **kwargs):
-            if "chase.com.tw" in url:
-                raise requests.ConnectionError("down")
-            return mock_list_resp
-
-        with patch.object(connector._session, "post", side_effect=side_effect_post):
+        with patch.object(connector._session, "post", return_value=mock_list_resp):
             with patch.object(connector._session, "get", return_value=mock_pdf_resp):
                 with pytest.raises(ConnectorError, match="檔案過小"):
-                    connector.download_report("2330", 2023)
+                    connector.download_report("2330", 2022)
 
     def test_download_network_error(self, connector, tmp_path):
-        """PDF 下載時網路錯誤。"""
         connector.output_dir = tmp_path
 
         mock_list_resp = MagicMock()
-        mock_list_resp.text = """
-        <table><tr>
-            <td>2330</td><td>台積電</td><td>112</td>
-            <td><a href="/mops/web/ajax_t100sb11?step=2&amp;co_id=2330">PDF</a></td>
-        </tr></table>
-        """
+        mock_list_resp.text = self._MOPS_HTML_WITH_PDF
         mock_list_resp.raise_for_status = MagicMock()
 
-        def side_effect_post(url, **kwargs):
-            if "chase.com.tw" in url:
-                raise requests.ConnectionError("down")
-            return mock_list_resp
-
-        with patch.object(connector._session, "post", side_effect=side_effect_post):
+        with patch.object(connector._session, "post", return_value=mock_list_resp):
             with patch.object(
                 connector._session,
                 "get",
                 side_effect=requests.ConnectionError("Download failed"),
             ):
                 with pytest.raises(ConnectorError, match="PDF 下載失敗"):
-                    connector.download_report("2330", 2023)
+                    connector.download_report("2330", 2022)
 
 
 # =====================================================================
@@ -614,13 +563,8 @@ class TestListAvailableReports:
         mock_resp.text = sample_mops_html
         mock_resp.raise_for_status = MagicMock()
 
-        def side_effect(url, **kwargs):
-            if "chase.com.tw" in url:
-                raise requests.ConnectionError("down")
-            return mock_resp
-
-        with patch.object(connector._session, "post", side_effect=side_effect):
-            reports = connector.list_available_reports(year=2023)
+        with patch.object(connector._session, "post", return_value=mock_resp):
+            reports = connector.list_available_reports(year=2022)
 
         assert isinstance(reports, list)
         assert len(reports) == 2

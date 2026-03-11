@@ -33,7 +33,7 @@ TEST_COMPANIES = [
     ("6505", "台塑化"),
 ]
 
-TEST_YEAR = 2023  # 報告年度
+TEST_YEAR = 2022  # 報告年度 (MOPS 支援至 2022, 2023+ 需 esggenplus JWT)
 
 
 def test_strategy(strategy_name: str, connector, year: int) -> dict:

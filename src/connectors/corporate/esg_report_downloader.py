@@ -41,20 +41,16 @@ MOPS_REPORT_URL = f"{MOPS_BASE}/mops/web/ajax_t100sb11"
 DEFAULT_TIMEOUT = 30
 DEFAULT_OUTPUT_DIR = "data/raw/esg_reports"
 
-# MOPS 回傳 HTML 中 PDF 連結的 pattern
-# 連結格式例：/mops/web/ajax_t100sb11?...(含 step=2 和 filename)
+# MOPS 回傳 HTML 中 PDF 下載連結的 pattern
+# 格式：/server-java/FileDownLoad?step=9&filePath=...&fileName=t100sa11_XXXX_YYY.pdf
+# 或外部連結如：https://esg.tsmc.com/download/file/...pdf
 MOPS_PDF_LINK_PATTERN = re.compile(
-    r'href=["\']([^"\']*ajax_t100sb11[^"\']*step=2[^"\']*)["\']',
+    r'href=["\']([^"\']*(?:\.pdf|FileDownLoad[^"\']*\.pdf)[^"\']*)["\']',
     re.IGNORECASE,
 )
 
-# 從 HTML 行中提取公司代號 / 名稱 / 年度
-MOPS_ROW_PATTERN = re.compile(
-    r"<td[^>]*>\s*(\d{4})\s*</td>"  # 股票代號
-    r"\s*<td[^>]*>\s*(.*?)\s*</td>"  # 公司名稱
-    r"\s*<td[^>]*>\s*(\d{3,4})\s*</td>",  # 民國年度
-    re.DOTALL,
-)
+# MOPS 在 ROC 112 年 (2023) 起改用 esggenplus，此前版本透過 MOPS 直接取得
+MOPS_LAST_DIRECT_ROC_YEAR = 111  # 西元 2022
 
 
 def _roc_year(western_year: int) -> int:
@@ -175,8 +171,8 @@ class EsgReportDownloaderConnector(BaseConnector):
         return df
 
     def _health_check_params(self) -> dict:
-        """健康檢查：嘗試取得最近一年的報告列表。"""
-        return {"year": datetime.now(tz=UTC).year - 1, "strategy": "mops"}
+        """健康檢查：使用 MOPS 可用的最近年度。"""
+        return {"year": _western_year(MOPS_LAST_DIRECT_ROC_YEAR), "strategy": "mops"}
 
     # ------------------------------------------------------------------
     # 公開方法
@@ -239,23 +235,37 @@ class EsgReportDownloaderConnector(BaseConnector):
     # ------------------------------------------------------------------
 
     def _fetch_auto(self, *, stock_id: str | None, year: int) -> list:
-        """依序嘗試各策略，回傳第一個成功的結果。"""
+        """依據年度自動選擇策略。
+
+        - 2022 (ROC 111) 以前：使用 MOPS（穩定可靠）
+        - 2023 (ROC 112) 以後：嘗試 esggenplus API，失敗則回傳 Playwright 參數
+        """
+        roc = _roc_year(year)
         errors = []
 
-        for strategy_name, fetcher in [
-            ("esggenplus", self._fetch_esggenplus),
-            ("mops", self._fetch_mops),
-        ]:
+        # 2022 以前優先用 MOPS
+        if roc <= MOPS_LAST_DIRECT_ROC_YEAR:
+            strategies = [
+                ("mops", self._fetch_mops),
+                ("esggenplus", self._fetch_esggenplus),
+            ]
+        else:
+            strategies = [
+                ("esggenplus", self._fetch_esggenplus),
+            ]
+
+        for strategy_name, fetcher in strategies:
             try:
                 result = fetcher(stock_id=stock_id, year=year)
-                self.logger.info(f"策略 '{strategy_name}' 成功取得資料")
-                return result
+                if result is not None:  # 空列表也是合法結果
+                    self.logger.info(f"策略 '{strategy_name}' 成功取得資料")
+                    return result
             except (ConnectorError, requests.RequestException) as exc:
                 self.logger.warning(f"策略 '{strategy_name}' 失敗: {exc}")
                 errors.append(f"{strategy_name}: {exc}")
 
         raise ConnectorError(
-            f"{self.name}: 所有策略均失敗 — " + "; ".join(errors)
+            f"{self.name}: 所有策略均失敗（year={year}）— " + "; ".join(errors)
         )
 
     # ------------------------------------------------------------------
@@ -308,9 +318,18 @@ class EsgReportDownloaderConnector(BaseConnector):
         """透過 MOPS 查詢永續報告書。
 
         POST 至 ajax_t100sb11，解析回傳的 HTML 表格。
+        注意：ROC 112+ (2023+) 會被重導向至 esggenplus（需 JWT），
+        此策略僅適用於 ROC 111 (2022) 以前的年度。
         """
         timeout = self.config.get("timeout", DEFAULT_TIMEOUT)
         roc = _roc_year(year)
+
+        if roc > MOPS_LAST_DIRECT_ROC_YEAR:
+            raise ConnectorError(
+                f"{self.name}: MOPS 自 ROC {MOPS_LAST_DIRECT_ROC_YEAR + 1} "
+                f"({_western_year(MOPS_LAST_DIRECT_ROC_YEAR + 1)}) 起已轉移至 "
+                f"esggenplus，請使用 Playwright 策略"
+            )
 
         form_data = {
             "encodeURIComponent": "1",
@@ -336,33 +355,52 @@ class EsgReportDownloaderConnector(BaseConnector):
                 f"{self.name}: MOPS 請求失敗 - {exc}"
             ) from exc
 
+        # 檢查是否被重導向至 esggenplus
+        if "esggenplus" in html:
+            raise ConnectorError(
+                f"{self.name}: MOPS 已將此年度 ({year}) 轉移至 esggenplus"
+            )
+
         return self._parse_mops_html(html, year=year)
 
     def _parse_mops_html(self, html: str, *, year: int) -> list:
-        """解析 MOPS 回傳的 HTML，提取報告資訊與 PDF 連結。"""
+        """解析 MOPS 回傳的 HTML，提取報告資訊與 PDF 連結。
+
+        MOPS HTML 結構：每個公司一個 <tr>，包含公司代號、名稱、
+        以及多個 PDF 下載連結（中文版、英文版等）。
+        PDF 連結格式：
+        - /server-java/FileDownLoad?step=9&filePath=...&fileName=t100sa11_XXXX_YYY.pdf
+        - https://外部網站/xxx.pdf (公司自有 ESG 網站)
+        """
         reports: list[dict] = []
 
-        # 嘗試逐行配對：每一列 <tr> 可能包含公司代號 + PDF 連結
         rows = re.split(r"<tr[^>]*>", html, flags=re.IGNORECASE)
 
         for row in rows:
-            # 提取股票代號與公司名稱
-            cells = re.findall(r"<td[^>]*>(.*?)</td>", row, re.DOTALL | re.IGNORECASE)
+            cells = re.findall(
+                r"<td[^>]*>(.*?)</td>", row, re.DOTALL | re.IGNORECASE
+            )
             if len(cells) < 3:
                 continue
 
             sid = re.sub(r"<[^>]+>", "", cells[0]).strip()
             cname = re.sub(r"<[^>]+>", "", cells[1]).strip()
 
-            # 股票代號應為 4 位數字
             if not re.match(r"^\d{4,6}$", sid):
                 continue
 
-            # 找 PDF 連結
+            # 蒐集所有 PDF 連結
             pdf_links = MOPS_PDF_LINK_PATTERN.findall(row)
             report_url = ""
             if pdf_links:
-                raw_url = pdf_links[0].replace("&amp;", "&")
+                # 優先選 MOPS 伺服器上的 PDF（穩定），其次外部連結
+                mops_pdfs = [
+                    u for u in pdf_links if "FileDownLoad" in u or "server-java" in u
+                ]
+                if mops_pdfs:
+                    raw_url = mops_pdfs[0].replace("&amp;", "&")
+                else:
+                    raw_url = pdf_links[0].replace("&amp;", "&")
                 report_url = (
                     raw_url
                     if raw_url.startswith("http")
