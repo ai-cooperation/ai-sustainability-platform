@@ -38,5 +38,6 @@ def create_tw_gov_session() -> requests.Session:
     session.mount("https://mopsfin.twse.com.tw", adapter)
     session.mount("https://mopsov.twse.com.tw", adapter)
     session.mount("https://esggenplus.twse.com.tw", adapter)
+    session.mount("https://l40s.chase.com.tw", adapter)
     session.mount("https://data.moenv.gov.tw", adapter)
     return session
