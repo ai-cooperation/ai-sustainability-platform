@@ -1,81 +1,81 @@
 {
-  "checked_at": "2026-03-19T06:51:57Z",
+  "checked_at": "2026-03-19T12:47:18Z",
   "total": 31,
-  "healthy": 26,
+  "healthy": 25,
   "degraded": 0,
-  "down": 5,
+  "down": 6,
   "apis": [
     {
       "id": "open_meteo_solar",
       "domain": "energy",
       "status": "healthy",
-      "latency_ms": 2438,
+      "latency_ms": 428,
       "message": "OK",
-      "checked_at": "2026-03-19T06:50:07Z"
+      "checked_at": "2026-03-19T12:45:03Z"
     },
     {
       "id": "nasa_power",
       "domain": "energy",
       "status": "healthy",
-      "latency_ms": 728,
+      "latency_ms": 684,
       "message": "OK",
-      "checked_at": "2026-03-19T06:50:10Z"
+      "checked_at": "2026-03-19T12:45:04Z"
     },
     {
       "id": "carbon_intensity_uk",
       "domain": "energy",
       "status": "healthy",
-      "latency_ms": 615,
+      "latency_ms": 328,
       "message": "OK",
-      "checked_at": "2026-03-19T06:50:10Z"
+      "checked_at": "2026-03-19T12:45:05Z"
     },
     {
       "id": "open_power_system",
       "domain": "energy",
       "status": "healthy",
-      "latency_ms": 778,
+      "latency_ms": 828,
       "message": "OK",
-      "checked_at": "2026-03-19T06:50:11Z"
+      "checked_at": "2026-03-19T12:45:05Z"
     },
     {
       "id": "eia",
       "domain": "energy",
-      "status": "healthy",
-      "latency_ms": 4644,
-      "message": "OK",
-      "checked_at": "2026-03-19T06:50:12Z"
+      "status": "down",
+      "latency_ms": 30486,
+      "message": "EIA API request failed: HTTPSConnectionPool(host='api.eia.gov', port=443): Read timed out. (read timeout=30)",
+      "checked_at": "2026-03-19T12:45:06Z"
     },
     {
       "id": "electricity_maps",
       "domain": "energy",
       "status": "down",
-      "latency_ms": 301,
+      "latency_ms": 490,
       "message": "Electricity Maps API request failed: 401 Client Error: Unauthorized for url: https://api.electricitymaps.com/v3/carbon-intensity/latest?zone=DE",
-      "checked_at": "2026-03-19T06:50:16Z"
+      "checked_at": "2026-03-19T12:45:36Z"
     },
     {
       "id": "nrel",
       "domain": "energy",
       "status": "healthy",
-      "latency_ms": 550,
+      "latency_ms": 850,
       "message": "OK",
-      "checked_at": "2026-03-19T06:50:17Z"
+      "checked_at": "2026-03-19T12:45:37Z"
     },
     {
       "id": "open_meteo_weather",
       "domain": "climate",
-      "status": "down",
-      "latency_ms": 30135,
-      "message": "open_meteo_weather: API request failed - HTTPSConnectionPool(host='api.open-meteo.com', port=443): Read timed out. (read timeout=30)",
-      "checked_at": "2026-03-19T06:50:17Z"
+      "status": "healthy",
+      "latency_ms": 404,
+      "message": "OK",
+      "checked_at": "2026-03-19T12:45:38Z"
     },
     {
       "id": "open_meteo_climate",
       "domain": "climate",
       "status": "healthy",
-      "latency_ms": 447,
+      "latency_ms": 446,
       "message": "OK",
-      "checked_at": "2026-03-19T06:50:47Z"
+      "checked_at": "2026-03-19T12:45:38Z"
     },
     {
       "id": "noaa_ghg",
@@ -83,79 +83,79 @@
       "status": "healthy",
       "latency_ms": 349,
       "message": "OK",
-      "checked_at": "2026-03-19T06:50:48Z"
+      "checked_at": "2026-03-19T12:45:38Z"
     },
     {
       "id": "world_bank_climate",
       "domain": "climate",
-      "status": "healthy",
-      "latency_ms": 299,
-      "message": "OK",
-      "checked_at": "2026-03-19T06:50:48Z"
+      "status": "down",
+      "latency_ms": 30135,
+      "message": "world_bank_climate: API request failed - HTTPSConnectionPool(host='api.worldbank.org', port=443): Read timed out. (read timeout=30)",
+      "checked_at": "2026-03-19T12:45:39Z"
     },
     {
       "id": "noaa_cdo",
       "domain": "climate",
       "status": "healthy",
-      "latency_ms": 377,
+      "latency_ms": 463,
       "message": "OK",
-      "checked_at": "2026-03-19T06:50:48Z"
+      "checked_at": "2026-03-19T12:46:09Z"
     },
     {
       "id": "copernicus_cds",
       "domain": "climate",
       "status": "healthy",
-      "latency_ms": 1642,
+      "latency_ms": 992,
       "message": "CDS API reachable (HTTP 202)",
-      "checked_at": "2026-03-19T06:50:49Z"
+      "checked_at": "2026-03-19T12:46:09Z"
     },
     {
       "id": "open_meteo_air_quality",
       "domain": "environment",
       "status": "healthy",
-      "latency_ms": 478,
+      "latency_ms": 404,
       "message": "OK",
-      "checked_at": "2026-03-19T06:50:50Z"
+      "checked_at": "2026-03-19T12:46:10Z"
     },
     {
       "id": "epa_envirofacts",
       "domain": "environment",
       "status": "healthy",
-      "latency_ms": 1149,
+      "latency_ms": 1610,
       "message": "OK",
-      "checked_at": "2026-03-19T06:50:51Z"
+      "checked_at": "2026-03-19T12:46:11Z"
     },
     {
       "id": "epa_water_quality",
       "domain": "environment",
       "status": "healthy",
-      "latency_ms": 146,
+      "latency_ms": 3248,
       "message": "OK",
-      "checked_at": "2026-03-19T06:50:52Z"
+      "checked_at": "2026-03-19T12:46:12Z"
     },
     {
       "id": "emissions_api",
       "domain": "environment",
       "status": "down",
-      "latency_ms": 30154,
-      "message": "emissions_api: API request failed - HTTPSConnectionPool(host='api.v2.emissions-api.org', port=443): Max retries exceeded with url: /api/v2/carbonmonoxide/geo.json?limit=1 (Caused by ConnectTimeoutError(<HTTPSConnection(host='api.v2.emissions-api.org', port=443) at 0x7f6e028e0050>, 'Connection to api.v2.emissions-api.org timed out. (connect timeout=30)'))",
-      "checked_at": "2026-03-19T06:50:52Z"
+      "latency_ms": 30050,
+      "message": "emissions_api: API request failed - HTTPSConnectionPool(host='api.v2.emissions-api.org', port=443): Max retries exceeded with url: /api/v2/carbonmonoxide/geo.json?limit=1 (Caused by ConnectTimeoutError(<HTTPSConnection(host='api.v2.emissions-api.org', port=443) at 0x7fca60feb110>, 'Connection to api.v2.emissions-api.org timed out. (connect timeout=30)'))",
+      "checked_at": "2026-03-19T12:46:16Z"
     },
     {
       "id": "openaq",
       "domain": "environment",
       "status": "healthy",
-      "latency_ms": 329,
+      "latency_ms": 194,
       "message": "OK",
-      "checked_at": "2026-03-19T06:51:22Z"
+      "checked_at": "2026-03-19T12:46:46Z"
     },
     {
       "id": "aqicn",
       "domain": "environment",
       "status": "healthy",
-      "latency_ms": 821,
+      "latency_ms": 700,
       "message": "OK",
-      "checked_at": "2026-03-19T06:51:23Z"
+      "checked_at": "2026-03-19T12:46:46Z"
     },
     {
       "id": "global_forest_watch",
@@ -163,23 +163,23 @@
       "status": "down",
       "latency_ms": 0,
       "message": "global_forest_watch: GLOBAL_FOREST_WATCH_API_KEY not configured",
-      "checked_at": "2026-03-19T06:51:23Z"
+      "checked_at": "2026-03-19T12:46:47Z"
     },
     {
       "id": "faostat",
       "domain": "agriculture",
       "status": "down",
-      "latency_ms": 28493,
+      "latency_ms": 26465,
       "message": "FAOSTAT API request failed for domain 'QCL': 521 Server Error: <none> for url: https://fenixservices.fao.org/faostat/api/v1/en/data/QCL?area_code=5000&year=2022",
-      "checked_at": "2026-03-19T06:51:23Z"
+      "checked_at": "2026-03-19T12:46:47Z"
     },
     {
       "id": "eu_agri_food",
       "domain": "agriculture",
       "status": "healthy",
-      "latency_ms": 485,
+      "latency_ms": 418,
       "message": "OK",
-      "checked_at": "2026-03-19T06:51:52Z"
+      "checked_at": "2026-03-19T12:47:13Z"
     },
     {
       "id": "usda_nass",
@@ -187,71 +187,71 @@
       "status": "healthy",
       "latency_ms": 305,
       "message": "OK",
-      "checked_at": "2026-03-19T06:51:52Z"
+      "checked_at": "2026-03-19T12:47:13Z"
     },
     {
       "id": "gbif",
       "domain": "agriculture",
       "status": "healthy",
-      "latency_ms": 895,
+      "latency_ms": 670,
       "message": "OK",
-      "checked_at": "2026-03-19T06:51:53Z"
+      "checked_at": "2026-03-19T12:47:14Z"
     },
     {
       "id": "owid_carbon",
       "domain": "carbon",
       "status": "healthy",
-      "latency_ms": 1182,
+      "latency_ms": 1353,
       "message": "OK",
-      "checked_at": "2026-03-19T06:51:54Z"
+      "checked_at": "2026-03-19T12:47:14Z"
     },
     {
       "id": "climate_watch",
       "domain": "carbon",
       "status": "healthy",
-      "latency_ms": 461,
+      "latency_ms": 264,
       "message": "OK",
-      "checked_at": "2026-03-19T06:51:55Z"
+      "checked_at": "2026-03-19T12:47:16Z"
     },
     {
       "id": "open_climate_data",
       "domain": "carbon",
       "status": "healthy",
-      "latency_ms": 93,
+      "latency_ms": 109,
       "message": "OK",
-      "checked_at": "2026-03-19T06:51:55Z"
+      "checked_at": "2026-03-19T12:47:16Z"
     },
     {
       "id": "climate_trace",
       "domain": "carbon",
       "status": "healthy",
-      "latency_ms": 269,
+      "latency_ms": 263,
       "message": "OK",
-      "checked_at": "2026-03-19T06:51:55Z"
+      "checked_at": "2026-03-19T12:47:16Z"
     },
     {
       "id": "climatiq",
       "domain": "carbon",
       "status": "healthy",
-      "latency_ms": 517,
+      "latency_ms": 441,
       "message": "OK",
-      "checked_at": "2026-03-19T06:51:56Z"
+      "checked_at": "2026-03-19T12:47:16Z"
     },
     {
       "id": "open_charge_map",
       "domain": "transport",
       "status": "healthy",
-      "latency_ms": 186,
+      "latency_ms": 349,
       "message": "OK",
-      "checked_at": "2026-03-19T06:51:56Z"
+      "checked_at": "2026-03-19T12:47:17Z"
     },
     {
       "id": "nrel_alt_fuel",
       "domain": "transport",
       "status": "healthy",
-      "latency_ms": 990,
+      "latency_ms": 978,
       "message": "OK",
-      "checked_at": "2026-03-19T06:51:56Z"
+      "checked_at": "2026-03-19T12:47:17Z"
     }
   ]
 }
