@@ -1,8 +1,8 @@
 {
   "domain": "agriculture",
-  "updated_at": "2026-03-22T07:00:35.308994Z",
+  "updated_at": "2026-03-23T07:19:34.069728Z",
   "record_count": 209,
-  "file": "agriculture_2026-03-22.parquet",
+  "file": "agriculture_2026-03-23.parquet",
   "sources": [
     "eu_agri_food",
     "gbif"
