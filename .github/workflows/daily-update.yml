@@ -27,8 +27,8 @@ jobs:
       GBIF_PASSWORD: ${{ secrets.GBIF_PASSWORD }}
       CLIMATIQ_API_KEY: ${{ secrets.CLIMATIQ_API_KEY }}
       GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      # TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      # TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
 
     steps:
       - uses: actions/checkout@v4
@@ -115,37 +115,6 @@ jobs:
       - name: Export dashboard JSON
         continue-on-error: true
         run: uv run python scripts/export_dashboard_json.py
-
-      - name: Send daily summary via Telegram
-        continue-on-error: true
-        run: |
-          uv run python -c "
-          from src.utils.telegram import send_telegram
-          from pathlib import Path
-          import json
-
-          # Pipeline results
-          processed = list(Path('data/processed').rglob('*.parquet')) if Path('data/processed').exists() else []
-
-          # Forecast results
-          forecast_text = 'No forecasts'
-          fp = Path('data/forecasts/latest.json')
-          if fp.exists():
-              forecasts = json.loads(fp.read_text())
-              lines = []
-              for f in forecasts:
-                  p = f['probability']
-                  lines.append(f\"  {p:.0%} - {f['question'][:60]}\")
-              forecast_text = chr(10).join(lines)
-
-          msg = (
-              '<b>Daily Pipeline Summary</b>\n\n'
-              f'<b>Pipelines:</b> {len(processed)} output files\n\n'
-              f'<b>AI Forecasts:</b>\n{forecast_text}'
-          )
-          send_telegram(msg, parse_mode='HTML')
-          print('Telegram notification sent')
-          "
 
       - name: Commit results
         run: |
