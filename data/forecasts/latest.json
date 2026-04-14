@@ -1,74 +1,74 @@
 [
   {
     "question": "Will UK grid carbon intensity exceed 200g CO2/kWh in the next 7 days?",
-    "probability": 0.27666666666666667,
+    "probability": 0.43333333333333335,
     "confidence": "low",
-    "reasoning": "```\n{\n  \"probability\": 0.25,\n  \"confidence\": \"medium\",\n  \"reasoning\": The final forecast is based on a synthesis of the optimist, pessimist, and statistician's arguments, considering the current high carbon intensity, the UK's transition towards green energy, and historical data trends. The optimist's emphasis on policy momentum and technological breakthroughs, as well as the statistician's reference to regression to the mean, suggest a lower likelihood of exceeding 200g CO2/kWh. However, the pe",
+    "reasoning": "```\n{\n  \"probability\": 0.45,\n  \"confidence\": \"medium\",\n  \"reasoning\": The final forecast considers the moderate current carbon intensity of 198.0 gCO2/kWh and the perspectives of the optimist, pessimist, and statistician. The lack of historical data limits the confidence in the forecast, but the ongoing transition to green energy and potential fluctuations in energy sources and demand are key factors. The synthesised probability of 0.45 reflects a balance between the possibilities of exceeding 2",
     "positions": [
       {
         "agent": "Optimist",
-        "probability": 0.2,
-        "reasoning": "Despite the current high carbon intensity, the UK has been transitioning towards green energy and improving efficiency, with policy momentum and technological breakthroughs driving progress. Public awareness and investment in renewable energy sources are also on the rise, suggesting a downward trend in carbon intensity. Therefore, it is unlikely that the grid carbon intensity will exceed 200g CO2/kWh in the next 7 days."
-      },
-      {
-        "agent": "Pessimist",
-        "probability": 0.4,
-        "reasoning": "While the current high carbon intensity and emissions risk are concerning, there are opportunities to explore renewable energy sources and reduce dependence on high-carbon intensity energy, which may mitigate the likelihood of exceeding 200g CO2/kWh in the next 7 days, but policy failures and greenwashing could hinder progress."
-      },
-      {
-        "agent": "Statistician",
-        "probability": 0.23,
-        "reasoning": "Based on historical data, the UK grid carbon intensity has fluctuated but generally remained below 200g CO2/kWh. Given the current intensity of 173.0 gCO2/kWh, a significant increase to exceed 200g CO2/kWh in the next 7 days seems unlikely, but possible due to potential variability in energy demand and supply. Regression to the mean suggests a reversion to lower intensity levels, informing this moderate probability estimate."
-      }
-    ],
-    "created_at": "2026-04-13 08:12:31.617709+00:00"
-  },
-  {
-    "question": "Will global renewable energy share exceed 32% by end of Q2 2026?",
-    "probability": 0.7233333333333333,
-    "confidence": "low",
-    "reasoning": "```\n{\n  \"probability\": 0.76,\n  \"confidence\": \"medium\",\n  \"reasoning\": The final forecast is based on a synthesis of the optimist, pessimist, and statistician's arguments, considering the trends of increasing renewable energy adoption, improving technology, and growing policy support, as well as the potential risks and uncertainties. The statistician's historical data analysis provides a strong foundation for the forecast, while the optimist's emphasis on ambitious renewable energy targets and in",
-    "positions": [
-      {
-        "agent": "Optimist",
-        "probability": 0.85,
-        "reasoning": "The trend of increasing renewable energy adoption, improving technology, and growing policy support suggest a strong likelihood of exceeding 32% global renewable energy share by Q2 2026. Additionally, many countries have set ambitious renewable energy targets, and investments in the sector continue to rise. As a result, I expect the share of renewables to continue growing rapidly."
+        "probability": 0.3,
+        "reasoning": "Given the current moderate carbon intensity of 198.0 gCO2/kWh and the ongoing transition to green energy, I believe the likelihood of exceeding 200g CO2/kWh in the next 7 days is relatively low, but possible due to potential fluctuations in energy sources and demand."
       },
       {
         "agent": "Pessimist",
         "probability": 0.6,
-        "reasoning": "While there is progress in renewable energy integration and emissions reduction strategies, the pace of change may be insufficient to meet the target, and risks such as policy failures and greenwashing could hinder efforts to increase the global renewable energy share."
+        "reasoning": "Given the current moderate carbon intensity and dependence on fossil fuels, there is a notable risk of exceeding 200g CO2/kWh in the next 7 days, especially if energy demand increases or renewable energy sources are insufficient, but historical data is lacking to make a highly confident prediction."
       },
       {
         "agent": "Statistician",
-        "probability": 0.72,
-        "reasoning": "Historical data shows a steady increase in global renewable energy share, with an average annual growth rate of 2.5% from 2015 to 2022. Given this trend, it's likely that the share will continue to rise, exceeding 32% by the end of Q2 2026. However, uncertainty surrounding policy changes and economic factors limits confidence in this forecast."
+        "probability": 0.4,
+        "reasoning": "Without historical data, it's challenging to accurately forecast future carbon intensity, but given the current moderate level of 198.0 gCO2/kWh, there's a possibility it could exceed 200g CO2/kWh in the next 7 days due to potential fluctuations, yet the lack of trends or anomalies makes this estimate uncertain."
       }
     ],
-    "created_at": "2026-04-13 08:12:44.107053+00:00"
+    "created_at": "2026-04-14 07:54:40.353180+00:00"
+  },
+  {
+    "question": "Will global renewable energy share exceed 32% by end of Q2 2026?",
+    "probability": 0.71,
+    "confidence": "low",
+    "reasoning": "```\n{\n  \"probability\": 0.73,\n  \"confidence\": \"medium\",\n  \"reasoning\": The final forecast is based on a synthesis of the optimist, pessimist, and statistician's arguments, weighing the strength of evidence and reasoning quality. The optimist's high probability is tempered by the pessimist's concerns about policy failures and greenwashing, while the statistician's historical data analysis provides a baseline for growth. Considering these factors, a probability of 0.73 is a reasonable estimate, ref",
+    "positions": [
+      {
+        "agent": "Optimist",
+        "probability": 0.85,
+        "reasoning": "Given the current trends in green energy transition and policy momentum, I believe the global renewable energy share will continue to grow, driven by technological breakthroughs and increasing public awareness, and thus exceed 32% by the end of Q2 2026, with the likelihood of this outcome being quite high."
+      },
+      {
+        "agent": "Pessimist",
+        "probability": 0.6,
+        "reasoning": "While there are positive trends in carbon intensity and air quality, the pace of change may not be sufficient to meet the target, and risks such as policy failures and greenwashing could hinder progress, but ongoing efforts to integrate renewable energy sources could still drive growth in the sector."
+      },
+      {
+        "agent": "Statistician",
+        "probability": 0.68,
+        "reasoning": "Historical data shows a steady increase in global renewable energy share, with an average annual growth rate of 2-3%. Given this trend and current base rates, it's plausible that the share will exceed 32% by Q2 2026. However, uncertainty remains due to factors like policy changes and technological advancements, which is reflected in the medium confidence level."
+      }
+    ],
+    "created_at": "2026-04-14 07:54:52.760359+00:00"
   },
   {
     "question": "Will PM2.5 levels in major Asian cities improve in the next month?",
-    "probability": 0.5,
+    "probability": 0.5066666666666667,
     "confidence": "low",
-    "reasoning": "```\n{\n  \"probability\": 0.55,\n  \"confidence\": \"low\",\n  \"reasoning\": The final forecast takes into account the varying perspectives of the optimist, pessimist, and statistician, weighing the strength of evidence and reasoning quality. While the optimist highlights growing momentum towards renewable energy and emissions reduction, the pessimist notes the significant risks posed by current high carbon intensity and reliance on fossil fuels. The statistician's caution due to limited relevant data and",
+    "reasoning": "{\n  \"probability\": 0.55,\n  \"confidence\": \"medium\",\n  \"reasoning\": The final forecast takes into account the perspectives of the optimist, pessimist, and statistician, weighing the strength of evidence and reasoning quality. While the optimist highlights positive trends in policy momentum and technological breakthroughs, the pessimist and statistician emphasize the uncertainty and complexity of factors influencing PM2.5 levels. Given the lack of direct quantitative evidence and the potential risk",
     "positions": [
       {
         "agent": "Optimist",
         "probability": 0.7,
-        "reasoning": "While current carbon intensity is high, there is a growing momentum towards renewable energy and emissions reduction, which could positively impact PM2.5 levels in major Asian cities. Increasing public awareness and policy momentum may also contribute to improvements. However, the next month is a short timeframe, and significant progress may be limited."
+        "reasoning": "While there are various factors influencing PM2.5 levels, the growing trend of policy momentum and technological breakthroughs in air quality management suggests a positive trajectory. Additionally, increasing public awareness and efforts to transition to cleaner energy sources contribute to the likelihood of improvement. However, uncertainty remains due to potential risks and variability in regional pollution patterns."
       },
       {
         "agent": "Pessimist",
         "probability": 0.4,
-        "reasoning": "While there are opportunities to reduce emissions through renewable energy and increased efficiency, the current high carbon intensity and reliance on fossil fuels pose significant risks to improving PM2.5 levels in major Asian cities. Insufficient policy measures and potential greenwashing may hinder progress, leading to a cautious outlook."
+        "reasoning": "While there are efforts to reduce pollution, the pace of change is often insufficient, and policy failures or greenwashing can hinder progress, making it uncertain whether PM2.5 levels in major Asian cities will improve in the next month. Additionally, rebound effects from increased economic activity could offset any potential gains. The complexity of these factors contributes to the low confidence in this forecast."
       },
       {
         "agent": "Statistician",
-        "probability": 0.4,
-        "reasoning": "Historical data on PM2.5 levels in major Asian cities shows a high degree of variability, making it difficult to predict short-term changes. Additionally, the provided analysis focuses on carbon intensity in the UK, which has limited relevance to PM2.5 levels in Asian cities. Regression to the mean suggests that extreme values may revert to average levels, but the lack of directly relevant data limits confidence in this forecast."
+        "probability": 0.42,
+        "reasoning": "The current data on carbon intensity in the UK does not provide direct evidence for PM2.5 levels in major Asian cities. Historical data on air quality trends in Asia suggests that improvements are possible but not guaranteed, and regression to the mean implies that recent trends may not continue. Quantitative evidence is lacking to make a precise prediction."
       }
     ],
-    "created_at": "2026-04-13 08:13:25.459576+00:00"
+    "created_at": "2026-04-14 07:55:33.887270+00:00"
   }
 ]
