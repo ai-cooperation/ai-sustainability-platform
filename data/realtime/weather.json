@@ -185,7 +185,7 @@
     "lon":121.625,
     "temperature":23.7,
     "humidity":93,
-    "precipitation":0.0,
+    "precipitation":0.2,
     "wind_speed":2.7
   },
   {
@@ -194,7 +194,7 @@
     "lon":121.625,
     "temperature":23.7,
     "humidity":93,
-    "precipitation":0.0,
+    "precipitation":0.3,
     "wind_speed":2.9
   },
   {
@@ -257,7 +257,7 @@
     "lon":121.625,
     "temperature":30.0,
     "humidity":64,
-    "precipitation":0.2,
+    "precipitation":0.1,
     "wind_speed":5.4
   },
   {
@@ -266,7 +266,7 @@
     "lon":121.625,
     "temperature":30.2,
     "humidity":64,
-    "precipitation":0.1,
+    "precipitation":0.2,
     "wind_speed":5.9
   },
   {
@@ -275,7 +275,7 @@
     "lon":121.625,
     "temperature":29.9,
     "humidity":66,
-    "precipitation":0.1,
+    "precipitation":0.4,
     "wind_speed":5.8
   },
   {
@@ -284,7 +284,7 @@
     "lon":121.625,
     "temperature":28.5,
     "humidity":71,
-    "precipitation":1.7,
+    "precipitation":1.2,
     "wind_speed":7.5
   },
   {
@@ -293,7 +293,7 @@
     "lon":121.625,
     "temperature":27.8,
     "humidity":74,
-    "precipitation":0.8,
+    "precipitation":1.6,
     "wind_speed":6.6
   },
   {
@@ -302,7 +302,7 @@
     "lon":121.625,
     "temperature":27.1,
     "humidity":76,
-    "precipitation":0.5,
+    "precipitation":0.7,
     "wind_speed":5.6
   },
   {
@@ -311,7 +311,7 @@
     "lon":121.625,
     "temperature":26.6,
     "humidity":78,
-    "precipitation":0.3,
+    "precipitation":0.2,
     "wind_speed":4.3
   },
   {
@@ -338,7 +338,7 @@
     "lon":121.625,
     "temperature":25.5,
     "humidity":85,
-    "precipitation":0.0,
+    "precipitation":0.1,
     "wind_speed":2.9
   },
   {
@@ -347,7 +347,7 @@
     "lon":121.625,
     "temperature":25.2,
     "humidity":86,
-    "precipitation":0.0,
+    "precipitation":0.1,
     "wind_speed":2.5
   },
   {
@@ -356,7 +356,7 @@
     "lon":121.625,
     "temperature":24.9,
     "humidity":89,
-    "precipitation":0.0,
+    "precipitation":0.1,
     "wind_speed":2.0
   },
   {
@@ -365,7 +365,7 @@
     "lon":121.625,
     "temperature":24.5,
     "humidity":91,
-    "precipitation":0.0,
+    "precipitation":0.1,
     "wind_speed":1.1
   },
   {
@@ -626,7 +626,7 @@
     "lon":121.625,
     "temperature":22.9,
     "humidity":88,
-    "precipitation":0.1,
+    "precipitation":0.0,
     "wind_speed":2.3
   },
   {
@@ -680,7 +680,7 @@
     "lon":121.625,
     "temperature":25.5,
     "humidity":74,
-    "precipitation":0.1,
+    "precipitation":0.0,
     "wind_speed":8.8
   },
   {
@@ -698,7 +698,7 @@
     "lon":121.625,
     "temperature":25.5,
     "humidity":71,
-    "precipitation":0.1,
+    "precipitation":0.0,
     "wind_speed":9.1
   },
   {
