@@ -112,7 +112,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":23.5,
-    "humidity":94,
+    "humidity":95,
     "precipitation":0.8,
     "wind_speed":11.8
   },
@@ -121,8 +121,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":23.2,
-    "humidity":93,
-    "precipitation":0.2,
+    "humidity":98,
+    "precipitation":2.3,
     "wind_speed":6.7
   },
   {
@@ -130,7 +130,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.8,
-    "humidity":93,
+    "humidity":97,
     "precipitation":0.1,
     "wind_speed":9.9
   },
@@ -139,8 +139,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.5,
-    "humidity":93,
-    "precipitation":0.2,
+    "humidity":92,
+    "precipitation":0.1,
     "wind_speed":7.5
   },
   {
@@ -148,8 +148,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.4,
-    "humidity":92,
-    "precipitation":0.5,
+    "humidity":89,
+    "precipitation":0.3,
     "wind_speed":5.7
   },
   {
@@ -157,8 +157,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":21.9,
-    "humidity":95,
-    "precipitation":0.6,
+    "humidity":89,
+    "precipitation":0.4,
     "wind_speed":5.0
   },
   {
@@ -167,7 +167,7 @@
     "lon":121.5194,
     "temperature":21.5,
     "humidity":91,
-    "precipitation":0.2,
+    "precipitation":0.6,
     "wind_speed":8.4
   },
   {
@@ -175,8 +175,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":21.1,
-    "humidity":89,
-    "precipitation":0.1,
+    "humidity":88,
+    "precipitation":0.2,
     "wind_speed":6.5
   },
   {
@@ -193,8 +193,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":20.4,
-    "humidity":94,
-    "precipitation":1.6,
+    "humidity":89,
+    "precipitation":0.1,
     "wind_speed":7.3
   },
   {
@@ -203,7 +203,7 @@
     "lon":121.5194,
     "temperature":20.2,
     "humidity":89,
-    "precipitation":0.4,
+    "precipitation":0.1,
     "wind_speed":10.5
   },
   {
@@ -211,8 +211,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":20.7,
-    "humidity":86,
-    "precipitation":0.5,
+    "humidity":83,
+    "precipitation":0.1,
     "wind_speed":10.1
   },
   {
@@ -220,7 +220,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":21.1,
-    "humidity":85,
+    "humidity":82,
     "precipitation":0.1,
     "wind_speed":12.0
   },
@@ -229,7 +229,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":21.7,
-    "humidity":81,
+    "humidity":75,
     "precipitation":0.1,
     "wind_speed":15.9
   },
@@ -238,8 +238,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.0,
-    "humidity":77,
-    "precipitation":0.1,
+    "humidity":72,
+    "precipitation":0.2,
     "wind_speed":16.5
   },
   {
@@ -247,7 +247,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.1,
-    "humidity":72,
+    "humidity":64,
     "precipitation":0.0,
     "wind_speed":14.9
   },
@@ -256,7 +256,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":23.5,
-    "humidity":62,
+    "humidity":61,
     "precipitation":0.0,
     "wind_speed":17.4
   },
@@ -265,7 +265,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":24.2,
-    "humidity":58,
+    "humidity":55,
     "precipitation":0.0,
     "wind_speed":19.0
   },
@@ -274,7 +274,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":23.1,
-    "humidity":61,
+    "humidity":58,
     "precipitation":0.0,
     "wind_speed":18.7
   },
@@ -283,7 +283,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.5,
-    "humidity":64,
+    "humidity":62,
     "precipitation":0.0,
     "wind_speed":16.8
   },
@@ -292,7 +292,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.6,
-    "humidity":63,
+    "humidity":62,
     "precipitation":0.0,
     "wind_speed":17.2
   },
@@ -301,8 +301,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":21.3,
-    "humidity":75,
-    "precipitation":0.1,
+    "humidity":71,
+    "precipitation":0.0,
     "wind_speed":14.0
   },
   {
@@ -310,8 +310,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":19.9,
-    "humidity":89,
-    "precipitation":1.0,
+    "humidity":73,
+    "precipitation":0.0,
     "wind_speed":13.6
   },
   {
@@ -319,8 +319,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":19.7,
-    "humidity":93,
-    "precipitation":0.4,
+    "humidity":69,
+    "precipitation":0.0,
     "wind_speed":14.2
   },
   {
@@ -328,8 +328,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":19.4,
-    "humidity":90,
-    "precipitation":0.1,
+    "humidity":74,
+    "precipitation":0.8,
     "wind_speed":15.6
   },
   {
@@ -337,8 +337,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":19.3,
-    "humidity":87,
-    "precipitation":0.0,
+    "humidity":79,
+    "precipitation":0.7,
     "wind_speed":16.6
   },
   {
@@ -346,8 +346,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":19.1,
-    "humidity":84,
-    "precipitation":0.0,
+    "humidity":79,
+    "precipitation":0.3,
     "wind_speed":16.9
   },
   {
@@ -355,8 +355,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":18.9,
-    "humidity":80,
-    "precipitation":0.2,
+    "humidity":79,
+    "precipitation":0.1,
     "wind_speed":17.9
   },
   {
@@ -364,8 +364,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":18.4,
-    "humidity":81,
-    "precipitation":0.3,
+    "humidity":83,
+    "precipitation":0.1,
     "wind_speed":18.3
   },
   {
@@ -373,7 +373,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":18.4,
-    "humidity":83,
+    "humidity":85,
     "precipitation":0.1,
     "wind_speed":17.5
   },
@@ -382,8 +382,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":18.5,
-    "humidity":86,
-    "precipitation":0.4,
+    "humidity":84,
+    "precipitation":0.2,
     "wind_speed":18.0
   },
   {
@@ -391,8 +391,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":18.4,
-    "humidity":87,
-    "precipitation":0.8,
+    "humidity":86,
+    "precipitation":1.6,
     "wind_speed":18.3
   },
   {
@@ -401,7 +401,7 @@
     "lon":121.5194,
     "temperature":18.4,
     "humidity":89,
-    "precipitation":0.6,
+    "precipitation":2.2,
     "wind_speed":18.6
   },
   {
@@ -409,8 +409,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":18.4,
-    "humidity":91,
-    "precipitation":5.0,
+    "humidity":96,
+    "precipitation":5.1,
     "wind_speed":18.0
   },
   {
@@ -418,8 +418,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":18.8,
-    "humidity":92,
-    "precipitation":4.1,
+    "humidity":95,
+    "precipitation":2.1,
     "wind_speed":17.8
   },
   {
@@ -428,7 +428,7 @@
     "lon":121.5194,
     "temperature":18.9,
     "humidity":96,
-    "precipitation":6.5,
+    "precipitation":2.2,
     "wind_speed":17.0
   },
   {
@@ -436,8 +436,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":19.1,
-    "humidity":95,
-    "precipitation":1.8,
+    "humidity":99,
+    "precipitation":1.6,
     "wind_speed":14.9
   },
   {
@@ -445,8 +445,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":20.5,
-    "humidity":90,
-    "precipitation":3.9,
+    "humidity":93,
+    "precipitation":2.1,
     "wind_speed":15.2
   },
   {
@@ -454,8 +454,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":21.9,
-    "humidity":85,
-    "precipitation":0.4,
+    "humidity":88,
+    "precipitation":2.1,
     "wind_speed":14.7
   },
   {
@@ -463,8 +463,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.7,
-    "humidity":82,
-    "precipitation":0.8,
+    "humidity":86,
+    "precipitation":2.5,
     "wind_speed":17.3
   },
   {
@@ -472,8 +472,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.7,
-    "humidity":82,
-    "precipitation":2.3,
+    "humidity":86,
+    "precipitation":1.8,
     "wind_speed":15.9
   },
   {
@@ -481,8 +481,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.4,
-    "humidity":86,
-    "precipitation":3.1,
+    "humidity":88,
+    "precipitation":1.7,
     "wind_speed":14.9
   },
   {
@@ -490,8 +490,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":21.9,
-    "humidity":89,
-    "precipitation":1.5,
+    "humidity":91,
+    "precipitation":2.1,
     "wind_speed":15.9
   },
   {
@@ -499,8 +499,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":21.9,
-    "humidity":89,
-    "precipitation":0.2,
+    "humidity":91,
+    "precipitation":1.1,
     "wind_speed":14.4
   },
   {
@@ -509,7 +509,7 @@
     "lon":121.5194,
     "temperature":21.9,
     "humidity":90,
-    "precipitation":0.8,
+    "precipitation":4.0,
     "wind_speed":13.2
   },
   {
@@ -517,8 +517,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":21.7,
-    "humidity":91,
-    "precipitation":0.1,
+    "humidity":90,
+    "precipitation":0.3,
     "wind_speed":13.9
   },
   {
@@ -527,7 +527,7 @@
     "lon":121.5194,
     "temperature":21.4,
     "humidity":91,
-    "precipitation":0.1,
+    "precipitation":0.0,
     "wind_speed":13.3
   },
   {
@@ -536,7 +536,7 @@
     "lon":121.5194,
     "temperature":20.9,
     "humidity":93,
-    "precipitation":0.1,
+    "precipitation":0.0,
     "wind_speed":12.2
   },
   {
@@ -544,8 +544,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":20.8,
-    "humidity":94,
-    "precipitation":0.1,
+    "humidity":93,
+    "precipitation":0.0,
     "wind_speed":12.1
   },
   {
@@ -553,7 +553,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":20.6,
-    "humidity":95,
+    "humidity":94,
     "precipitation":0.0,
     "wind_speed":12.5
   },
@@ -562,7 +562,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":20.6,
-    "humidity":95,
+    "humidity":93,
     "precipitation":0.0,
     "wind_speed":10.6
   },
@@ -571,7 +571,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":20.6,
-    "humidity":95,
+    "humidity":93,
     "precipitation":0.0,
     "wind_speed":9.3
   },
@@ -580,7 +580,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":20.5,
-    "humidity":96,
+    "humidity":95,
     "precipitation":0.0,
     "wind_speed":8.2
   },
@@ -589,7 +589,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":19.9,
-    "humidity":98,
+    "humidity":99,
     "precipitation":0.0,
     "wind_speed":2.7
   },
@@ -598,8 +598,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":19.8,
-    "humidity":98,
-    "precipitation":0.3,
+    "humidity":100,
+    "precipitation":0.0,
     "wind_speed":2.7
   },
   {
@@ -607,8 +607,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":20.0,
-    "humidity":98,
-    "precipitation":0.6,
+    "humidity":97,
+    "precipitation":0.0,
     "wind_speed":3.4
   },
   {
@@ -616,7 +616,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":19.7,
-    "humidity":97,
+    "humidity":98,
     "precipitation":0.0,
     "wind_speed":1.1
   },
@@ -625,8 +625,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":19.2,
-    "humidity":98,
-    "precipitation":0.8,
+    "humidity":100,
+    "precipitation":0.0,
     "wind_speed":1.3
   },
   {
@@ -634,7 +634,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":19.9,
-    "humidity":98,
+    "humidity":97,
     "precipitation":0.0,
     "wind_speed":3.2
   },
@@ -643,7 +643,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":21.7,
-    "humidity":94,
+    "humidity":91,
     "precipitation":0.0,
     "wind_speed":2.3
   },
@@ -652,7 +652,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":23.4,
-    "humidity":83,
+    "humidity":81,
     "precipitation":0.0,
     "wind_speed":3.2
   },
@@ -661,7 +661,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":25.5,
-    "humidity":74,
+    "humidity":73,
     "precipitation":0.0,
     "wind_speed":4.6
   },
@@ -688,8 +688,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":27.0,
-    "humidity":69,
-    "precipitation":0.2,
+    "humidity":70,
+    "precipitation":0.1,
     "wind_speed":7.8
   },
   {
@@ -697,8 +697,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":27.0,
-    "humidity":71,
-    "precipitation":0.2,
+    "humidity":70,
+    "precipitation":0.1,
     "wind_speed":11.6
   },
   {
@@ -706,7 +706,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":27.1,
-    "humidity":71,
+    "humidity":68,
     "precipitation":0.0,
     "wind_speed":13.9
   },
@@ -715,7 +715,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":26.3,
-    "humidity":74,
+    "humidity":71,
     "precipitation":0.0,
     "wind_speed":15.3
   },
@@ -724,7 +724,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":26.5,
-    "humidity":73,
+    "humidity":70,
     "precipitation":0.0,
     "wind_speed":16.3
   },
@@ -733,7 +733,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":25.7,
-    "humidity":76,
+    "humidity":73,
     "precipitation":0.0,
     "wind_speed":15.5
   },
@@ -742,7 +742,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":24.9,
-    "humidity":81,
+    "humidity":75,
     "precipitation":0.0,
     "wind_speed":13.4
   },
@@ -751,7 +751,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":23.7,
-    "humidity":86,
+    "humidity":81,
     "precipitation":0.0,
     "wind_speed":12.5
   },
@@ -760,7 +760,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":23.2,
-    "humidity":89,
+    "humidity":85,
     "precipitation":0.0,
     "wind_speed":11.4
   },
@@ -769,7 +769,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.8,
-    "humidity":91,
+    "humidity":87,
     "precipitation":0.0,
     "wind_speed":9.8
   },
@@ -778,7 +778,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.5,
-    "humidity":92,
+    "humidity":89,
     "precipitation":0.0,
     "wind_speed":8.7
   },
@@ -787,7 +787,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.1,
-    "humidity":93,
+    "humidity":91,
     "precipitation":0.0,
     "wind_speed":7.1
   },
@@ -796,7 +796,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":21.8,
-    "humidity":94,
+    "humidity":92,
     "precipitation":0.0,
     "wind_speed":5.0
   },
@@ -805,7 +805,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":21.4,
-    "humidity":95,
+    "humidity":93,
     "precipitation":0.0,
     "wind_speed":4.7
   },
@@ -814,7 +814,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":20.8,
-    "humidity":97,
+    "humidity":96,
     "precipitation":0.0,
     "wind_speed":4.7
   },
@@ -823,7 +823,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":20.6,
-    "humidity":98,
+    "humidity":96,
     "precipitation":0.0,
     "wind_speed":4.2
   },
@@ -832,7 +832,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":20.5,
-    "humidity":98,
+    "humidity":95,
     "precipitation":0.0,
     "wind_speed":3.8
   },
@@ -841,7 +841,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":20.3,
-    "humidity":97,
+    "humidity":95,
     "precipitation":0.0,
     "wind_speed":3.0
   },
@@ -850,7 +850,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":20.9,
-    "humidity":95,
+    "humidity":94,
     "precipitation":0.0,
     "wind_speed":2.8
   },
@@ -859,7 +859,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":24.0,
-    "humidity":86,
+    "humidity":84,
     "precipitation":0.0,
     "wind_speed":1.5
   },
@@ -868,7 +868,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":26.6,
-    "humidity":72,
+    "humidity":75,
     "precipitation":0.0,
     "wind_speed":1.5
   },
@@ -877,7 +877,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":28.3,
-    "humidity":65,
+    "humidity":63,
     "precipitation":0.0,
     "wind_speed":0.6
   },
@@ -886,7 +886,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":29.9,
-    "humidity":59,
+    "humidity":57,
     "precipitation":0.0,
     "wind_speed":2.8
   },
@@ -895,7 +895,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":30.9,
-    "humidity":56,
+    "humidity":55,
     "precipitation":0.0,
     "wind_speed":4.6
   },
@@ -904,8 +904,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":31.0,
-    "humidity":58,
-    "precipitation":0.2,
+    "humidity":56,
+    "precipitation":0.0,
     "wind_speed":6.3
   },
   {
@@ -913,8 +913,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":30.5,
-    "humidity":61,
-    "precipitation":0.2,
+    "humidity":59,
+    "precipitation":0.0,
     "wind_speed":8.1
   },
   {
@@ -922,8 +922,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":29.9,
-    "humidity":66,
-    "precipitation":0.2,
+    "humidity":62,
+    "precipitation":1.1,
     "wind_speed":8.7
   },
   {
@@ -931,8 +931,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":29.1,
-    "humidity":68,
-    "precipitation":1.4,
+    "humidity":65,
+    "precipitation":0.4,
     "wind_speed":6.5
   },
   {
@@ -940,8 +940,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":28.2,
-    "humidity":71,
-    "precipitation":1.4,
+    "humidity":69,
+    "precipitation":0.4,
     "wind_speed":2.7
   },
   {
@@ -949,8 +949,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":27.4,
-    "humidity":75,
-    "precipitation":1.4,
+    "humidity":73,
+    "precipitation":0.4,
     "wind_speed":0.7
   },
   {
@@ -958,7 +958,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":26.6,
-    "humidity":80,
+    "humidity":77,
     "precipitation":0.0,
     "wind_speed":2.8
   },
@@ -967,7 +967,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":25.9,
-    "humidity":87,
+    "humidity":82,
     "precipitation":0.0,
     "wind_speed":4.5
   },
@@ -976,7 +976,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":25.2,
-    "humidity":92,
+    "humidity":86,
     "precipitation":0.0,
     "wind_speed":5.3
   },
@@ -985,7 +985,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":24.4,
-    "humidity":96,
+    "humidity":90,
     "precipitation":0.0,
     "wind_speed":5.0
   },
@@ -994,7 +994,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":23.6,
-    "humidity":98,
+    "humidity":94,
     "precipitation":0.0,
     "wind_speed":3.9
   },
@@ -1003,7 +1003,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":23.0,
-    "humidity":99,
+    "humidity":96,
     "precipitation":0.0,
     "wind_speed":3.0
   },
@@ -1012,7 +1012,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.5,
-    "humidity":100,
+    "humidity":97,
     "precipitation":0.0,
     "wind_speed":2.7
   },
@@ -1021,7 +1021,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.3,
-    "humidity":100,
+    "humidity":97,
     "precipitation":0.0,
     "wind_speed":2.4
   },
@@ -1030,7 +1030,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.1,
-    "humidity":100,
+    "humidity":97,
     "precipitation":0.0,
     "wind_speed":2.1
   },
@@ -1039,7 +1039,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":21.9,
-    "humidity":100,
+    "humidity":97,
     "precipitation":0.0,
     "wind_speed":1.5
   },
@@ -1048,7 +1048,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":21.9,
-    "humidity":99,
+    "humidity":96,
     "precipitation":0.0,
     "wind_speed":0.9
   },
@@ -1057,7 +1057,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.1,
-    "humidity":97,
+    "humidity":94,
     "precipitation":0.0,
     "wind_speed":0.2
   },
@@ -1066,7 +1066,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.9,
-    "humidity":95,
+    "humidity":92,
     "precipitation":0.0,
     "wind_speed":1.2
   },
@@ -1075,7 +1075,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":24.0,
-    "humidity":92,
+    "humidity":88,
     "precipitation":0.0,
     "wind_speed":2.4
   },
@@ -1084,7 +1084,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":25.1,
-    "humidity":88,
+    "humidity":84,
     "precipitation":0.0,
     "wind_speed":3.5
   },
@@ -1093,7 +1093,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":26.4,
-    "humidity":81,
+    "humidity":79,
     "precipitation":0.0,
     "wind_speed":4.0
   },
@@ -1111,7 +1111,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":28.6,
-    "humidity":70,
+    "humidity":71,
     "precipitation":0.0,
     "wind_speed":3.8
   },
@@ -1120,8 +1120,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":28.5,
-    "humidity":71,
-    "precipitation":2.6,
+    "humidity":72,
+    "precipitation":0.8,
     "wind_speed":2.0
   },
   {
@@ -1129,8 +1129,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":27.8,
-    "humidity":74,
-    "precipitation":2.6,
+    "humidity":76,
+    "precipitation":0.8,
     "wind_speed":2.4
   },
   {
@@ -1138,8 +1138,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":27.1,
-    "humidity":77,
-    "precipitation":2.6,
+    "humidity":80,
+    "precipitation":0.8,
     "wind_speed":3.8
   },
   {
@@ -1147,8 +1147,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":26.6,
-    "humidity":80,
-    "precipitation":0.7,
+    "humidity":81,
+    "precipitation":1.9,
     "wind_speed":2.4
   },
   {
@@ -1156,8 +1156,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":26.1,
-    "humidity":82,
-    "precipitation":0.7,
+    "humidity":83,
+    "precipitation":1.9,
     "wind_speed":1.1
   },
   {
@@ -1166,7 +1166,7 @@
     "lon":121.5194,
     "temperature":25.6,
     "humidity":85,
-    "precipitation":0.7,
+    "precipitation":1.9,
     "wind_speed":2.7
   },
   {
@@ -1174,8 +1174,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":25.0,
-    "humidity":89,
-    "precipitation":0.0,
+    "humidity":88,
+    "precipitation":0.6,
     "wind_speed":3.4
   },
   {
@@ -1183,8 +1183,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":24.4,
-    "humidity":93,
-    "precipitation":0.0,
+    "humidity":92,
+    "precipitation":0.6,
     "wind_speed":3.6
   },
   {
@@ -1192,8 +1192,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":23.9,
-    "humidity":97,
-    "precipitation":0.0,
+    "humidity":95,
+    "precipitation":0.6,
     "wind_speed":3.2
   },
   {
@@ -1201,8 +1201,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":23.6,
-    "humidity":98,
-    "precipitation":0.0,
+    "humidity":93,
+    "precipitation":0.7,
     "wind_speed":1.8
   },
   {
@@ -1210,8 +1210,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":23.4,
-    "humidity":99,
-    "precipitation":0.0,
+    "humidity":89,
+    "precipitation":0.7,
     "wind_speed":0.8
   },
   {
@@ -1219,8 +1219,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":23.3,
-    "humidity":98,
-    "precipitation":0.0,
+    "humidity":85,
+    "precipitation":0.7,
     "wind_speed":2.0
   },
   {
@@ -1228,7 +1228,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":23.1,
-    "humidity":98,
+    "humidity":84,
     "precipitation":0.4,
     "wind_speed":1.9
   },
@@ -1237,7 +1237,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.9,
-    "humidity":98,
+    "humidity":83,
     "precipitation":0.4,
     "wind_speed":0.9
   },
@@ -1246,7 +1246,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.8,
-    "humidity":97,
+    "humidity":83,
     "precipitation":0.4,
     "wind_speed":0.7
   },
@@ -1255,8 +1255,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.7,
-    "humidity":97,
-    "precipitation":0.0,
+    "humidity":84,
+    "precipitation":0.4,
     "wind_speed":1.0
   },
   {
@@ -1264,8 +1264,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.8,
-    "humidity":97,
-    "precipitation":0.0,
+    "humidity":86,
+    "precipitation":0.4,
     "wind_speed":1.1
   },
   {
@@ -1273,8 +1273,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.9,
-    "humidity":96,
-    "precipitation":0.0,
+    "humidity":86,
+    "precipitation":0.4,
     "wind_speed":1.3
   },
   {
@@ -1282,8 +1282,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":23.3,
-    "humidity":96,
-    "precipitation":0.1,
+    "humidity":84,
+    "precipitation":0.2,
     "wind_speed":2.6
   },
   {
@@ -1291,8 +1291,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":23.7,
-    "humidity":94,
-    "precipitation":0.1,
+    "humidity":80,
+    "precipitation":0.2,
     "wind_speed":5.1
   },
   {
@@ -1300,8 +1300,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":24.2,
-    "humidity":92,
-    "precipitation":0.1,
+    "humidity":76,
+    "precipitation":0.2,
     "wind_speed":7.0
   },
   {
@@ -1309,7 +1309,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":24.6,
-    "humidity":89,
+    "humidity":74,
     "precipitation":0.2,
     "wind_speed":8.0
   },
@@ -1318,7 +1318,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":25.0,
-    "humidity":85,
+    "humidity":71,
     "precipitation":0.2,
     "wind_speed":9.0
   },
@@ -1327,7 +1327,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":25.2,
-    "humidity":82,
+    "humidity":69,
     "precipitation":0.2,
     "wind_speed":10.1
   },
@@ -1336,7 +1336,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":25.3,
-    "humidity":81,
+    "humidity":68,
     "precipitation":0.1,
     "wind_speed":10.1
   },
@@ -1345,7 +1345,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":25.2,
-    "humidity":80,
+    "humidity":67,
     "precipitation":0.1,
     "wind_speed":9.7
   },
@@ -1354,7 +1354,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":25.2,
-    "humidity":80,
+    "humidity":66,
     "precipitation":0.1,
     "wind_speed":9.7
   },
@@ -1363,7 +1363,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":25.0,
-    "humidity":79,
+    "humidity":64,
     "precipitation":0.0,
     "wind_speed":8.1
   },
@@ -1372,7 +1372,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":24.6,
-    "humidity":81,
+    "humidity":63,
     "precipitation":0.0,
     "wind_speed":6.9
   },
@@ -1381,7 +1381,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":24.1,
-    "humidity":83,
+    "humidity":63,
     "precipitation":0.0,
     "wind_speed":5.3
   },
@@ -1390,7 +1390,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":23.6,
-    "humidity":87,
+    "humidity":69,
     "precipitation":0.0,
     "wind_speed":3.8
   },
@@ -1399,7 +1399,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":23.1,
-    "humidity":90,
+    "humidity":70,
     "precipitation":0.0,
     "wind_speed":2.9
   },
@@ -1408,7 +1408,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.7,
-    "humidity":92,
+    "humidity":71,
     "precipitation":0.0,
     "wind_speed":2.6
   },
@@ -1417,7 +1417,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.5,
-    "humidity":94,
+    "humidity":72,
     "precipitation":0.0,
     "wind_speed":2.5
   },
@@ -1426,7 +1426,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.3,
-    "humidity":95,
+    "humidity":73,
     "precipitation":0.0,
     "wind_speed":2.3
   },
@@ -1435,7 +1435,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.2,
-    "humidity":96,
+    "humidity":73,
     "precipitation":0.0,
     "wind_speed":2.1
   },
@@ -1444,7 +1444,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.1,
-    "humidity":96,
+    "humidity":73,
     "precipitation":0.0,
     "wind_speed":1.8
   },
@@ -1453,7 +1453,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.1,
-    "humidity":96,
+    "humidity":73,
     "precipitation":0.0,
     "wind_speed":1.8
   },
@@ -1462,7 +1462,7 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.2,
-    "humidity":96,
+    "humidity":73,
     "precipitation":0.0,
     "wind_speed":1.8
   },
@@ -1471,8 +1471,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.3,
-    "humidity":95,
-    "precipitation":0.0,
+    "humidity":73,
+    "precipitation":0.1,
     "wind_speed":2.0
   },
   {
@@ -1480,8 +1480,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.5,
-    "humidity":94,
-    "precipitation":0.0,
+    "humidity":72,
+    "precipitation":0.1,
     "wind_speed":2.2
   },
   {
@@ -1489,8 +1489,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":22.8,
-    "humidity":92,
-    "precipitation":0.0,
+    "humidity":71,
+    "precipitation":0.1,
     "wind_speed":2.4
   },
   {
@@ -1498,8 +1498,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":23.1,
-    "humidity":90,
-    "precipitation":0.0,
+    "humidity":71,
+    "precipitation":0.1,
     "wind_speed":2.8
   },
   {
@@ -1507,8 +1507,8 @@
     "lat":25.06151,
     "lon":121.5194,
     "temperature":23.5,
-    "humidity":88,
-    "precipitation":0.0,
+    "humidity":69,
+    "precipitation":0.1,
     "wind_speed":3.4
   }
 ]
