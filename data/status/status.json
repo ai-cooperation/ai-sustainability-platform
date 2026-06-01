@@ -1,161 +1,161 @@
 {
-  "checked_at": "2026-06-01T02:56:53Z",
+  "checked_at": "2026-06-01T11:16:27Z",
   "total": 31,
-  "healthy": 24,
+  "healthy": 23,
   "degraded": 0,
-  "down": 7,
+  "down": 8,
   "apis": [
     {
       "id": "open_meteo_solar",
       "domain": "energy",
       "status": "healthy",
-      "latency_ms": 470,
+      "latency_ms": 665,
       "message": "OK",
-      "checked_at": "2026-06-01T02:55:11Z"
+      "checked_at": "2026-06-01T11:14:03Z"
     },
     {
       "id": "nasa_power",
       "domain": "energy",
       "status": "healthy",
-      "latency_ms": 529,
+      "latency_ms": 347,
       "message": "OK",
-      "checked_at": "2026-06-01T02:55:11Z"
+      "checked_at": "2026-06-01T11:14:03Z"
     },
     {
       "id": "carbon_intensity_uk",
       "domain": "energy",
       "status": "healthy",
-      "latency_ms": 540,
+      "latency_ms": 979,
       "message": "OK",
-      "checked_at": "2026-06-01T02:55:12Z"
+      "checked_at": "2026-06-01T11:14:04Z"
     },
     {
       "id": "open_power_system",
       "domain": "energy",
       "status": "healthy",
-      "latency_ms": 926,
+      "latency_ms": 930,
       "message": "OK",
-      "checked_at": "2026-06-01T02:55:13Z"
+      "checked_at": "2026-06-01T11:14:05Z"
     },
     {
       "id": "eia",
       "domain": "energy",
       "status": "healthy",
-      "latency_ms": 2543,
+      "latency_ms": 23834,
       "message": "OK",
-      "checked_at": "2026-06-01T02:55:13Z"
+      "checked_at": "2026-06-01T11:14:06Z"
     },
     {
       "id": "electricity_maps",
       "domain": "energy",
       "status": "down",
-      "latency_ms": 299,
+      "latency_ms": 802,
       "message": "Electricity Maps API request failed: 401 Client Error: Unauthorized for url: https://api.electricitymaps.com/v3/carbon-intensity/latest?zone=DE",
-      "checked_at": "2026-06-01T02:55:16Z"
+      "checked_at": "2026-06-01T11:14:29Z"
     },
     {
       "id": "nrel",
       "domain": "energy",
       "status": "down",
-      "latency_ms": 22,
+      "latency_ms": 17,
       "message": "NREL API request failed: HTTPSConnectionPool(host='developer.nrel.gov', port=443): Max retries exceeded with url: /api/solar/solar_resource/v1.json?api_key=rEGKGhV2wGBueJbA6BnXlWchg7KtlfwSawnUZ9I3&lat=40.0&lon=-105.0 (Caused by NameResolutionError(\"HTTPSConnection(host='developer.nrel.gov', port=443): Failed to resolve 'developer.nrel.gov' ([Errno -5] No address associated with hostname)\"))",
-      "checked_at": "2026-06-01T02:55:16Z"
+      "checked_at": "2026-06-01T11:14:30Z"
     },
     {
       "id": "open_meteo_weather",
       "domain": "climate",
-      "status": "healthy",
-      "latency_ms": 408,
-      "message": "OK",
-      "checked_at": "2026-06-01T02:55:16Z"
+      "status": "down",
+      "latency_ms": 30231,
+      "message": "open_meteo_weather: API request failed - HTTPSConnectionPool(host='api.open-meteo.com', port=443): Read timed out. (read timeout=30)",
+      "checked_at": "2026-06-01T11:14:30Z"
     },
     {
       "id": "open_meteo_climate",
       "domain": "climate",
       "status": "healthy",
-      "latency_ms": 442,
+      "latency_ms": 796,
       "message": "OK",
-      "checked_at": "2026-06-01T02:55:17Z"
+      "checked_at": "2026-06-01T11:15:00Z"
     },
     {
       "id": "noaa_ghg",
       "domain": "climate",
       "status": "healthy",
-      "latency_ms": 351,
+      "latency_ms": 255,
       "message": "OK",
-      "checked_at": "2026-06-01T02:55:17Z"
+      "checked_at": "2026-06-01T11:15:01Z"
     },
     {
       "id": "world_bank_climate",
       "domain": "climate",
       "status": "healthy",
-      "latency_ms": 26352,
+      "latency_ms": 496,
       "message": "OK",
-      "checked_at": "2026-06-01T02:55:18Z"
+      "checked_at": "2026-06-01T11:15:01Z"
     },
     {
       "id": "noaa_cdo",
       "domain": "climate",
       "status": "healthy",
-      "latency_ms": 550,
+      "latency_ms": 856,
       "message": "OK",
-      "checked_at": "2026-06-01T02:55:44Z"
+      "checked_at": "2026-06-01T11:15:02Z"
     },
     {
       "id": "copernicus_cds",
       "domain": "climate",
       "status": "healthy",
-      "latency_ms": 2438,
+      "latency_ms": 2804,
       "message": "CDS API reachable (HTTP 202)",
-      "checked_at": "2026-06-01T02:55:44Z"
+      "checked_at": "2026-06-01T11:15:03Z"
     },
     {
       "id": "open_meteo_air_quality",
       "domain": "environment",
       "status": "healthy",
-      "latency_ms": 398,
+      "latency_ms": 608,
       "message": "OK",
-      "checked_at": "2026-06-01T02:55:47Z"
+      "checked_at": "2026-06-01T11:15:06Z"
     },
     {
       "id": "epa_envirofacts",
       "domain": "environment",
       "status": "healthy",
-      "latency_ms": 1919,
+      "latency_ms": 14958,
       "message": "OK",
-      "checked_at": "2026-06-01T02:55:47Z"
+      "checked_at": "2026-06-01T11:15:06Z"
     },
     {
       "id": "epa_water_quality",
       "domain": "environment",
       "status": "healthy",
-      "latency_ms": 635,
+      "latency_ms": 457,
       "message": "OK",
-      "checked_at": "2026-06-01T02:55:49Z"
+      "checked_at": "2026-06-01T11:15:21Z"
     },
     {
       "id": "emissions_api",
       "domain": "environment",
       "status": "down",
-      "latency_ms": 30202,
-      "message": "emissions_api: API request failed - HTTPSConnectionPool(host='api.v2.emissions-api.org', port=443): Max retries exceeded with url: /api/v2/carbonmonoxide/geo.json?limit=1 (Caused by ConnectTimeoutError(<HTTPSConnection(host='api.v2.emissions-api.org', port=443) at 0x7f1d9ccea4b0>, 'Connection to api.v2.emissions-api.org timed out. (connect timeout=30)'))",
-      "checked_at": "2026-06-01T02:55:50Z"
+      "latency_ms": 30156,
+      "message": "emissions_api: API request failed - HTTPSConnectionPool(host='api.v2.emissions-api.org', port=443): Max retries exceeded with url: /api/v2/carbonmonoxide/geo.json?limit=1 (Caused by ConnectTimeoutError(<HTTPSConnection(host='api.v2.emissions-api.org', port=443) at 0x7f5f2c4e7fb0>, 'Connection to api.v2.emissions-api.org timed out. (connect timeout=30)'))",
+      "checked_at": "2026-06-01T11:15:22Z"
     },
     {
       "id": "openaq",
       "domain": "environment",
       "status": "healthy",
-      "latency_ms": 337,
+      "latency_ms": 339,
       "message": "OK",
-      "checked_at": "2026-06-01T02:56:20Z"
+      "checked_at": "2026-06-01T11:15:52Z"
     },
     {
       "id": "aqicn",
       "domain": "environment",
       "status": "healthy",
-      "latency_ms": 664,
+      "latency_ms": 568,
       "message": "OK",
-      "checked_at": "2026-06-01T02:56:20Z"
+      "checked_at": "2026-06-01T11:15:52Z"
     },
     {
       "id": "global_forest_watch",
@@ -163,95 +163,95 @@
       "status": "down",
       "latency_ms": 0,
       "message": "global_forest_watch: GLOBAL_FOREST_WATCH_API_KEY not configured",
-      "checked_at": "2026-06-01T02:56:21Z"
+      "checked_at": "2026-06-01T11:15:53Z"
     },
     {
       "id": "faostat",
       "domain": "agriculture",
       "status": "down",
-      "latency_ms": 28529,
+      "latency_ms": 27681,
       "message": "FAOSTAT API request failed for domain 'QCL': 521 Server Error: <none> for url: https://fenixservices.fao.org/faostat/api/v1/en/data/QCL?area_code=5000&year=2022",
-      "checked_at": "2026-06-01T02:56:21Z"
+      "checked_at": "2026-06-01T11:15:53Z"
     },
     {
       "id": "eu_agri_food",
       "domain": "agriculture",
       "status": "healthy",
-      "latency_ms": 411,
+      "latency_ms": 586,
       "message": "OK",
-      "checked_at": "2026-06-01T02:56:50Z"
+      "checked_at": "2026-06-01T11:16:20Z"
     },
     {
       "id": "usda_nass",
       "domain": "agriculture",
       "status": "healthy",
-      "latency_ms": 361,
+      "latency_ms": 1228,
       "message": "OK",
-      "checked_at": "2026-06-01T02:56:50Z"
+      "checked_at": "2026-06-01T11:16:21Z"
     },
     {
       "id": "gbif",
       "domain": "agriculture",
       "status": "healthy",
-      "latency_ms": 890,
+      "latency_ms": 750,
       "message": "OK",
-      "checked_at": "2026-06-01T02:56:50Z"
+      "checked_at": "2026-06-01T11:16:22Z"
     },
     {
       "id": "owid_carbon",
       "domain": "carbon",
       "status": "healthy",
-      "latency_ms": 111,
+      "latency_ms": 1475,
       "message": "OK",
-      "checked_at": "2026-06-01T02:56:51Z"
+      "checked_at": "2026-06-01T11:16:23Z"
     },
     {
       "id": "climate_watch",
       "domain": "carbon",
       "status": "healthy",
-      "latency_ms": 490,
+      "latency_ms": 657,
       "message": "OK",
-      "checked_at": "2026-06-01T02:56:51Z"
+      "checked_at": "2026-06-01T11:16:24Z"
     },
     {
       "id": "open_climate_data",
       "domain": "carbon",
       "status": "down",
-      "latency_ms": 54,
+      "latency_ms": 190,
       "message": "Open Climate Data download failed for 'global-carbon-budget': 404 Client Error: Not Found for url: https://raw.githubusercontent.com/openclimatedata/global-carbon-budget/main/data/global-carbon-budget.csv",
-      "checked_at": "2026-06-01T02:56:52Z"
+      "checked_at": "2026-06-01T11:16:25Z"
     },
     {
       "id": "climate_trace",
       "domain": "carbon",
       "status": "healthy",
-      "latency_ms": 102,
+      "latency_ms": 293,
       "message": "OK",
-      "checked_at": "2026-06-01T02:56:52Z"
+      "checked_at": "2026-06-01T11:16:25Z"
     },
     {
       "id": "climatiq",
       "domain": "carbon",
       "status": "healthy",
-      "latency_ms": 373,
+      "latency_ms": 603,
       "message": "OK",
-      "checked_at": "2026-06-01T02:56:52Z"
+      "checked_at": "2026-06-01T11:16:26Z"
     },
     {
       "id": "open_charge_map",
       "domain": "transport",
       "status": "healthy",
-      "latency_ms": 340,
+      "latency_ms": 344,
       "message": "OK",
-      "checked_at": "2026-06-01T02:56:52Z"
+      "checked_at": "2026-06-01T11:16:26Z"
     },
     {
       "id": "nrel_alt_fuel",
       "domain": "transport",
       "status": "down",
-      "latency_ms": 14,
+      "latency_ms": 15,
       "message": "NREL Alt Fuel API request failed: HTTPSConnectionPool(host='developer.nrel.gov', port=443): Max retries exceeded with url: /api/alt-fuel-stations/v1.json?api_key=rEGKGhV2wGBueJbA6BnXlWchg7KtlfwSawnUZ9I3&fuel_type=ELEC&state=CA&limit=1 (Caused by NameResolutionError(\"HTTPSConnection(host='developer.nrel.gov', port=443): Failed to resolve 'developer.nrel.gov' ([Errno -5] No address associated with hostname)\"))",
-      "checked_at": "2026-06-01T02:56:53Z"
+      "checked_at": "2026-06-01T11:16:26Z"
     }
   ]
 }
