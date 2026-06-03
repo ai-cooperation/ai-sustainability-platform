@@ -1,8 +1,8 @@
 {
   "domain": "carbon",
-  "updated_at": "2026-06-02T10:44:58.946756Z",
+  "updated_at": "2026-06-03T11:07:39.259996Z",
   "record_count": 54790,
-  "file": "carbon_2026-06-02.parquet",
+  "file": "carbon_2026-06-03.parquet",
   "sources": [
     "climate_watch",
     "owid_carbon"
@@ -32,17 +32,17 @@
     },
     "co2_per_capita": {
       "latest": 0.824,
-      "mean": 3.821368704968124,
+      "mean": 3.8214110679391906,
       "min": 0.0,
       "max": 782.743,
       "count": 26509
     },
     "energy_per_capita": {
-      "latest": 3181.361,
-      "mean": 24325.863594607516,
+      "latest": 4059.237,
+      "mean": 24218.01777564708,
       "min": 0.0,
       "max": 318559.688,
-      "count": 10459
+      "count": 10586
     }
   },
   "time_series": {
@@ -501,7 +501,7 @@
           4.494,
           1.288,
           1.187,
-          0.289,
+          0.328,
           3.969,
           5.301,
           1.556,
