@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-06-05T10:00:08.546646Z",
+  "updated_at": "2026-06-06T08:40:04.279541Z",
   "domains": {
     "energy": {
       "record_count": 5796,
@@ -12,30 +12,30 @@
       ],
       "kpis": {
         "shortwave_radiation": {
-          "latest": 64.0,
-          "mean": 200.03571428571428,
+          "latest": 35.0,
+          "mean": 197.39285714285714,
           "min": 0.0,
           "max": 968.0,
           "count": 336
         },
         "direct_radiation": {
-          "latest": 1.0,
-          "mean": 111.99404761904762,
+          "latest": 0.0,
+          "mean": 111.38690476190476,
           "min": 0.0,
           "max": 841.0,
           "count": 336
         },
         "diffuse_radiation": {
-          "latest": 63.0,
-          "mean": 88.04166666666667,
+          "latest": 35.0,
+          "mean": 86.00595238095238,
           "min": 0.0,
-          "max": 421.0,
+          "max": 377.0,
           "count": 336
         },
         "temperature_2m": {
-          "latest": 24.0,
-          "mean": 26.621130952380955,
-          "min": 21.3,
+          "latest": 22.1,
+          "mean": 26.293154761904763,
+          "min": 21.1,
           "max": 35.7,
           "count": 336
         },
@@ -54,10 +54,10 @@
           "count": 366
         },
         "intensity_forecast": {
-          "latest": 79.0,
-          "mean": 79.0,
-          "min": 79.0,
-          "max": 79.0,
+          "latest": 61.0,
+          "mean": 61.0,
+          "min": 61.0,
+          "max": 61.0,
           "count": 1
         },
         "DE_load_actual_entsoe_transparency": {
@@ -84,7 +84,7 @@
       }
     },
     "climate": {
-      "record_count": 12149,
+      "record_count": 12150,
       "sources": [
         "noaa_ghg",
         "open_meteo_climate",
@@ -113,18 +113,18 @@
           "count": 10958
         },
         "co2_ppm": {
-          "latest": 431.12,
-          "mean": 361.02421760391206,
+          "latest": 432.34,
+          "mean": 361.11131868131866,
           "min": 312.42,
-          "max": 431.12,
-          "count": 818
+          "max": 432.34,
+          "count": 819
         },
         "trend": {
-          "latest": 428.7,
-          "mean": 361.0178728606357,
+          "latest": 429.14,
+          "mean": 361.1009768009768,
           "min": 314.44,
-          "max": 428.72,
-          "count": 818
+          "max": 429.14,
+          "count": 819
         }
       }
     },
@@ -138,45 +138,45 @@
       ],
       "kpis": {
         "pm2_5": {
-          "latest": 15.2,
-          "mean": 24.15871559633027,
-          "min": 8.4,
-          "max": 57.2,
+          "latest": 11.9,
+          "mean": 25.622018348623858,
+          "min": 8.2,
+          "max": 53.2,
           "count": 109
         },
         "pm10": {
-          "latest": 13.0,
-          "mean": 27.068181818181813,
-          "min": 11.8,
-          "max": 58.3,
+          "latest": 6.0,
+          "mean": 28.37636363636364,
+          "min": 6.0,
+          "max": 54.8,
           "count": 110
         },
         "co": {
           "latest": 2.8,
-          "mean": 630.0763636363637,
+          "mean": 639.7118181818182,
           "min": 2.8,
-          "max": 1655.0,
+          "max": 2111.0,
           "count": 110
         },
         "no2": {
           "latest": 3.7,
-          "mean": 39.78636363636364,
-          "min": 3.7,
-          "max": 71.5,
+          "mean": 39.42909090909092,
+          "min": 2.6,
+          "max": 77.4,
           "count": 110
         },
         "o3": {
-          "latest": 50.6,
-          "mean": 65.32363636363637,
-          "min": 21.0,
-          "max": 138.0,
+          "latest": 25.6,
+          "mean": 74.97818181818182,
+          "min": 25.6,
+          "max": 141.0,
           "count": 110
         },
         "aqi": {
-          "latest": 51.0,
-          "mean": 55.054054054054056,
-          "min": 31.0,
-          "max": 69.0,
+          "latest": 26.0,
+          "mean": 55.369369369369366,
+          "min": 21.0,
+          "max": 70.0,
           "count": 111
         }
       }
