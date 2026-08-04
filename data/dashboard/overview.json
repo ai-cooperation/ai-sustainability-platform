@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-03T09:52:55.893266Z",
+  "updated_at": "2026-08-04T08:43:29.887358Z",
   "domains": {
     "energy": {
       "record_count": 5796,
@@ -13,28 +13,28 @@
       "kpis": {
         "shortwave_radiation": {
           "latest": 136.0,
-          "mean": 232.75,
+          "mean": 242.13392857142858,
           "min": 0.0,
-          "max": 958.0,
+          "max": 978.0,
           "count": 336
         },
         "direct_radiation": {
-          "latest": 64.0,
-          "mean": 150.97619047619048,
+          "latest": 61.0,
+          "mean": 163.3125,
           "min": 0.0,
-          "max": 833.0,
+          "max": 873.0,
           "count": 336
         },
         "diffuse_radiation": {
-          "latest": 72.0,
-          "mean": 81.77380952380952,
+          "latest": 75.0,
+          "mean": 78.82142857142857,
           "min": 0.0,
-          "max": 421.0,
+          "max": 346.0,
           "count": 336
         },
         "temperature_2m": {
-          "latest": 31.3,
-          "mean": 29.273809523809526,
+          "latest": 29.8,
+          "mean": 29.616666666666667,
           "min": 24.1,
           "max": 36.6,
           "count": 336
@@ -54,10 +54,10 @@
           "count": 366
         },
         "intensity_forecast": {
-          "latest": 75.0,
-          "mean": 75.0,
-          "min": 75.0,
-          "max": 75.0,
+          "latest": 120.0,
+          "mean": 120.0,
+          "min": 120.0,
+          "max": 120.0,
           "count": 1
         },
         "DE_load_actual_entsoe_transparency": {
@@ -84,21 +84,13 @@
       }
     },
     "climate": {
-      "record_count": 12319,
+      "record_count": 12151,
       "sources": [
         "noaa_ghg",
         "open_meteo_climate",
-        "open_meteo_weather",
         "world_bank_climate"
       ],
       "kpis": {
-        "precipitation": {
-          "latest": 0.0,
-          "mean": 5.818774941578285,
-          "min": 0.0,
-          "max": 578.23,
-          "count": 11126
-        },
         "temperature_max": {
           "latest": 17.7,
           "mean": 25.596915495528382,
@@ -111,6 +103,13 @@
           "mean": 21.133208614710714,
           "min": 4.7,
           "max": 30.4,
+          "count": 10958
+        },
+        "precipitation": {
+          "latest": 0.0,
+          "mean": 5.875250045628765,
+          "min": 0.0,
+          "max": 578.23,
           "count": 10958
         },
         "co2_ppm": {
@@ -139,45 +138,45 @@
       ],
       "kpis": {
         "pm2_5": {
-          "latest": 14.6,
-          "mean": 12.783486238532111,
-          "min": 7.2,
-          "max": 31.4,
+          "latest": 11.0,
+          "mean": 16.095412844036698,
+          "min": 6.4,
+          "max": 36.6,
           "count": 109
         },
         "pm10": {
-          "latest": 19.0,
-          "mean": 15.491818181818184,
-          "min": 8.7,
-          "max": 36.4,
+          "latest": 18.0,
+          "mean": 19.19181818181818,
+          "min": 8.4,
+          "max": 42.6,
           "count": 110
         },
         "co": {
           "latest": 2.8,
-          "mean": 386.3418181818182,
+          "mean": 398.76727272727277,
           "min": 2.8,
-          "max": 922.0,
+          "max": 1637.0,
           "count": 110
         },
         "no2": {
           "latest": 4.6,
-          "mean": 21.270000000000007,
+          "mean": 23.707272727272724,
           "min": 4.6,
-          "max": 51.3,
+          "max": 61.3,
           "count": 110
         },
         "o3": {
-          "latest": 49.2,
-          "mean": 68.92,
-          "min": 25.0,
-          "max": 116.0,
+          "latest": 53.2,
+          "mean": 83.62,
+          "min": 26.0,
+          "max": 180.0,
           "count": 110
         },
         "aqi": {
-          "latest": 57.0,
-          "mean": 35.873873873873876,
-          "min": 20.0,
-          "max": 65.0,
+          "latest": 59.0,
+          "mean": 38.513513513513516,
+          "min": 17.0,
+          "max": 69.0,
           "count": 111
         }
       }
