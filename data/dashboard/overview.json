@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-17T07:01:37.528140Z",
+  "updated_at": "2026-08-18T06:49:26.090348Z",
   "domains": {
     "energy": {
       "record_count": 5796,
@@ -12,30 +12,30 @@
       ],
       "kpis": {
         "shortwave_radiation": {
-          "latest": 135.0,
-          "mean": 228.17559523809524,
+          "latest": 148.0,
+          "mean": 228.36309523809524,
           "min": 0.0,
           "max": 901.0,
           "count": 336
         },
         "direct_radiation": {
-          "latest": 82.0,
-          "mean": 142.41964285714286,
+          "latest": 105.0,
+          "mean": 147.08333333333334,
           "min": 0.0,
           "max": 753.0,
           "count": 336
         },
         "diffuse_radiation": {
-          "latest": 53.0,
-          "mean": 85.75595238095238,
-          "min": 0.0,
-          "max": 384.0,
+          "latest": 43.0,
+          "mean": 81.2797619047619,
+          "min": -54.0,
+          "max": 450.0,
           "count": 336
         },
         "temperature_2m": {
-          "latest": 28.0,
-          "mean": 28.425297619047623,
-          "min": 25.0,
+          "latest": 28.3,
+          "mean": 28.448214285714283,
+          "min": 24.8,
           "max": 34.4,
           "count": 336
         },
@@ -54,10 +54,10 @@
           "count": 366
         },
         "intensity_forecast": {
-          "latest": 244.0,
-          "mean": 244.0,
-          "min": 244.0,
-          "max": 244.0,
+          "latest": 148.0,
+          "mean": 148.0,
+          "min": 148.0,
+          "max": 148.0,
           "count": 1
         },
         "DE_load_actual_entsoe_transparency": {
@@ -84,21 +84,13 @@
       }
     },
     "climate": {
-      "record_count": 12320,
+      "record_count": 12152,
       "sources": [
         "noaa_ghg",
         "open_meteo_climate",
-        "open_meteo_weather",
         "world_bank_climate"
       ],
       "kpis": {
-        "precipitation": {
-          "latest": 0.0,
-          "mean": 5.792736832644255,
-          "min": 0.0,
-          "max": 578.23,
-          "count": 11126
-        },
         "temperature_max": {
           "latest": 17.7,
           "mean": 25.596915495528382,
@@ -111,6 +103,13 @@
           "mean": 21.133208614710714,
           "min": 4.7,
           "max": 30.4,
+          "count": 10958
+        },
+        "precipitation": {
+          "latest": 0.0,
+          "mean": 5.875250045628765,
+          "min": 0.0,
+          "max": 578.23,
           "count": 10958
         },
         "co2_ppm": {
@@ -139,45 +138,45 @@
       ],
       "kpis": {
         "pm2_5": {
-          "latest": 58.7,
-          "mean": 14.940366972477063,
-          "min": 4.9,
-          "max": 58.7,
+          "latest": 30.2,
+          "mean": 18.120183486238535,
+          "min": 2.5,
+          "max": 45.6,
           "count": 109
         },
         "pm10": {
-          "latest": 11.0,
-          "mean": 16.76090909090909,
-          "min": 6.2,
-          "max": 59.3,
+          "latest": 26.0,
+          "mean": 19.59909090909091,
+          "min": 2.9,
+          "max": 46.2,
           "count": 110
         },
         "co": {
-          "latest": 3.7,
-          "mean": 348.4227272727273,
-          "min": 3.7,
-          "max": 1211.0,
+          "latest": 4.6,
+          "mean": 562.2218181818182,
+          "min": 4.6,
+          "max": 1331.0,
           "count": 110
         },
         "no2": {
-          "latest": 4.2,
-          "mean": 24.823636363636357,
-          "min": 4.2,
-          "max": 72.6,
+          "latest": 3.7,
+          "mean": 32.15545454545454,
+          "min": 3.7,
+          "max": 74.2,
           "count": 110
         },
         "o3": {
-          "latest": 45.1,
-          "mean": 50.84636363636364,
-          "min": 16.0,
-          "max": 135.0,
+          "latest": 61.0,
+          "mean": 46.95454545454545,
+          "min": 3.0,
+          "max": 137.0,
           "count": 110
         },
         "aqi": {
-          "latest": 45.0,
-          "mean": 31.18018018018018,
-          "min": 14.0,
-          "max": 64.0,
+          "latest": 61.0,
+          "mean": 36.810810810810814,
+          "min": 13.0,
+          "max": 67.0,
           "count": 111
         }
       }
