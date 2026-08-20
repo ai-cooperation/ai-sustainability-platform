@@ -1,8 +1,8 @@
 {
   "domain": "carbon",
-  "updated_at": "2026-08-19T06:50:13.848525Z",
+  "updated_at": "2026-08-20T06:52:31.135003Z",
   "record_count": 54790,
-  "file": "carbon_2026-08-19.parquet",
+  "file": "carbon_2026-08-20.parquet",
   "sources": [
     "climate_watch",
     "owid_carbon"
