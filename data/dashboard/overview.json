@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-08T10:53:16.117259Z",
+  "updated_at": "2026-09-09T10:58:36.269329Z",
   "domains": {
     "energy": {
       "record_count": 5796,
@@ -13,30 +13,30 @@
       "kpis": {
         "shortwave_radiation": {
           "latest": 70.0,
-          "mean": 198.20238095238096,
+          "mean": 191.23809523809524,
           "min": 0.0,
-          "max": 891.0,
+          "max": 915.0,
           "count": 336
         },
         "direct_radiation": {
           "latest": 23.0,
-          "mean": 125.45238095238095,
+          "mean": 116.05952380952381,
           "min": 0.0,
-          "max": 751.0,
+          "max": 792.0,
           "count": 336
         },
         "diffuse_radiation": {
           "latest": 47.0,
-          "mean": 72.75,
+          "mean": 75.17857142857143,
           "min": 0.0,
           "max": 355.0,
           "count": 336
         },
         "temperature_2m": {
-          "latest": 26.2,
-          "mean": 26.58720238095238,
+          "latest": 26.0,
+          "mean": 26.44910714285714,
           "min": 21.5,
-          "max": 32.7,
+          "max": 32.8,
           "count": 336
         },
         "solar_radiation": {
@@ -54,10 +54,10 @@
           "count": 366
         },
         "intensity_forecast": {
-          "latest": 39.0,
-          "mean": 39.0,
-          "min": 39.0,
-          "max": 39.0,
+          "latest": 62.0,
+          "mean": 62.0,
+          "min": 62.0,
+          "max": 62.0,
           "count": 1
         },
         "DE_load_actual_entsoe_transparency": {
@@ -84,7 +84,7 @@
       }
     },
     "climate": {
-      "record_count": 12152,
+      "record_count": 12153,
       "sources": [
         "noaa_ghg",
         "open_meteo_climate",
@@ -113,18 +113,18 @@
           "count": 10958
         },
         "co2_ppm": {
-          "latest": 429.12,
-          "mean": 361.2798051157125,
+          "latest": 427.55,
+          "mean": 361.36047445255474,
           "min": 312.42,
           "max": 432.34,
-          "count": 821
+          "count": 822
         },
         "trend": {
-          "latest": 428.83,
-          "mean": 361.2660901339829,
+          "latest": 429.51,
+          "mean": 361.3490875912409,
           "min": 314.44,
-          "max": 429.05,
-          "count": 821
+          "max": 429.51,
+          "count": 822
         }
       }
     },
@@ -138,45 +138,45 @@
       ],
       "kpis": {
         "pm2_5": {
-          "latest": 5.3,
-          "mean": 14.198347107438016,
-          "min": 3.7,
-          "max": 30.3,
+          "latest": 7.6,
+          "mean": 11.194214876033058,
+          "min": 4.4,
+          "max": 21.8,
           "count": 121
         },
         "pm10": {
-          "latest": 12.0,
-          "mean": 18.69180327868853,
-          "min": 4.9,
-          "max": 35.4,
+          "latest": 13.0,
+          "mean": 15.089344262295082,
+          "min": 5.7,
+          "max": 27.4,
           "count": 122
         },
         "co": {
-          "latest": 1.9,
-          "mean": 360.7737704918033,
-          "min": 1.9,
-          "max": 1365.0,
+          "latest": 4.6,
+          "mean": 288.47459016393447,
+          "min": 4.6,
+          "max": 838.0,
           "count": 122
         },
         "no2": {
           "latest": 4.6,
-          "mean": 20.308196721311475,
-          "min": 4.4,
-          "max": 59.5,
+          "mean": 16.93934426229508,
+          "min": 3.2,
+          "max": 52.7,
           "count": 122
         },
         "o3": {
-          "latest": 31.3,
-          "mean": 78.82213114754097,
-          "min": 28.0,
-          "max": 158.0,
+          "latest": 42.3,
+          "mean": 65.29754098360655,
+          "min": 18.0,
+          "max": 128.0,
           "count": 122
         },
         "aqi": {
-          "latest": 31.0,
-          "mean": 41.68032786885246,
-          "min": 16.0,
-          "max": 79.0,
+          "latest": 42.0,
+          "mean": 36.040983606557376,
+          "min": 18.0,
+          "max": 64.0,
           "count": 122
         }
       }
