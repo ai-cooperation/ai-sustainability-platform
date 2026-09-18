@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-17T11:16:15.408165Z",
+  "updated_at": "2026-09-18T10:48:31.543430Z",
   "domains": {
     "energy": {
       "record_count": 5796,
@@ -12,29 +12,29 @@
       ],
       "kpis": {
         "shortwave_radiation": {
-          "latest": 111.0,
-          "mean": 227.2797619047619,
+          "latest": 110.0,
+          "mean": 231.79761904761904,
           "min": 0.0,
           "max": 911.0,
           "count": 336
         },
         "direct_radiation": {
-          "latest": 77.0,
-          "mean": 155.0595238095238,
+          "latest": 74.0,
+          "mean": 161.67857142857142,
           "min": 0.0,
           "max": 794.0,
           "count": 336
         },
         "diffuse_radiation": {
-          "latest": 34.0,
-          "mean": 72.2202380952381,
+          "latest": 36.0,
+          "mean": 70.11904761904762,
           "min": 0.0,
-          "max": 393.0,
+          "max": 375.0,
           "count": 336
         },
         "temperature_2m": {
-          "latest": 27.2,
-          "mean": 26.243154761904766,
+          "latest": 27.4,
+          "mean": 26.529166666666665,
           "min": 21.0,
           "max": 33.6,
           "count": 336
@@ -54,10 +54,10 @@
           "count": 366
         },
         "intensity_forecast": {
-          "latest": 32.0,
-          "mean": 32.0,
-          "min": 32.0,
-          "max": 32.0,
+          "latest": 51.0,
+          "mean": 51.0,
+          "min": 51.0,
+          "max": 51.0,
           "count": 1
         },
         "DE_load_actual_entsoe_transparency": {
@@ -138,45 +138,45 @@
       ],
       "kpis": {
         "pm2_5": {
-          "latest": 17.3,
-          "mean": 19.28677685950413,
-          "min": 12.8,
-          "max": 38.5,
+          "latest": 13.8,
+          "mean": 17.414049586776862,
+          "min": 12.2,
+          "max": 25.7,
           "count": 121
         },
         "pm10": {
-          "latest": 28.0,
-          "mean": 26.07049180327869,
-          "min": 18.2,
-          "max": 43.3,
+          "latest": 40.0,
+          "mean": 23.849180327868847,
+          "min": 16.8,
+          "max": 40.0,
           "count": 122
         },
         "co": {
-          "latest": 3.7,
-          "mean": 349.7254098360656,
-          "min": 3.7,
-          "max": 1569.0,
+          "latest": 4.6,
+          "mean": 298.0565573770492,
+          "min": 4.6,
+          "max": 768.0,
           "count": 122
         },
         "no2": {
-          "latest": 6.4,
-          "mean": 21.12049180327869,
+          "latest": 4.6,
+          "mean": 19.06147540983607,
           "min": 4.4,
-          "max": 60.2,
+          "max": 43.6,
           "count": 122
         },
         "o3": {
-          "latest": 92.9,
-          "mean": 94.21229508196721,
-          "min": 48.0,
-          "max": 135.0,
+          "latest": 68.8,
+          "mean": 90.57213114754097,
+          "min": 46.0,
+          "max": 134.0,
           "count": 122
         },
         "aqi": {
-          "latest": 93.0,
-          "mean": 48.42622950819672,
-          "min": 36.0,
-          "max": 93.0,
+          "latest": 69.0,
+          "mean": 45.71311475409836,
+          "min": 34.0,
+          "max": 69.0,
           "count": 122
         }
       }
